@@ -14,8 +14,8 @@ function SectionLabel({ text }) {
         fontWeight: 700,
         letterSpacing: '2px',
         textTransform: 'uppercase',
-        color: 'var(--color-primary-dark)',
-        bgcolor: 'var(--color-primary-light)',
+        color: 'var(--color-primary)',
+        bgcolor: 'var(--color-accent)',
         px: 1.5,
         py: 0.5,
         borderRadius: 1,
@@ -27,7 +27,7 @@ function SectionLabel({ text }) {
   );
 }
 
-/* ── Hero 섹션 ─────────────────────────────────────────── */
+/* ── Hero 섹션 ─────────────────────────────────────── */
 function HeroSection() {
   return (
     <Box
@@ -36,17 +36,17 @@ function HeroSection() {
         minHeight: '90vh',
         display: 'flex',
         alignItems: 'center',
-        background: 'linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-primary-light) 100%)',
+        background: 'linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-secondary-mid) 100%)',
       }}
     >
       <Container maxWidth="md" sx={{ textAlign: 'center' }}>
         <SectionLabel text="Hero" />
-        <Typography variant="h1" sx={{ mb: 3, color: 'var(--color-text-primary)' }}>
+        <Typography variant="h1" sx={{ mb: 3, color: 'var(--color-text-white)' }}>
           여기는 Hero 섹션입니다.
         </Typography>
         <Typography
           variant="body1"
-          sx={{ color: 'var(--color-text-secondary)', maxWidth: 520, mx: 'auto', mb: 1 }}
+          sx={{ color: 'rgba(255,255,255,0.7)', maxWidth: 520, mx: 'auto' }}
         >
           메인 비주얼, 이름, 간단 소개가 들어갈 예정입니다.
         </Typography>
@@ -55,7 +55,7 @@ function HeroSection() {
   );
 }
 
-/* ── About Me 섹션 ──────────────────────────────────────── */
+/* ── About Me 섹션 ─────────────────────────────────── */
 function AboutSection() {
   return (
     <Box sx={{ ...sectionBase, bgcolor: 'var(--color-bg-primary)' }}>
@@ -78,6 +78,7 @@ function AboutSection() {
             px: 4,
             py: 1.2,
             borderRadius: 2,
+            fontWeight: 700,
           }}
         >
           더 알아보기
@@ -87,10 +88,10 @@ function AboutSection() {
   );
 }
 
-/* ── Skill Tree 섹션 ────────────────────────────────────── */
+/* ── Skill Tree 섹션 ───────────────────────────────── */
 function SkillSection() {
   return (
-    <Box sx={{ ...sectionBase, bgcolor: 'var(--color-bg-secondary)' }}>
+    <Box sx={{ ...sectionBase, bgcolor: 'var(--color-bg-soft)' }}>
       <Container maxWidth="md" sx={{ textAlign: 'center' }}>
         <SectionLabel text="Skill Tree" />
         <Typography variant="h2" sx={{ mb: 3, color: 'var(--color-text-primary)' }}>
@@ -107,10 +108,10 @@ function SkillSection() {
   );
 }
 
-/* ── Projects 섹션 ──────────────────────────────────────── */
+/* ── Projects 섹션 ─────────────────────────────────── */
 function ProjectsSection() {
   return (
-    <Box sx={{ ...sectionBase, bgcolor: 'var(--color-bg-dark)' }}>
+    <Box sx={{ ...sectionBase, bgcolor: 'var(--color-bg-secondary)' }}>
       <Container maxWidth="md" sx={{ textAlign: 'center' }}>
         <SectionLabel text="Projects" />
         <Typography variant="h2" sx={{ mb: 3, color: 'var(--color-text-white)' }}>
@@ -118,7 +119,7 @@ function ProjectsSection() {
         </Typography>
         <Typography
           variant="body1"
-          sx={{ color: 'var(--color-text-muted)', maxWidth: 520, mx: 'auto', mb: 4 }}
+          sx={{ color: 'rgba(255,255,255,0.6)', maxWidth: 520, mx: 'auto', mb: 4 }}
         >
           대표작 썸네일 3-4개와 '더 보기' 버튼이 들어갈 예정입니다.
         </Typography>
@@ -126,13 +127,14 @@ function ProjectsSection() {
           variant="outlined"
           sx={{
             color: 'var(--color-text-white)',
-            borderColor: 'var(--color-text-white)',
+            borderColor: 'var(--color-primary)',
             px: 4,
             py: 1.2,
             borderRadius: 2,
+            fontWeight: 700,
             '&:hover': {
-              bgcolor: 'var(--color-text-white)',
-              color: 'var(--color-text-primary)',
+              bgcolor: 'var(--color-primary)',
+              borderColor: 'var(--color-primary)',
             },
           }}
         >
@@ -143,18 +145,34 @@ function ProjectsSection() {
   );
 }
 
-/* ── Contact 섹션 ───────────────────────────────────────── */
+/* ── Contact 섹션 ──────────────────────────────────── */
 function ContactSection() {
   return (
-    <Box sx={{ ...sectionBase, bgcolor: 'var(--color-secondary)' }}>
+    <Box sx={{ ...sectionBase, bgcolor: 'var(--color-primary)' }}>
       <Container maxWidth="md" sx={{ textAlign: 'center' }}>
-        <SectionLabel text="Contact" />
-        <Typography variant="h2" sx={{ mb: 3, color: 'var(--color-text-primary)' }}>
+        <Typography
+          sx={{
+            display: 'inline-block',
+            fontSize: '0.75rem',
+            fontWeight: 700,
+            letterSpacing: '2px',
+            textTransform: 'uppercase',
+            color: 'var(--color-primary)',
+            bgcolor: 'var(--color-text-white)',
+            px: 1.5,
+            py: 0.5,
+            borderRadius: 1,
+            mb: 2,
+          }}
+        >
+          Contact
+        </Typography>
+        <Typography variant="h2" sx={{ mb: 3, color: 'var(--color-text-white)' }}>
           여기는 Contact 섹션입니다.
         </Typography>
         <Typography
           variant="body1"
-          sx={{ color: 'var(--color-text-primary)', opacity: 0.7, maxWidth: 520, mx: 'auto' }}
+          sx={{ color: 'rgba(255,255,255,0.8)', maxWidth: 520, mx: 'auto' }}
         >
           연락처, SNS, 간단한 메시지 폼이 들어갈 예정입니다.
         </Typography>
@@ -163,18 +181,17 @@ function ContactSection() {
   );
 }
 
-/* ── 메인 ───────────────────────────────────────────────── */
 function HomePage() {
   return (
     <Box>
       <HeroSection />
-      <Divider />
+      <Divider sx={{ borderColor: 'var(--color-border)' }} />
       <AboutSection />
-      <Divider />
+      <Divider sx={{ borderColor: 'var(--color-border)' }} />
       <SkillSection />
-      <Divider />
+      <Divider sx={{ borderColor: 'var(--color-border)' }} />
       <ProjectsSection />
-      <Divider />
+      <Divider sx={{ borderColor: 'var(--color-border)' }} />
       <ContactSection />
     </Box>
   );

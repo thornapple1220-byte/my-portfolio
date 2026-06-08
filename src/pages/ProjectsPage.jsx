@@ -5,7 +5,7 @@ function ProjectsPage() {
     <Box
       sx={{
         minHeight: 'calc(100vh - 64px)',
-        bgcolor: 'var(--color-bg-dark)',
+        bgcolor: 'var(--color-bg-secondary)',
         display: 'flex',
         alignItems: 'center',
       }}
@@ -18,8 +18,8 @@ function ProjectsPage() {
             fontWeight: 700,
             letterSpacing: '2px',
             textTransform: 'uppercase',
-            color: 'var(--color-primary-dark)',
-            bgcolor: 'var(--color-primary-light)',
+            color: 'var(--color-primary)',
+            bgcolor: 'var(--color-accent)',
             px: 1.5,
             py: 0.5,
             borderRadius: 1,
@@ -33,7 +33,7 @@ function ProjectsPage() {
         </Typography>
         <Typography
           variant="body1"
-          sx={{ color: 'var(--color-text-muted)', maxWidth: 480, mx: 'auto' }}
+          sx={{ color: 'rgba(255,255,255,0.6)', maxWidth: 480, mx: 'auto' }}
         >
           포트폴리오 작품들이 들어갈 예정입니다.
         </Typography>

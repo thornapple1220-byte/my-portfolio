@@ -1,55 +1,71 @@
 /* ==========================================================
    Color Palette — my-portfolio
-   출처: 파이오니어컨설팅그룹 / SOLVEK 웹사이트 분석
+   출처: 야놀자(Yanolja) 채용 페이지
    분석 날짜: 2026-06-08
    ========================================================== */
 
 :root {
-  /* Primary — 파스텔 블루 */
-  --color-primary:        #A8C4E4;
-  --color-primary-light:  #C5D8F0;
-  --color-primary-dark:   #4A7FD4;
+  /* Primary — 핫 핑크 계열 */
+  --color-primary:        #FF2D55;
+  --color-primary-light:  #FF6B8A;
+  --color-primary-dark:   #E0002E;
 
-  /* Secondary — 골든 옐로우 */
-  --color-secondary:       #F5C842;
-  --color-secondary-light: #FFD966;
-  --color-secondary-dark:  #D4A820;
+  /* Secondary — 딥 네이비 계열 */
+  --color-secondary:      #0A1628;
+  --color-secondary-mid:  #1B3870;
+
+  /* Accent */
+  --color-accent:         #FFB3C6;
 
   /* Background */
-  --color-bg-primary:   #FFFFFF;
-  --color-bg-secondary: #B8CCF0;
-  --color-bg-dark:      #0D0D12;
+  --color-bg-primary:     #FFFFFF;
+  --color-bg-secondary:   #0A1628;
+  --color-bg-soft:        #FFF0F4;
 
   /* Text */
-  --color-text-primary:   #111111;
-  --color-text-secondary: #888888;
-  --color-text-muted:     #BBBBBB;
+  --color-text-primary:   #222222;
+  --color-text-secondary: #666666;
+  --color-text-muted:     #999999;
   --color-text-white:     #FFFFFF;
 
   /* Interactive */
-  --color-button-primary: #4A7FD4;
-  --color-button-hover:   #3567C4;
-  --color-link:           #4A7FD4;
-  --color-link-hover:     #F5C842;
+  --color-button-primary: #FF2D55;
+  --color-button-hover:   #E0002E;
+  --color-link:           #FF2D55;
+  --color-link-hover:     #FF6B8A;
 
   /* Border */
-  --color-border:         #E0E0E0;
-  --color-border-glass:   rgba(255, 255, 255, 0.4);
+  --color-border:         #FFB3C6;
+  --color-border-dark:    rgba(255, 255, 255, 0.2);
 }
 
+/* 다크 모드 */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg-primary:     #0D0D12;
-    --color-bg-secondary:   #1A1F2E;
+    --color-bg-primary:     #0A1628;
+    --color-bg-soft:        #12213A;
     --color-text-primary:   #FFFFFF;
     --color-text-secondary: #AAAAAA;
     --color-text-muted:     #666666;
-    --color-border:         #2A2A3A;
+    --color-border:         rgba(255, 45, 85, 0.3);
   }
 }
 
-* {
+/* 모바일 — 핑크 채도 완화 */
+@media (max-width: 600px) {
+  :root {
+    --color-primary:        #FF4D6D;
+    --color-button-primary: #FF4D6D;
+  }
+}
+
+/* 대형 화면 — 더 깊은 우주 배경 */
+@media (min-width: 1440px) {
+  :root {
+    --color-bg-secondary: #060E20;
+  }
+}
+
+*, *::before, *::after {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
