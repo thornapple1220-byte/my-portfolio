@@ -10,16 +10,16 @@
   --color-primary-light:  #FF6B8A;
   --color-primary-dark:   #E0002E;
 
-  /* Secondary — 딥 네이비 계열 */
-  --color-secondary:      #0A1628;
-  --color-secondary-mid:  #1B3870;
+  /* Secondary — 라이트 네이비 계열 */
+  --color-secondary:      #1E3A6E;
+  --color-secondary-mid:  #2D5AA0;
 
   /* Accent */
   --color-accent:         #FFB3C6;
 
   /* Background */
   --color-bg-primary:     #FFFFFF;
-  --color-bg-secondary:   #0A1628;
+  --color-bg-secondary:   #1E3A6E;
   --color-bg-soft:        #FFF0F4;
 
   /* Text */
@@ -42,8 +42,8 @@
 /* 다크 모드 */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg-primary:     #0A1628;
-    --color-bg-soft:        #12213A;
+    --color-bg-primary:     #1E3A6E;
+    --color-bg-soft:        #243F78;
     --color-text-primary:   #FFFFFF;
     --color-text-secondary: #AAAAAA;
     --color-text-muted:     #666666;
@@ -62,7 +62,7 @@
 /* 대형 화면 — 더 깊은 우주 배경 */
 @media (min-width: 1440px) {
   :root {
-    --color-bg-secondary: #060E20;
+    --color-bg-secondary: #163060;
   }
 }
 
