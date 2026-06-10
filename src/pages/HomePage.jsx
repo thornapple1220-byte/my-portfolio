@@ -157,13 +157,19 @@ function ContactSection() {
 
   const fetchEntries = useCallback(async () => {
     setLoadingEntries(true);
-    const { data } = await supabase
-      .from('guestbook')
-      .select('*')
-      .eq('is_public', true)
-      .order('created_at', { ascending: false });
-    setEntries(data || []);
-    setLoadingEntries(false);
+    try {
+      const { data, error } = await supabase
+        .from('guestbook')
+        .select('*')
+        .eq('is_public', true)
+        .order('created_at', { ascending: false });
+      if (error) console.error('[Guestbook] fetch error:', error);
+      setEntries(data || []);
+    } catch (e) {
+      console.error('[Guestbook] unexpected error:', e);
+    } finally {
+      setLoadingEntries(false);
+    }
   }, []);
 
   useEffect(() => {
