@@ -1,8 +1,6 @@
 import { Box, Card, CardContent, Typography, IconButton, Tooltip } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
 import InstagramIcon from '@mui/icons-material/Instagram';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 const SNS_LINKS = [
   {
@@ -10,18 +8,6 @@ const SNS_LINKS = [
     icon: <InstagramIcon />,
     href: 'https://instagram.com/',
     color: '#E1306C',
-  },
-  {
-    label: 'GitHub',
-    icon: <GitHubIcon />,
-    href: 'https://github.com/thornapple1220-byte',
-    color: '#333333',
-  },
-  {
-    label: 'LinkedIn',
-    icon: <LinkedInIcon />,
-    href: 'https://linkedin.com/',
-    color: '#0077B5',
   },
 ];
 
