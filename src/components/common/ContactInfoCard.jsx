@@ -1,6 +1,7 @@
 import { Box, Card, CardContent, Typography, IconButton, Tooltip } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
 import InstagramIcon from '@mui/icons-material/Instagram';
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 const SNS_LINKS = [
   {
@@ -8,6 +9,12 @@ const SNS_LINKS = [
     icon: <InstagramIcon />,
     href: 'https://instagram.com/',
     color: '#E1306C',
+  },
+  {
+    label: 'GitHub',
+    icon: <GitHubIcon />,
+    href: 'https://github.com/thornapple1220-byte',
+    color: '#333333',
   },
 ];
 
@@ -25,52 +32,50 @@ function ContactInfoCard() {
       }}
     >
       <CardContent sx={{ p: 0, '&:last-child': { pb: 0 } }}>
-        {/* 이메일 */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
-          <Box
-            sx={{
-              width: 44,
-              height: 44,
-              borderRadius: '50%',
-              bgcolor: 'var(--color-accent)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
-          >
-            <EmailIcon sx={{ color: 'var(--color-primary)', fontSize: 22 }} />
-          </Box>
-          <Box>
-            <Typography variant="caption" sx={{ color: 'var(--color-text-secondary)', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase' }}>
-              Email
-            </Typography>
-            <Typography
-              component="a"
-              href="mailto:jje918@naver.com"
-              variant="body1"
+        {/* 이메일 + SNS 한 줄 */}
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
+          {/* 이메일 */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: 0 }}>
+            <Box
               sx={{
-                display: 'block',
-                color: 'var(--color-text-primary)',
-                textDecoration: 'none',
-                fontWeight: 600,
-                '&:hover': { color: 'var(--color-primary)' },
+                width: 44,
+                height: 44,
+                borderRadius: '50%',
+                bgcolor: 'var(--color-accent)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
               }}
             >
-              jje918@naver.com
-            </Typography>
+              <EmailIcon sx={{ color: 'var(--color-primary)', fontSize: 22 }} />
+            </Box>
+            <Box sx={{ minWidth: 0 }}>
+              <Typography variant="caption" sx={{ color: 'var(--color-text-secondary)', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase' }}>
+                Email
+              </Typography>
+              <Typography
+                component="a"
+                href="mailto:jje918@naver.com"
+                variant="body1"
+                sx={{
+                  display: 'block',
+                  color: 'var(--color-text-primary)',
+                  textDecoration: 'none',
+                  fontWeight: 600,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  '&:hover': { color: 'var(--color-primary)' },
+                }}
+              >
+                jje918@naver.com
+              </Typography>
+            </Box>
           </Box>
-        </Box>
 
-        {/* 구분선 */}
-        <Box sx={{ borderTop: '1px solid var(--color-border)', mb: 3 }} />
-
-        {/* SNS 아이콘 */}
-        <Box>
-          <Typography variant="caption" sx={{ color: 'var(--color-text-secondary)', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase', display: 'block', mb: 1.5 }}>
-            SNS
-          </Typography>
-          <Box sx={{ display: 'flex', gap: 1.5 }}>
+          {/* SNS 아이콘 */}
+          <Box sx={{ display: 'flex', gap: 1, flexShrink: 0 }}>
             {SNS_LINKS.map(({ label, icon, href, color }) => (
               <Tooltip key={label} title={label} arrow>
                 <IconButton
@@ -79,8 +84,8 @@ function ContactInfoCard() {
                   target="_blank"
                   rel="noopener noreferrer"
                   sx={{
-                    width: 44,
-                    height: 44,
+                    width: 40,
+                    height: 40,
                     bgcolor: 'var(--color-bg-soft)',
                     color: color,
                     border: '1.5px solid var(--color-border)',
