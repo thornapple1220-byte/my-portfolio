@@ -49,7 +49,7 @@ function ThumbnailImage({ src, alt }) {
           src={src}
           alt={alt}
           onError={() => setImgError(true)}
-          sx={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', bgcolor: '#f5f7fa' }}
+          sx={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
         />
       ) : (
         <Box
