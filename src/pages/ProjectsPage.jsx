@@ -287,7 +287,7 @@ function ProjectsPage() {
         {!loading && !error && (
           <Grid container spacing={3}>
             {projects.length === 0 ? (
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Box sx={{ textAlign: 'center', py: 10 }}>
                   <Typography variant="body1" sx={{ color: 'var(--color-text-muted)' }}>
                     등록된 프로젝트가 없습니다.
@@ -296,7 +296,7 @@ function ProjectsPage() {
               </Grid>
             ) : (
               projects.map((project) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={project.id}>
+                <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={project.id}>
                   <ProjectCard project={project} />
                 </Grid>
               ))
