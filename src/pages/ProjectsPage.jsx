@@ -1,42 +1,285 @@
-import { Box, Container, Typography } from '@mui/material';
+import { useState, useEffect } from 'react';
+import {
+  Box, Container, Typography, Grid, Card, CardMedia, CardContent,
+  CardActions, Button, Chip, Stack, CircularProgress, Alert,
+} from '@mui/material';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import ArticleIcon from '@mui/icons-material/Article';
+import supabase from '../utils/supabase';
+
+function SectionLabel({ text }) {
+  return (
+    <Typography
+      sx={{
+        display: 'inline-block',
+        fontSize: '0.75rem',
+        fontWeight: 700,
+        letterSpacing: '2px',
+        textTransform: 'uppercase',
+        color: 'var(--color-primary)',
+        bgcolor: 'var(--color-accent)',
+        px: 1.5,
+        py: 0.5,
+        borderRadius: 1,
+        mb: 2,
+      }}
+    >
+      {text}
+    </Typography>
+  );
+}
+
+function ThumbnailImage({ src, alt }) {
+  const [imgError, setImgError] = useState(false);
+
+  if (!src || imgError) {
+    return (
+      <Box
+        sx={{
+          height: 180,
+          background: 'linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-mid) 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Typography
+          variant="body2"
+          sx={{ color: 'rgba(255,255,255,0.5)', fontWeight: 600, letterSpacing: 1 }}
+        >
+          {alt}
+        </Typography>
+      </Box>
+    );
+  }
+
+  return (
+    <CardMedia
+      component="img"
+      height="180"
+      image={src}
+      alt={alt}
+      onError={() => setImgError(true)}
+      sx={{ objectFit: 'cover', bgcolor: 'var(--color-secondary)' }}
+    />
+  );
+}
+
+function ProjectCard({ project }) {
+  const formattedDate = new Date(project.created_at).toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: 'long',
+  });
+
+  return (
+    <Card
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        borderRadius: 3,
+        overflow: 'hidden',
+        transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+        '&:hover': {
+          transform: 'scale(1.03)',
+          boxShadow: '0 12px 40px rgba(0,0,0,0.35)',
+        },
+      }}
+    >
+      {/* 썸네일 */}
+      <ThumbnailImage src={project.thumbnail_url} alt={project.title} />
+
+      {/* 카드 내용 */}
+      <CardContent sx={{ flexGrow: 1, p: 2.5 }}>
+        <Typography
+          variant="caption"
+          sx={{ color: 'var(--color-text-muted)', display: 'block', mb: 1 }}
+        >
+          {formattedDate}
+        </Typography>
+
+        <Typography
+          variant="h6"
+          sx={{ fontWeight: 700, color: 'var(--color-text-primary)', mb: 1, lineHeight: 1.35 }}
+        >
+          {project.title}
+        </Typography>
+
+        <Typography
+          variant="body2"
+          sx={{ color: 'var(--color-text-secondary)', mb: 2, lineHeight: 1.6 }}
+        >
+          {project.description}
+        </Typography>
+
+        {/* 기술 스택 뱃지 */}
+        <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
+          {project.tech_stack?.map((tech) => (
+            <Chip
+              key={tech}
+              label={tech}
+              size="small"
+              sx={{
+                bgcolor: 'var(--color-accent)',
+                color: 'var(--color-primary)',
+                fontWeight: 600,
+                fontSize: '0.7rem',
+                height: 22,
+                mb: 0.5,
+              }}
+            />
+          ))}
+        </Stack>
+      </CardContent>
+
+      {/* 버튼 */}
+      <CardActions sx={{ p: 2, pt: 0, flexWrap: 'wrap', gap: 0.5 }}>
+        {project.demo_url && (
+          <Button
+            size="small"
+            variant="contained"
+            startIcon={<OpenInNewIcon fontSize="small" />}
+            href={project.demo_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              bgcolor: 'var(--color-button-primary)',
+              '&:hover': { bgcolor: 'var(--color-button-hover)' },
+              fontSize: '0.72rem',
+              fontWeight: 600,
+              px: 1.5,
+            }}
+          >
+            Live Demo
+          </Button>
+        )}
+        {project.github_url && (
+          <Button
+            size="small"
+            variant="outlined"
+            startIcon={<GitHubIcon fontSize="small" />}
+            href={project.github_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              borderColor: 'var(--color-primary)',
+              color: 'var(--color-primary)',
+              '&:hover': { bgcolor: 'var(--color-accent)', borderColor: 'var(--color-primary)' },
+              fontSize: '0.72rem',
+              fontWeight: 600,
+              px: 1.5,
+            }}
+          >
+            GitHub
+          </Button>
+        )}
+        {project.detail_url && (
+          <Button
+            size="small"
+            variant="text"
+            startIcon={<ArticleIcon fontSize="small" />}
+            href={project.detail_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              color: 'var(--color-text-secondary)',
+              '&:hover': { color: 'var(--color-primary)' },
+              fontSize: '0.72rem',
+              fontWeight: 600,
+              ml: 'auto',
+            }}
+          >
+            View Details
+          </Button>
+        )}
+      </CardActions>
+    </Card>
+  );
+}
 
 function ProjectsPage() {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchProjects() {
+      try {
+        const { data, error } = await supabase
+          .from('projects')
+          .select('*')
+          .eq('is_published', true)
+          .order('sort_order', { ascending: true });
+        if (error) throw error;
+        setProjects(data || []);
+      } catch (e) {
+        setError('프로젝트를 불러오는 데 실패했습니다.');
+        console.error('[Projects] fetch error:', e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProjects();
+  }, []);
+
   return (
     <Box
       sx={{
         minHeight: 'calc(100vh - 64px)',
-        bgcolor: 'var(--color-bg-secondary)',
-        display: 'flex',
-        alignItems: 'center',
+        bgcolor: 'var(--color-bg-navy-light)',
+        py: { xs: 8, md: 12 },
       }}
     >
-      <Container maxWidth="md" sx={{ textAlign: 'center', py: 10 }}>
-        <Typography
-          sx={{
-            display: 'inline-block',
-            fontSize: '0.75rem',
-            fontWeight: 700,
-            letterSpacing: '2px',
-            textTransform: 'uppercase',
-            color: 'var(--color-primary)',
-            bgcolor: 'var(--color-accent)',
-            px: 1.5,
-            py: 0.5,
-            borderRadius: 1,
-            mb: 3,
-          }}
-        >
-          Projects
-        </Typography>
-        <Typography variant="h2" sx={{ mb: 3, color: 'var(--color-text-white)' }}>
-          Projects 페이지가 개발될 공간입니다.
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{ color: 'rgba(255,255,255,0.6)', maxWidth: 480, mx: 'auto' }}
-        >
-          포트폴리오 작품들이 들어갈 예정입니다.
-        </Typography>
+      <Container maxWidth="xl">
+        {/* 헤더 */}
+        <Box sx={{ textAlign: 'center', mb: 8 }}>
+          <SectionLabel text="Projects" />
+          <Typography variant="h2" sx={{ color: 'var(--color-text-primary)', mb: 2 }}>
+            프로젝트
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{ color: 'var(--color-text-secondary)', maxWidth: 480, mx: 'auto' }}
+          >
+            직접 기획하고 개발한 프로젝트들을 소개합니다.
+          </Typography>
+        </Box>
+
+        {/* 로딩 */}
+        {loading && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}>
+            <CircularProgress sx={{ color: 'var(--color-primary)' }} />
+          </Box>
+        )}
+
+        {/* 에러 */}
+        {error && (
+          <Alert severity="error" sx={{ maxWidth: 480, mx: 'auto' }}>
+            {error}
+          </Alert>
+        )}
+
+        {/* 프로젝트 그리드 */}
+        {!loading && !error && (
+          <Grid container spacing={3}>
+            {projects.length === 0 ? (
+              <Grid item xs={12}>
+                <Box sx={{ textAlign: 'center', py: 10 }}>
+                  <Typography variant="body1" sx={{ color: 'var(--color-text-muted)' }}>
+                    등록된 프로젝트가 없습니다.
+                  </Typography>
+                </Box>
+              </Grid>
+            ) : (
+              projects.map((project) => (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={project.id}>
+                  <ProjectCard project={project} />
+                </Grid>
+              ))
+            )}
+          </Grid>
+        )}
       </Container>
     </Box>
   );

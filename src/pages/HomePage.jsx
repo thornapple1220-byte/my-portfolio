@@ -116,7 +116,7 @@ function SkillSection() {
 /* ── Projects 섹션 ─────────────────────────────────── */
 function ProjectsSection() {
   return (
-    <Box sx={{ ...sectionBase, bgcolor: 'var(--color-bg-secondary)' }}>
+    <Box sx={{ ...sectionBase, bgcolor: 'var(--color-bg-navy-mid)' }}>
       <Container maxWidth="md" sx={{ textAlign: 'center' }}>
         <SectionLabel text="Projects" />
         <Typography variant="h2" sx={{ mb: 3, color: 'var(--color-text-white)' }}>
@@ -124,7 +124,7 @@ function ProjectsSection() {
         </Typography>
         <Typography
           variant="body1"
-          sx={{ color: 'rgba(255,255,255,0.6)', maxWidth: 520, mx: 'auto', mb: 4 }}
+          sx={{ color: 'rgba(255,255,255,0.75)', maxWidth: 520, mx: 'auto', mb: 4 }}
         >
           대표작 썸네일 3-4개와 '더 보기' 버튼이 들어갈 예정입니다.
         </Typography>
@@ -132,14 +132,14 @@ function ProjectsSection() {
           variant="outlined"
           sx={{
             color: 'var(--color-text-white)',
-            borderColor: 'var(--color-primary)',
+            borderColor: 'rgba(255,255,255,0.6)',
             px: 4,
             py: 1.2,
             borderRadius: 2,
             fontWeight: 700,
             '&:hover': {
-              bgcolor: 'var(--color-primary)',
-              borderColor: 'var(--color-primary)',
+              bgcolor: 'rgba(255,255,255,0.15)',
+              borderColor: 'var(--color-text-white)',
             },
           }}
         >
