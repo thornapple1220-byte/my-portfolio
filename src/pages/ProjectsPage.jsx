@@ -8,7 +8,7 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import ArticleIcon from '@mui/icons-material/Article';
 import supabase from '../utils/supabase';
 
-const THUM_BASE = 'https://image.thum.io/get/width/600/crop/450';
+const THUM_BASE = 'https://image.thum.io/get/width/400/crop/711';
 
 function getThumbnailUrl(project) {
   if (project.thumbnail_url) return project.thumbnail_url;
@@ -42,8 +42,8 @@ function ThumbnailImage({ src, alt }) {
   const [imgError, setImgError] = useState(false);
 
   return (
-    /* 4:3 비율 고정 (75% = 3/4) */
-    <Box sx={{ position: 'relative', width: '100%', paddingTop: '75%', flexShrink: 0, overflow: 'hidden' }}>
+    /* 9:16 비율 고정 (177.78% = 16/9) */
+    <Box sx={{ position: 'relative', width: '100%', paddingTop: '177.78%', flexShrink: 0, overflow: 'hidden' }}>
       {src && !imgError ? (
         <Box
           component="img"
