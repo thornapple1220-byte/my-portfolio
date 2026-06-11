@@ -41,42 +41,37 @@ function SectionLabel({ text }) {
 function ThumbnailImage({ src, alt }) {
   const [imgError, setImgError] = useState(false);
 
-  if (!src || imgError) {
-    return (
-      <Box
-        sx={{
-          height: 180,
-          background: 'linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-mid) 100%)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          px: 2,
-        }}
-      >
-        <Typography
-          variant="body2"
+  return (
+    <Box sx={{ height: '52%', flexShrink: 0, overflow: 'hidden' }}>
+      {src && !imgError ? (
+        <Box
+          component="img"
+          src={src}
+          alt={alt}
+          onError={() => setImgError(true)}
+          sx={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+        />
+      ) : (
+        <Box
           sx={{
-            color: 'rgba(255,255,255,0.6)',
-            fontWeight: 600,
-            letterSpacing: 1,
-            textAlign: 'center',
+            width: '100%',
+            height: '100%',
+            background: 'linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-mid) 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            px: 2,
           }}
         >
-          {alt}
-        </Typography>
-      </Box>
-    );
-  }
-
-  return (
-    <CardMedia
-      component="img"
-      height="180"
-      image={src}
-      alt={alt}
-      onError={() => setImgError(true)}
-      sx={{ objectFit: 'cover', bgcolor: 'var(--color-secondary)' }}
-    />
+          <Typography
+            variant="body2"
+            sx={{ color: 'rgba(255,255,255,0.6)', fontWeight: 600, textAlign: 'center' }}
+          >
+            {alt}
+          </Typography>
+        </Box>
+      )}
+    </Box>
   );
 }
 
@@ -91,7 +86,7 @@ function ProjectCard({ project }) {
   return (
     <Card
       sx={{
-        height: '100%',
+        aspectRatio: '1 / 1',
         display: 'flex',
         flexDirection: 'column',
         borderRadius: 3,
@@ -107,30 +102,38 @@ function ProjectCard({ project }) {
       <ThumbnailImage src={thumbnailSrc} alt={project.title} />
 
       {/* 카드 내용 */}
-      <CardContent sx={{ flexGrow: 1, p: 2.5 }}>
+      <CardContent sx={{ flex: 1, overflow: 'hidden', p: 1.5, pb: '0 !important' }}>
         <Typography
           variant="caption"
-          sx={{ color: 'var(--color-text-muted)', display: 'block', mb: 1 }}
+          sx={{ color: 'var(--color-text-muted)', display: 'block', mb: 0.5 }}
         >
           {formattedDate}
         </Typography>
 
         <Typography
-          variant="h6"
-          sx={{ fontWeight: 700, color: 'var(--color-text-primary)', mb: 1, lineHeight: 1.35 }}
+          variant="subtitle2"
+          sx={{ fontWeight: 700, color: 'var(--color-text-primary)', mb: 0.5, lineHeight: 1.3 }}
         >
           {project.title}
         </Typography>
 
         <Typography
           variant="body2"
-          sx={{ color: 'var(--color-text-secondary)', mb: 2, lineHeight: 1.6 }}
+          sx={{
+            color: 'var(--color-text-secondary)',
+            mb: 1,
+            lineHeight: 1.5,
+            overflow: 'hidden',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+          }}
         >
           {project.description}
         </Typography>
 
         {/* 기술 스택 뱃지 */}
-        <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
+        <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ overflow: 'hidden', maxHeight: 48 }}>
           {project.tech_stack?.map((tech) => (
             <Chip
               key={tech}
@@ -140,8 +143,8 @@ function ProjectCard({ project }) {
                 bgcolor: 'var(--color-accent)',
                 color: 'var(--color-primary)',
                 fontWeight: 600,
-                fontSize: '0.7rem',
-                height: 22,
+                fontSize: '0.65rem',
+                height: 20,
                 mb: 0.5,
               }}
             />
@@ -150,7 +153,7 @@ function ProjectCard({ project }) {
       </CardContent>
 
       {/* 버튼 */}
-      <CardActions sx={{ p: 2, pt: 0, flexWrap: 'wrap', gap: 0.5 }}>
+      <CardActions sx={{ p: 1.5, pt: 0.5, flexWrap: 'wrap', gap: 0.5, flexShrink: 0 }}>
         {project.demo_url && (
           <Button
             size="small"
