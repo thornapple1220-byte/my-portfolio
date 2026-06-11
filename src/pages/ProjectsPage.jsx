@@ -42,7 +42,7 @@ function ThumbnailImage({ src, alt }) {
   const [imgError, setImgError] = useState(false);
 
   return (
-    <Box sx={{ height: '48%', flexShrink: 0, overflow: 'hidden' }}>
+    <Box sx={{ height: '55%', flexShrink: 0, overflow: 'hidden' }}>
       {src && !imgError ? (
         <Box
           component="img"
@@ -85,7 +85,7 @@ function ProjectCard({ project }) {
 
   return (
     /* padding-top: 100% 트릭으로 정사각형 비율 보장 */
-    <Box sx={{ position: 'relative', width: '100%', paddingTop: '100%' }}>
+    <Box sx={{ position: 'relative', width: '100%', paddingTop: '130%' }}>
     <Card
       sx={{
         position: 'absolute',
