@@ -8,6 +8,14 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import ArticleIcon from '@mui/icons-material/Article';
 import supabase from '../utils/supabase';
 
+const THUM_BASE = 'https://image.thum.io/get/width/600/crop/400';
+
+function getThumbnailUrl(project) {
+  if (project.thumbnail_url) return project.thumbnail_url;
+  if (project.detail_url) return `${THUM_BASE}/${project.detail_url}`;
+  return null;
+}
+
 function SectionLabel({ text }) {
   return (
     <Typography
@@ -42,11 +50,17 @@ function ThumbnailImage({ src, alt }) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          px: 2,
         }}
       >
         <Typography
           variant="body2"
-          sx={{ color: 'rgba(255,255,255,0.5)', fontWeight: 600, letterSpacing: 1 }}
+          sx={{
+            color: 'rgba(255,255,255,0.6)',
+            fontWeight: 600,
+            letterSpacing: 1,
+            textAlign: 'center',
+          }}
         >
           {alt}
         </Typography>
@@ -67,6 +81,8 @@ function ThumbnailImage({ src, alt }) {
 }
 
 function ProjectCard({ project }) {
+  const thumbnailSrc = getThumbnailUrl(project);
+
   const formattedDate = new Date(project.created_at).toLocaleDateString('ko-KR', {
     year: 'numeric',
     month: 'long',
@@ -83,12 +99,12 @@ function ProjectCard({ project }) {
         transition: 'transform 0.25s ease, box-shadow 0.25s ease',
         '&:hover': {
           transform: 'scale(1.03)',
-          boxShadow: '0 12px 40px rgba(0,0,0,0.35)',
+          boxShadow: '0 12px 40px rgba(0,0,0,0.2)',
         },
       }}
     >
-      {/* 썸네일 */}
-      <ThumbnailImage src={project.thumbnail_url} alt={project.title} />
+      {/* 썸네일: detail_url 기반 thum.io 실시간 생성 */}
+      <ThumbnailImage src={thumbnailSrc} alt={project.title} />
 
       {/* 카드 내용 */}
       <CardContent sx={{ flexGrow: 1, p: 2.5 }}>
