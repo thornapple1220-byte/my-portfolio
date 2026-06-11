@@ -42,7 +42,7 @@ function ThumbnailImage({ src, alt }) {
   const [imgError, setImgError] = useState(false);
 
   return (
-    <Box sx={{ height: '52%', flexShrink: 0, overflow: 'hidden' }}>
+    <Box sx={{ height: '48%', flexShrink: 0, overflow: 'hidden' }}>
       {src && !imgError ? (
         <Box
           component="img"
@@ -105,38 +105,20 @@ function ProjectCard({ project }) {
       <ThumbnailImage src={thumbnailSrc} alt={project.title} />
 
       {/* 카드 내용 */}
-      <CardContent sx={{ flex: 1, overflow: 'hidden', p: 1.5, pb: '0 !important' }}>
-        <Typography
-          variant="caption"
-          sx={{ color: 'var(--color-text-muted)', display: 'block', mb: 0.5 }}
-        >
+      <CardContent sx={{ flex: 1, p: 1.5, pb: '0 !important', display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+        <Typography variant="caption" sx={{ color: 'var(--color-text-muted)' }}>
           {formattedDate}
         </Typography>
 
         <Typography
           variant="subtitle2"
-          sx={{ fontWeight: 700, color: 'var(--color-text-primary)', mb: 0.5, lineHeight: 1.3 }}
+          sx={{ fontWeight: 700, color: 'var(--color-text-primary)', lineHeight: 1.3 }}
         >
           {project.title}
         </Typography>
 
-        <Typography
-          variant="body2"
-          sx={{
-            color: 'var(--color-text-secondary)',
-            mb: 1,
-            lineHeight: 1.5,
-            overflow: 'hidden',
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-          }}
-        >
-          {project.description}
-        </Typography>
-
         {/* 기술 스택 뱃지 */}
-        <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ overflow: 'hidden', maxHeight: 48 }}>
+        <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ mt: 0.5 }}>
           {project.tech_stack?.map((tech) => (
             <Chip
               key={tech}
