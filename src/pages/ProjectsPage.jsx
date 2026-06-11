@@ -8,7 +8,7 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import ArticleIcon from '@mui/icons-material/Article';
 import supabase from '../utils/supabase';
 
-const THUM_BASE = 'https://image.thum.io/get/width/600/crop/400';
+const THUM_BASE = 'https://image.thum.io/get/width/600/crop/338';
 
 function getThumbnailUrl(project) {
   if (project.thumbnail_url) return project.thumbnail_url;
@@ -42,31 +42,30 @@ function ThumbnailImage({ src, alt }) {
   const [imgError, setImgError] = useState(false);
 
   return (
-    <Box sx={{ height: '55%', flexShrink: 0, overflow: 'hidden' }}>
+    /* 16:9 비율 고정 (56.25% = 9/16) */
+    <Box sx={{ position: 'relative', width: '100%', paddingTop: '56.25%', flexShrink: 0, overflow: 'hidden' }}>
       {src && !imgError ? (
         <Box
           component="img"
           src={src}
           alt={alt}
           onError={() => setImgError(true)}
-          sx={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          sx={{
+            position: 'absolute', top: 0, left: 0,
+            width: '100%', height: '100%',
+            objectFit: 'cover', display: 'block',
+          }}
         />
       ) : (
         <Box
           sx={{
-            width: '100%',
-            height: '100%',
+            position: 'absolute', top: 0, left: 0,
+            width: '100%', height: '100%',
             background: 'linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-mid) 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            px: 2,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', px: 2,
           }}
         >
-          <Typography
-            variant="body2"
-            sx={{ color: 'rgba(255,255,255,0.6)', fontWeight: 600, textAlign: 'center' }}
-          >
+          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', fontWeight: 600, textAlign: 'center' }}>
             {alt}
           </Typography>
         </Box>
@@ -84,12 +83,8 @@ function ProjectCard({ project }) {
   });
 
   return (
-    /* padding-top: 100% 트릭으로 정사각형 비율 보장 */
-    <Box sx={{ position: 'relative', width: '100%', paddingTop: '130%' }}>
     <Card
       sx={{
-        position: 'absolute',
-        top: 0, left: 0, right: 0, bottom: 0,
         display: 'flex',
         flexDirection: 'column',
         borderRadius: 3,
@@ -199,7 +194,6 @@ function ProjectCard({ project }) {
         )}
       </CardActions>
     </Card>
-    </Box>
   );
 }
 
