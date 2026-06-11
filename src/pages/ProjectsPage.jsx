@@ -84,9 +84,12 @@ function ProjectCard({ project }) {
   });
 
   return (
+    /* padding-top: 100% 트릭으로 정사각형 비율 보장 */
+    <Box sx={{ position: 'relative', width: '100%', paddingTop: '100%' }}>
     <Card
       sx={{
-        aspectRatio: '1 / 1',
+        position: 'absolute',
+        top: 0, left: 0, right: 0, bottom: 0,
         display: 'flex',
         flexDirection: 'column',
         borderRadius: 3,
@@ -214,6 +217,7 @@ function ProjectCard({ project }) {
         )}
       </CardActions>
     </Card>
+    </Box>
   );
 }
 
