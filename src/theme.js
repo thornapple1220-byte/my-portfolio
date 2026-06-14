@@ -34,6 +34,20 @@ const theme = createTheme({
     body2: { fontSize: '0.875rem', lineHeight: 1.6 },
   },
   spacing: 8,
+  components: {
+    MuiContainer: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          paddingLeft: theme.spacing(3),
+          paddingRight: theme.spacing(3),
+          [theme.breakpoints.up('sm')]: {
+            paddingLeft: theme.spacing(4),
+            paddingRight: theme.spacing(4),
+          },
+        }),
+      },
+    },
+  },
 });
 
 export default theme;

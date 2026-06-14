@@ -172,7 +172,7 @@ const SkillCard = memo(function SkillCard({ skill, animated, delay, onEdit, onDe
         tabIndex={0}
         aria-label={`${skill.name}, ${skill.category} 카테고리, ${skill.level}% 숙련도`}
         sx={{
-          p: 2.5, borderRadius: 3, height: '100%',
+          p: { xs: 1.5, sm: 2.5 }, borderRadius: 3, height: '100%',
           border: '1px solid var(--color-border)',
           bgcolor: 'var(--color-bg-primary)',
           position: 'relative',
@@ -206,10 +206,10 @@ const SkillCard = memo(function SkillCard({ skill, animated, delay, onEdit, onDe
           </IconButton>
         </Box>
 
-        <Stack direction="row" alignItems="center" spacing={1.5} sx={{ mb: 2 }}>
+        <Stack direction="row" alignItems="center" spacing={{ xs: 1, sm: 1.5 }} sx={{ mb: { xs: 1.5, sm: 2 } }}>
           <Box
             sx={{
-              width: 40, height: 40, borderRadius: 2, flexShrink: 0,
+              width: { xs: 32, sm: 40 }, height: { xs: 32, sm: 40 }, borderRadius: 2, flexShrink: 0,
               bgcolor: `${color}18`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               color,
@@ -417,9 +417,10 @@ function SkillsContent({ skills, onSkillsChange }) {
       </Stack>
 
       {/* 스킬 그리드 */}
-      <Grid container spacing={2} sx={{ mb: 4 }}>
+      <Box sx={{ overflow: 'hidden', mb: 4 }}>
+      <Grid container spacing={{ xs: 1.5, sm: 2 }}>
         {filtered.map((skill, idx) => (
-          <Grid item xs={12} sm={6} md={4} key={skill.id}>
+          <Grid item xs={6} sm={6} md={4} key={skill.id}>
             <SkillCard
               skill={skill}
               animated={animated}
@@ -437,6 +438,7 @@ function SkillsContent({ skills, onSkillsChange }) {
           </Grid>
         )}
       </Grid>
+      </Box>
 
       <Button
         variant="outlined"

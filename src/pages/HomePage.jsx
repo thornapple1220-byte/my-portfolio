@@ -1,6 +1,6 @@
 import { memo, useState, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Container, Typography, Button, Divider, Grid, CircularProgress, Stack, Avatar } from '@mui/material';
+import { Box, Container, Typography, Button, Divider, Grid, CircularProgress, Stack, Avatar, Card, CardContent, Chip } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import SchoolIcon from '@mui/icons-material/School';
 import WorkIcon from '@mui/icons-material/Work';
@@ -52,36 +52,36 @@ function HeroSection() {
       }}
     >
       <Container maxWidth="md" sx={{ textAlign: 'center' }}>
-        <SectionLabel text="Portfolio" />
+        <Box sx={{ mb: 6 }}>
+          <SectionLabel text="Portfolio" />
+        </Box>
 
-        {/* 이름 */}
-        <Typography
-          variant="h1"
-          sx={{
-            fontSize: { xs: '3.5rem', md: '5.5rem' },
-            fontWeight: 900,
-            color: 'var(--color-text-white)',
-            letterSpacing: '-2px',
-            lineHeight: 1,
-            mb: 2,
-          }}
-        >
-          장지은
-        </Typography>
-
-        {/* 역할 */}
-        <Typography
-          sx={{
-            fontSize: { xs: '0.9rem', md: '1rem' },
-            fontWeight: 700,
-            color: 'var(--color-accent)',
-            letterSpacing: '3px',
-            textTransform: 'uppercase',
-            mb: 5,
-          }}
-        >
-          Web Designer
-        </Typography>
+        {/* 이름 + 역할 */}
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'center', sm: 'baseline' }, justifyContent: 'center', gap: { xs: 1, sm: 5 }, mb: 5 }}>
+          <Typography
+            variant="h1"
+            sx={{
+              fontSize: { xs: '3.5rem', md: '5.5rem' },
+              fontWeight: 900,
+              color: 'var(--color-text-white)',
+              letterSpacing: '-2px',
+              lineHeight: 1,
+            }}
+          >
+            장지은
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: { xs: '1.3rem', md: '1.7rem' },
+              fontWeight: 700,
+              color: 'var(--color-accent)',
+              letterSpacing: '3px',
+              textTransform: 'uppercase',
+            }}
+          >
+            Web Designer
+          </Typography>
+        </Box>
 
         {/* 구분선 */}
         <Box sx={{ width: 48, height: 3, bgcolor: 'var(--color-primary)', mx: 'auto', mb: 6, borderRadius: 2 }} />
@@ -90,7 +90,7 @@ function HeroSection() {
         <Typography
           sx={{
             fontSize: { xs: '1.15rem', md: '1.45rem' },
-            color: 'rgba(255,255,255,0.8)',
+            color: 'var(--color-text-white)',
             lineHeight: 2.2,
             maxWidth: 600,
             mx: 'auto',
@@ -98,15 +98,15 @@ function HeroSection() {
             wordBreak: 'keep-all',
           }}
         >
-          회사에서만 6년, 프리랜서로도 꾸준히 —{' '}
+          회사에서만 6년, 프리랜서로도 꾸준히!<br />
           상세페이지, 배너, 쇼핑몰 관리, 간단한 영상까지{' '}
-          <Box component="span" sx={{ color: 'var(--color-accent)', fontWeight: 800 }}>
+          <Box component="span" sx={{ color: 'var(--color-accent)', fontWeight: 900, whiteSpace: 'nowrap', fontSize: { xs: '1.7rem', md: '2.3rem' }, letterSpacing: '-0.5px' }}>
             웬만한 건 다 해요.
           </Box>
         </Typography>
 
         {/* CTA 버튼 */}
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="center" alignItems="center">
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2, justifyContent: 'center', alignItems: 'center' }}>
           <Button
             component={Link}
             to="/projects"
@@ -133,7 +133,7 @@ function HeroSection() {
           >
             더 알아보기
           </Button>
-        </Stack>
+        </Box>
       </Container>
     </Box>
   );
@@ -170,18 +170,15 @@ function AboutSection({ photo }) {
           {/* 오른쪽: 텍스트 */}
           <Box sx={{ flex: 1 }}>
             <SectionLabel text="About Me" />
-            {/* 이름 + 카드 가로 배치 */}
-            <Stack direction="row" spacing={3} alignItems="flex-start" sx={{ mb: 4 }}>
-              <Box sx={{ flexShrink: 0 }}>
-                <Typography variant="h2" sx={{ mb: 0.5, color: 'var(--color-text-primary)', fontWeight: 800 }}>
-                  {basicInfo.name}
-                </Typography>
-                <Typography sx={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-primary)' }}>
-                  Web Designer
-                </Typography>
-              </Box>
-
-              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap alignItems="center" sx={{ mt: 0.5 }}>
+            {/* 이름 + 카드 */}
+            <Box sx={{ mb: 4 }}>
+              <Typography variant="h2" sx={{ mb: 0.5, color: 'var(--color-text-primary)', fontWeight: 800 }}>
+                {basicInfo.name}
+              </Typography>
+              <Typography sx={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-primary)', mb: 2 }}>
+                Web Designer
+              </Typography>
+              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap alignItems="center">
                 {[
                   { icon: <SchoolIcon fontSize="small" />, label: '학력', value: basicInfo.education },
                   { icon: <PaletteIcon fontSize="small" />, label: '전공', value: basicInfo.major },
@@ -208,7 +205,7 @@ function AboutSection({ photo }) {
                   </Box>
                 ))}
               </Stack>
-            </Stack>
+            </Box>
 
             {iAmSection && (
               <Box sx={{ mb: 4 }}>
@@ -349,22 +346,126 @@ const SkillSection = memo(function SkillSection({ skills }) {
   );
 });
 
+/* ── Projects 미리보기 카드 ────────────────────────── */
+const THUM_BASE = 'https://image.thum.io/get/width/600/crop/800';
+
+function HomeProjectCard({ project }) {
+  const thumbnailSrc = project.thumbnail_url
+    || (project.detail_url ? `${THUM_BASE}/${project.detail_url}` : null);
+
+  return (
+    <Card
+      sx={{
+        height: '100%', display: 'flex', flexDirection: 'column',
+        borderRadius: 3, overflow: 'hidden',
+        bgcolor: 'rgba(255,255,255,0.05)',
+        border: '1px solid rgba(255,255,255,0.1)',
+        transition: 'transform 0.25s, box-shadow 0.25s',
+        '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 12px 32px rgba(0,0,0,0.3)' },
+      }}
+    >
+      {/* 썸네일 (16:10 비율) */}
+      <Box sx={{ position: 'relative', width: '100%', paddingTop: '62.5%', overflow: 'hidden' }}>
+        {thumbnailSrc ? (
+          <Box
+            component="img"
+            src={thumbnailSrc}
+            alt={project.title}
+            loading="lazy"
+            sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
+          />
+        ) : (
+          <Box sx={{
+            position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+            background: 'linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-mid) 100%)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.85rem', textAlign: 'center', px: 2 }}>
+              {project.title}
+            </Typography>
+          </Box>
+        )}
+      </Box>
+
+      <CardContent sx={{ p: { xs: 1.2, sm: 2 } }}>
+        <Typography sx={{ fontWeight: 700, color: 'var(--color-text-white)', mb: 0.8, fontSize: { xs: '0.8rem', sm: '0.95rem' }, lineHeight: 1.4 }}>
+          {project.title}
+        </Typography>
+        <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
+          {project.tech_stack?.slice(0, 2).map((tech) => (
+            <Chip
+              key={tech}
+              label={tech}
+              size="small"
+              sx={{ bgcolor: 'rgba(255,45,85,0.15)', color: 'var(--color-accent)', fontSize: { xs: '0.55rem', sm: '0.6rem' }, height: 16, fontWeight: 600 }}
+            />
+          ))}
+        </Stack>
+      </CardContent>
+    </Card>
+  );
+}
+
 /* ── Projects 섹션 ─────────────────────────────────── */
 function ProjectsSection() {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProjects() {
+      try {
+        const { data } = await supabase
+          .from('projects')
+          .select('*')
+          .eq('is_published', true)
+          .order('sort_order', { ascending: true })
+          .limit(3);
+        setProjects(data || []);
+      } catch (e) {
+        console.error('[Projects] fetch error:', e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProjects();
+  }, []);
+
   return (
     <Box sx={{ ...sectionBase, bgcolor: 'var(--color-bg-navy-mid)' }}>
-      <Container maxWidth="md" sx={{ textAlign: 'center' }}>
+      <Container maxWidth="md">
         <SectionLabel text="Projects" />
-        <Typography variant="h2" sx={{ mb: 3, color: 'var(--color-text-white)' }}>
-          여기는 Projects 섹션입니다.
+        <Typography variant="h2" sx={{ mb: 1, color: 'var(--color-text-white)', fontWeight: 800 }}>
+          프로젝트
         </Typography>
-        <Typography
-          variant="body1"
-          sx={{ color: 'rgba(255,255,255,0.75)', maxWidth: 520, mx: 'auto', mb: 4 }}
-        >
-          대표작 썸네일 3-4개와 '더 보기' 버튼이 들어갈 예정입니다.
+        <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.65)', mb: 6 }}>
+          대표 작업물을 소개합니다.
         </Typography>
+
+        {loading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
+            <CircularProgress sx={{ color: 'var(--color-primary)' }} />
+          </Box>
+        ) : projects.length === 0 ? (
+          <Box sx={{ textAlign: 'center', py: 6 }}>
+            <Typography sx={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.95rem' }}>
+              등록된 프로젝트가 없습니다.
+            </Typography>
+          </Box>
+        ) : (
+          <Box sx={{ overflow: 'hidden', mb: 6 }}>
+            <Grid container spacing={{ xs: 1.5, sm: 3 }}>
+              {projects.map((project) => (
+                <Grid item xs={6} sm={6} md={4} key={project.id}>
+                  <HomeProjectCard project={project} />
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+        )}
+
         <Button
+          component={Link}
+          to="/projects"
           variant="outlined"
           sx={{
             color: 'var(--color-text-white)',
