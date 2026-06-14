@@ -44,6 +44,7 @@ function HeroSection() {
     <Box
       sx={{
         ...sectionBase,
+        py: { xs: 14, md: 20 },
         minHeight: '90vh',
         display: 'flex',
         alignItems: 'center',
@@ -62,7 +63,7 @@ function HeroSection() {
             color: 'var(--color-text-white)',
             letterSpacing: '-2px',
             lineHeight: 1,
-            mb: 1,
+            mb: 2,
           }}
         >
           장지은
@@ -76,24 +77,24 @@ function HeroSection() {
             color: 'var(--color-accent)',
             letterSpacing: '3px',
             textTransform: 'uppercase',
-            mb: 4,
+            mb: 5,
           }}
         >
           Web Designer
         </Typography>
 
         {/* 구분선 */}
-        <Box sx={{ width: 48, height: 3, bgcolor: 'var(--color-primary)', mx: 'auto', mb: 4, borderRadius: 2 }} />
+        <Box sx={{ width: 48, height: 3, bgcolor: 'var(--color-primary)', mx: 'auto', mb: 6, borderRadius: 2 }} />
 
         {/* 헤드라인 */}
         <Typography
           sx={{
-            fontSize: { xs: '1rem', md: '1.15rem' },
+            fontSize: { xs: '1.15rem', md: '1.45rem' },
             color: 'rgba(255,255,255,0.8)',
-            lineHeight: 2,
-            maxWidth: 540,
+            lineHeight: 2.2,
+            maxWidth: 600,
             mx: 'auto',
-            mb: 5,
+            mb: 8,
             wordBreak: 'keep-all',
           }}
         >
@@ -105,7 +106,7 @@ function HeroSection() {
         </Typography>
 
         {/* CTA 버튼 */}
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="center">
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="center" alignItems="center">
           <Button
             component={Link}
             to="/projects"
