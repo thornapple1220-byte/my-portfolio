@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Box, Container, Typography, Button, Divider, Grid, CircularProgress } from '@mui/material';
+import { Box, Container, Typography, Button, Divider, Grid, CircularProgress, Stack } from '@mui/material';
+import { aboutMeData, skillsData, categoryColors } from '../data/aboutMeData';
 import ContactInfoCard from '../components/common/ContactInfoCard';
 import GuestbookForm from '../components/common/GuestbookForm';
 import GuestbookCard from '../components/common/GuestbookCard';
@@ -62,21 +63,54 @@ function HeroSection() {
 
 /* ── About Me 섹션 ─────────────────────────────────── */
 function AboutSection() {
+  const { basicInfo, sections } = aboutMeData;
+  const iAmSection = sections.find((s) => s.showInHome && s.id === 'i-am');
+
   return (
     <Box sx={{ ...sectionBase, bgcolor: 'var(--color-bg-primary)' }}>
-      <Container maxWidth="md" sx={{ textAlign: 'center' }}>
+      <Container maxWidth="md">
         <SectionLabel text="About Me" />
-        <Typography variant="h2" sx={{ mb: 3, color: 'var(--color-text-primary)' }}>
-          여기는 About Me 섹션입니다.
+        <Typography variant="h2" sx={{ mb: 0.5, color: 'var(--color-text-primary)', fontWeight: 800 }}>
+          {basicInfo.name}
         </Typography>
         <Typography
-          variant="body1"
-          sx={{ color: 'var(--color-text-secondary)', maxWidth: 520, mx: 'auto', mb: 4 }}
+          sx={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-primary)', mb: 5 }}
         >
-          간단한 자기소개와 '더 알아보기' 버튼이 들어갈 예정입니다.
+          Web Designer · {basicInfo.experience}
         </Typography>
+
+        {iAmSection && (
+          <Stack spacing={2.5} sx={{ mb: 6 }}>
+            {iAmSection.content.map((phrase, idx) => (
+              <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Box
+                  sx={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: '50%',
+                    bgcolor: idx === iAmSection.content.length - 1
+                      ? 'var(--color-primary)'
+                      : 'var(--color-accent)',
+                    flexShrink: 0,
+                  }}
+                />
+                <Typography
+                  sx={{
+                    fontSize: { xs: '1.1rem', md: '1.4rem' },
+                    fontWeight: 700,
+                    color: 'var(--color-text-primary)',
+                  }}
+                >
+                  {phrase}
+                </Typography>
+              </Box>
+            ))}
+          </Stack>
+        )}
+
         <Button
           variant="contained"
+          href="/my-portfolio/about"
           sx={{
             bgcolor: 'var(--color-button-primary)',
             '&:hover': { bgcolor: 'var(--color-button-hover)' },
@@ -84,6 +118,7 @@ function AboutSection() {
             py: 1.2,
             borderRadius: 2,
             fontWeight: 700,
+            textTransform: 'none',
           }}
         >
           더 알아보기
@@ -95,19 +130,71 @@ function AboutSection() {
 
 /* ── Skill Tree 섹션 ───────────────────────────────── */
 function SkillSection() {
+  const [animated, setAnimated] = useState(false);
+  const homeSkills = skillsData
+    .filter((s) => s.showInHome)
+    .sort((a, b) => b.level - a.level);
+
+  useEffect(() => {
+    const t = setTimeout(() => setAnimated(true), 200);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <Box sx={{ ...sectionBase, bgcolor: 'var(--color-bg-soft)' }}>
-      <Container maxWidth="md" sx={{ textAlign: 'center' }}>
+      <Container maxWidth="md">
         <SectionLabel text="Skill Tree" />
-        <Typography variant="h2" sx={{ mb: 3, color: 'var(--color-text-primary)' }}>
-          여기는 Skill Tree 섹션입니다.
+        <Typography variant="h2" sx={{ mb: 1, color: 'var(--color-text-primary)', fontWeight: 800 }}>
+          주요 스킬
         </Typography>
-        <Typography
-          variant="body1"
-          sx={{ color: 'var(--color-text-secondary)', maxWidth: 520, mx: 'auto' }}
-        >
-          기술 스택을 트리나 프로그레스바로 시각화할 예정입니다.
+        <Typography variant="body1" sx={{ color: 'var(--color-text-secondary)', mb: 6 }}>
+          숙련도 높은 순으로 정렬됩니다.
         </Typography>
+
+        <Stack spacing={2.5}>
+          {homeSkills.map((skill, idx) => {
+            const color = categoryColors[skill.category] ?? '#999';
+            return (
+              <Box key={skill.id}>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 0.8 }}>
+                  <Stack direction="row" spacing={1.2} alignItems="center">
+                    <Box
+                      sx={{
+                        width: 8, height: 8, borderRadius: '50%',
+                        bgcolor: color, flexShrink: 0,
+                      }}
+                    />
+                    <Typography sx={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text-primary)' }}>
+                      {skill.name}
+                    </Typography>
+                    <Box
+                      sx={{
+                        fontSize: '0.65rem', fontWeight: 700, px: 0.8, py: 0.2,
+                        borderRadius: 1, bgcolor: `${color}18`, color,
+                      }}
+                    >
+                      {skill.category}
+                    </Box>
+                  </Stack>
+                  <Typography sx={{ fontSize: '0.9rem', fontWeight: 800, color }}>
+                    {skill.level}%
+                  </Typography>
+                </Stack>
+                <Box sx={{ bgcolor: 'rgba(0,0,0,0.07)', borderRadius: 4, height: 10, overflow: 'hidden' }}>
+                  <Box
+                    sx={{
+                      width: animated ? `${skill.level}%` : '0%',
+                      height: '100%',
+                      borderRadius: 4,
+                      bgcolor: color,
+                      transition: `width 0.9s ease-out ${idx * 100}ms`,
+                    }}
+                  />
+                </Box>
+              </Box>
+            );
+          })}
+        </Stack>
       </Container>
     </Box>
   );
