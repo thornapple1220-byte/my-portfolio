@@ -51,16 +51,88 @@ function HeroSection() {
       }}
     >
       <Container maxWidth="md" sx={{ textAlign: 'center' }}>
-        <SectionLabel text="Hero" />
-        <Typography variant="h1" sx={{ mb: 3, color: 'var(--color-text-white)' }}>
-          여기는 Hero 섹션입니다.
-        </Typography>
+        <SectionLabel text="Portfolio" />
+
+        {/* 이름 */}
         <Typography
-          variant="body1"
-          sx={{ color: 'rgba(255,255,255,0.7)', maxWidth: 520, mx: 'auto' }}
+          variant="h1"
+          sx={{
+            fontSize: { xs: '3.5rem', md: '5.5rem' },
+            fontWeight: 900,
+            color: 'var(--color-text-white)',
+            letterSpacing: '-2px',
+            lineHeight: 1,
+            mb: 1,
+          }}
         >
-          메인 비주얼, 이름, 간단 소개가 들어갈 예정입니다.
+          장지은
         </Typography>
+
+        {/* 역할 */}
+        <Typography
+          sx={{
+            fontSize: { xs: '0.9rem', md: '1rem' },
+            fontWeight: 700,
+            color: 'var(--color-accent)',
+            letterSpacing: '3px',
+            textTransform: 'uppercase',
+            mb: 4,
+          }}
+        >
+          Web Designer
+        </Typography>
+
+        {/* 구분선 */}
+        <Box sx={{ width: 48, height: 3, bgcolor: 'var(--color-primary)', mx: 'auto', mb: 4, borderRadius: 2 }} />
+
+        {/* 헤드라인 */}
+        <Typography
+          sx={{
+            fontSize: { xs: '1rem', md: '1.15rem' },
+            color: 'rgba(255,255,255,0.8)',
+            lineHeight: 2,
+            maxWidth: 540,
+            mx: 'auto',
+            mb: 5,
+            wordBreak: 'keep-all',
+          }}
+        >
+          회사에서만 6년, 프리랜서로도 꾸준히 —{' '}
+          상세페이지, 배너, 쇼핑몰 관리, 간단한 영상까지{' '}
+          <Box component="span" sx={{ color: 'var(--color-accent)', fontWeight: 800 }}>
+            웬만한 건 다 해요.
+          </Box>
+        </Typography>
+
+        {/* CTA 버튼 */}
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="center">
+          <Button
+            component={Link}
+            to="/projects"
+            variant="contained"
+            sx={{
+              bgcolor: 'var(--color-button-primary)',
+              '&:hover': { bgcolor: 'var(--color-button-hover)' },
+              px: 4, py: 1.2, borderRadius: 2, fontWeight: 700, textTransform: 'none',
+              boxShadow: '0 3px 6px rgba(0,0,0,0.15)',
+            }}
+          >
+            작업물 보기
+          </Button>
+          <Button
+            href="/my-portfolio/about"
+            variant="outlined"
+            sx={{
+              borderColor: 'rgba(255,255,255,0.6)',
+              color: 'var(--color-text-white)',
+              px: 4, py: 1.2, borderRadius: 2, fontWeight: 700, textTransform: 'none',
+              boxShadow: '0 3px 6px rgba(0,0,0,0.15)',
+              '&:hover': { bgcolor: 'rgba(255,255,255,0.1)', borderColor: 'var(--color-text-white)', boxShadow: '0 4px 10px rgba(0,0,0,0.2)' },
+            }}
+          >
+            더 알아보기
+          </Button>
+        </Stack>
       </Container>
     </Box>
   );
