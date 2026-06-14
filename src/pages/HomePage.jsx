@@ -1,5 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Box, Container, Typography, Button, Divider, Grid, CircularProgress, Stack } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { Box, Container, Typography, Button, Divider, Grid, CircularProgress, Stack, Avatar } from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
+import SchoolIcon from '@mui/icons-material/School';
+import WorkIcon from '@mui/icons-material/Work';
+import PaletteIcon from '@mui/icons-material/Palette';
 import { aboutMeData, skillsData, categoryColors } from '../data/aboutMeData';
 import ContactInfoCard from '../components/common/ContactInfoCard';
 import GuestbookForm from '../components/common/GuestbookForm';
@@ -62,67 +67,126 @@ function HeroSection() {
 }
 
 /* ── About Me 섹션 ─────────────────────────────────── */
-function AboutSection() {
+function AboutSection({ photo }) {
   const { basicInfo, sections } = aboutMeData;
   const iAmSection = sections.find((s) => s.showInHome && s.id === 'i-am');
 
   return (
     <Box sx={{ ...sectionBase, bgcolor: 'var(--color-bg-primary)' }}>
       <Container maxWidth="md">
-        <SectionLabel text="About Me" />
-        <Typography variant="h2" sx={{ mb: 0.5, color: 'var(--color-text-primary)', fontWeight: 800 }}>
-          {basicInfo.name}
-        </Typography>
-        <Typography
-          sx={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-primary)', mb: 5 }}
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          spacing={{ xs: 6, md: 8 }}
+          alignItems="center"
         >
-          Web Designer · {basicInfo.experience}
-        </Typography>
+          {/* 왼쪽: 프로필 사진 */}
+          <Avatar
+            src={photo}
+            sx={{
+              width: { xs: 200, md: 260 },
+              height: { xs: 200, md: 260 },
+              bgcolor: 'var(--color-accent)',
+              border: '5px solid var(--color-border)',
+              boxShadow: '0 16px 48px rgba(255,45,85,0.18)',
+              flexShrink: 0,
+            }}
+          >
+            <PersonIcon sx={{ fontSize: { xs: '5rem', md: '7rem' }, color: 'var(--color-primary)' }} />
+          </Avatar>
 
-        {iAmSection && (
-          <Stack spacing={2.5} sx={{ mb: 6 }}>
-            {iAmSection.content.map((phrase, idx) => (
-              <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <Box
-                  sx={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: '50%',
-                    bgcolor: idx === iAmSection.content.length - 1
-                      ? 'var(--color-primary)'
-                      : 'var(--color-accent)',
-                    flexShrink: 0,
-                  }}
-                />
-                <Typography
-                  sx={{
-                    fontSize: { xs: '1.1rem', md: '1.4rem' },
-                    fontWeight: 700,
-                    color: 'var(--color-text-primary)',
-                  }}
-                >
-                  {phrase}
+          {/* 오른쪽: 텍스트 */}
+          <Box sx={{ flex: 1 }}>
+            <SectionLabel text="About Me" />
+            {/* 이름 + 카드 가로 배치 */}
+            <Stack direction="row" spacing={3} alignItems="flex-start" sx={{ mb: 4 }}>
+              <Box sx={{ flexShrink: 0 }}>
+                <Typography variant="h2" sx={{ mb: 0.5, color: 'var(--color-text-primary)', fontWeight: 800 }}>
+                  {basicInfo.name}
+                </Typography>
+                <Typography sx={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-primary)' }}>
+                  Web Designer
                 </Typography>
               </Box>
-            ))}
-          </Stack>
-        )}
 
-        <Button
-          variant="contained"
-          href="/my-portfolio/about"
-          sx={{
-            bgcolor: 'var(--color-button-primary)',
-            '&:hover': { bgcolor: 'var(--color-button-hover)' },
-            px: 4,
-            py: 1.2,
-            borderRadius: 2,
-            fontWeight: 700,
-            textTransform: 'none',
-          }}
-        >
-          더 알아보기
-        </Button>
+              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap alignItems="center" sx={{ mt: 0.5 }}>
+                {[
+                  { icon: <SchoolIcon fontSize="small" />, label: '학력', value: basicInfo.education },
+                  { icon: <PaletteIcon fontSize="small" />, label: '전공', value: basicInfo.major },
+                  { icon: <WorkIcon fontSize="small" />,   label: '경력', value: basicInfo.experience },
+                ].map(({ icon, label, value }) => (
+                  <Box
+                    key={label}
+                    sx={{
+                      display: 'flex', alignItems: 'center', gap: 1,
+                      bgcolor: 'var(--color-bg-soft)',
+                      border: '1px solid var(--color-border)',
+                      borderRadius: 2, px: 2.5, py: 0.8,
+                    }}
+                  >
+                    <Box sx={{ color: 'var(--color-primary)', display: 'flex', flexShrink: 0 }}>{icon}</Box>
+                    <Box>
+                      <Typography sx={{ fontSize: '0.62rem', fontWeight: 700, color: 'var(--color-text-secondary)', letterSpacing: '0.5px', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+                        {label}
+                      </Typography>
+                      <Typography sx={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--color-text-primary)', whiteSpace: 'nowrap' }}>
+                        {value}
+                      </Typography>
+                    </Box>
+                  </Box>
+                ))}
+              </Stack>
+            </Stack>
+
+            {iAmSection && (
+              <Box sx={{ mb: 4 }}>
+                {/* 큰 I AM 텍스트 */}
+                <Typography
+                  sx={{
+                    fontSize: { xs: '2.8rem', md: '3.8rem' },
+                    fontWeight: 900,
+                    color: 'var(--color-accent)',
+                    lineHeight: 1,
+                    letterSpacing: '-1.5px',
+                    userSelect: 'none',
+                  }}
+                >
+                  I AM
+                </Typography>
+                <Box sx={{ width: 44, height: 4, bgcolor: 'var(--color-primary)', mt: 1, mb: 3, borderRadius: 2 }} />
+
+                <Stack spacing={2}>
+                  {iAmSection.content.map((phrase, idx) => (
+                    <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                      <Box
+                        sx={{
+                          width: 8, height: 8, borderRadius: '50%', flexShrink: 0,
+                          bgcolor: idx === iAmSection.content.length - 1
+                            ? 'var(--color-primary)'
+                            : 'var(--color-accent)',
+                        }}
+                      />
+                      <Typography sx={{ fontSize: { xs: '1rem', md: '1.2rem' }, fontWeight: 700, color: 'var(--color-text-primary)' }}>
+                        {phrase}
+                      </Typography>
+                    </Box>
+                  ))}
+                </Stack>
+              </Box>
+            )}
+
+            <Button
+              variant="contained"
+              href="/my-portfolio/about"
+              sx={{
+                bgcolor: 'var(--color-button-primary)',
+                '&:hover': { bgcolor: 'var(--color-button-hover)' },
+                px: 4, py: 1.2, borderRadius: 2, fontWeight: 700, textTransform: 'none',
+              }}
+            >
+              더 알아보기
+            </Button>
+          </Box>
+        </Stack>
       </Container>
     </Box>
   );
@@ -131,9 +195,13 @@ function AboutSection() {
 /* ── Skill Tree 섹션 ───────────────────────────────── */
 function SkillSection() {
   const [animated, setAnimated] = useState(false);
+  const categoryOrder = ['Design', 'Frontend', 'Framework', '기타'];
   const homeSkills = skillsData
     .filter((s) => s.showInHome)
-    .sort((a, b) => b.level - a.level);
+    .sort((a, b) => {
+      const catDiff = categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category);
+      return catDiff !== 0 ? catDiff : b.level - a.level;
+    });
 
   useEffect(() => {
     const t = setTimeout(() => setAnimated(true), 200);
@@ -148,38 +216,28 @@ function SkillSection() {
           주요 스킬
         </Typography>
         <Typography variant="body1" sx={{ color: 'var(--color-text-secondary)', mb: 6 }}>
-          숙련도 높은 순으로 정렬됩니다.
+          카테고리 순으로 정렬됩니다.
         </Typography>
 
-        <Stack spacing={2.5}>
+        <Stack spacing={2.5} sx={{ mb: 6 }}>
           {homeSkills.map((skill, idx) => {
             const color = categoryColors[skill.category] ?? '#999';
             return (
               <Box key={skill.id}>
-                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 0.8 }}>
-                  <Stack direction="row" spacing={1.2} alignItems="center">
-                    <Box
-                      sx={{
-                        width: 8, height: 8, borderRadius: '50%',
-                        bgcolor: color, flexShrink: 0,
-                      }}
-                    />
-                    <Typography sx={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text-primary)' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.8 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2 }}>
+                    <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: color, flexShrink: 0 }} />
+                    <Box sx={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text-primary)' }}>
                       {skill.name}
-                    </Typography>
-                    <Box
-                      sx={{
-                        fontSize: '0.65rem', fontWeight: 700, px: 0.8, py: 0.2,
-                        borderRadius: 1, bgcolor: `${color}18`, color,
-                      }}
-                    >
+                    </Box>
+                    <Box sx={{ fontSize: '0.65rem', fontWeight: 700, color }}>
                       {skill.category}
                     </Box>
-                  </Stack>
-                  <Typography sx={{ fontSize: '0.9rem', fontWeight: 800, color }}>
+                  </Box>
+                  <Box sx={{ fontSize: '0.9rem', fontWeight: 800, color, flexShrink: 0, ml: 2 }}>
                     {skill.level}%
-                  </Typography>
-                </Stack>
+                  </Box>
+                </Box>
                 <Box sx={{ bgcolor: 'rgba(0,0,0,0.07)', borderRadius: 4, height: 10, overflow: 'hidden' }}>
                   <Box
                     sx={{
@@ -195,6 +253,21 @@ function SkillSection() {
             );
           })}
         </Stack>
+
+        <Button
+          component={Link}
+          to="/about?tab=1"
+          variant="outlined"
+          sx={{
+            borderColor: 'var(--color-primary)',
+            color: 'var(--color-primary)',
+            px: 4, py: 1.2, borderRadius: 2, fontWeight: 700, textTransform: 'none',
+            boxShadow: '0 3px 6px rgba(0,0,0,0.15)',
+            '&:hover': { bgcolor: 'var(--color-accent)', borderColor: 'var(--color-primary)', boxShadow: '0 4px 10px rgba(0,0,0,0.2)' },
+          }}
+        >
+          더 알아보기
+        </Button>
       </Container>
     </Box>
   );
@@ -220,17 +293,12 @@ function ProjectsSection() {
           sx={{
             color: 'var(--color-text-white)',
             borderColor: 'rgba(255,255,255,0.6)',
-            px: 4,
-            py: 1.2,
-            borderRadius: 2,
-            fontWeight: 700,
-            '&:hover': {
-              bgcolor: 'rgba(255,255,255,0.15)',
-              borderColor: 'var(--color-text-white)',
-            },
+            px: 4, py: 1.2, borderRadius: 2, fontWeight: 700, textTransform: 'none',
+            boxShadow: '0 3px 6px rgba(0,0,0,0.15)',
+            '&:hover': { bgcolor: 'rgba(255,255,255,0.15)', borderColor: 'var(--color-text-white)', boxShadow: '0 4px 10px rgba(0,0,0,0.2)' },
           }}
         >
-          더 보기
+          더 알아보기
         </Button>
       </Container>
     </Box>
@@ -322,12 +390,12 @@ function ContactSection() {
   );
 }
 
-function HomePage() {
+function HomePage({ photo }) {
   return (
     <Box>
       <HeroSection />
       <Divider sx={{ borderColor: 'var(--color-border)' }} />
-      <AboutSection />
+      <AboutSection photo={photo} />
       <Divider sx={{ borderColor: 'var(--color-border)' }} />
       <SkillSection />
       <Divider sx={{ borderColor: 'var(--color-border)' }} />

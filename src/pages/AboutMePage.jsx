@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   Box, Container, Typography, Card, Stack,
   Tab, Tabs, Avatar, Chip, IconButton,
@@ -378,9 +379,12 @@ function SectionContent({ section }) {
 }
 
 /* ── 메인 ───────────────────────────────────────────────── */
-function AboutMePage() {
-  const [photo, setPhoto] = useState(aboutMeData.basicInfo.photo);
-  const [activeTab, setActiveTab] = useState(0);
+function AboutMePage({ photo, onPhotoChange }) {
+  const [searchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState(() => {
+    const tab = Number(searchParams.get('tab'));
+    return Number.isFinite(tab) ? tab : 0;
+  });
   const { basicInfo, sections } = aboutMeData;
 
   const infoItems = [
@@ -395,8 +399,8 @@ function AboutMePage() {
       {/* ─ 프로필 히어로 ─ */}
       <Box sx={{ background: 'linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-secondary-mid) 100%)', py: { xs: 6, md: 8 } }}>
         <Container maxWidth="md">
-          <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 4, md: 6 }} alignItems={{ xs: 'center', md: 'flex-start' }}>
-            <ProfilePhoto photo={photo} onPhotoChange={setPhoto} />
+          <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 4, md: 6 }} alignItems="center">
+            <ProfilePhoto photo={photo} onPhotoChange={onPhotoChange} />
             <Box sx={{ flex: 1, textAlign: { xs: 'center', md: 'left' } }}>
               <SectionLabel text="About Me" />
               <Typography variant="h1" sx={{ fontSize: { xs: '2.2rem', md: '3rem' }, fontWeight: 900, color: 'var(--color-text-white)', letterSpacing: '-1px', mb: 0.5 }}>
