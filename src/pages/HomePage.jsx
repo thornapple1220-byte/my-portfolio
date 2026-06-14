@@ -1,11 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
+import { memo, useState, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Container, Typography, Button, Divider, Grid, CircularProgress, Stack, Avatar } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import SchoolIcon from '@mui/icons-material/School';
 import WorkIcon from '@mui/icons-material/Work';
 import PaletteIcon from '@mui/icons-material/Palette';
-import { aboutMeData, skillsData, categoryColors } from '../data/aboutMeData';
+import { aboutMeData, categoryColors } from '../data/aboutMeData';
 import ContactInfoCard from '../components/common/ContactInfoCard';
 import GuestbookForm from '../components/common/GuestbookForm';
 import GuestbookCard from '../components/common/GuestbookCard';
@@ -193,15 +193,18 @@ function AboutSection({ photo }) {
 }
 
 /* ── Skill Tree 섹션 ───────────────────────────────── */
-function SkillSection() {
+const SkillSection = memo(function SkillSection({ skills }) {
   const [animated, setAnimated] = useState(false);
   const categoryOrder = ['Design', 'Frontend', 'Framework', '기타'];
-  const homeSkills = skillsData
-    .filter((s) => s.showInHome)
-    .sort((a, b) => {
-      const catDiff = categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category);
-      return catDiff !== 0 ? catDiff : b.level - a.level;
-    });
+  const homeSkills = useMemo(() =>
+    skills
+      .filter((s) => s.showInHome)
+      .sort((a, b) => {
+        const catDiff = categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category);
+        return catDiff !== 0 ? catDiff : b.level - a.level;
+      }),
+    [skills]
+  );
 
   useEffect(() => {
     const t = setTimeout(() => setAnimated(true), 200);
@@ -271,7 +274,7 @@ function SkillSection() {
       </Container>
     </Box>
   );
-}
+});
 
 /* ── Projects 섹션 ─────────────────────────────────── */
 function ProjectsSection() {
@@ -390,14 +393,14 @@ function ContactSection() {
   );
 }
 
-function HomePage({ photo }) {
+function HomePage({ photo, skills }) {
   return (
     <Box>
       <HeroSection />
       <Divider sx={{ borderColor: 'var(--color-border)' }} />
       <AboutSection photo={photo} />
       <Divider sx={{ borderColor: 'var(--color-border)' }} />
-      <SkillSection />
+      <SkillSection skills={skills} />
       <Divider sx={{ borderColor: 'var(--color-border)' }} />
       <ProjectsSection />
       <Divider sx={{ borderColor: 'var(--color-border)' }} />

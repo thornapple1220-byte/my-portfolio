@@ -1,10 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { memo, useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
   Box, Container, Typography, Card, Stack,
   Tab, Tabs, Avatar, Chip, IconButton,
   Grid, Dialog, DialogTitle, DialogContent, DialogActions,
   TextField, MenuItem, Slider, Button, Tooltip,
+  Switch, FormControlLabel,
 } from '@mui/material';
 import CameraAltIcon        from '@mui/icons-material/CameraAlt';
 import SchoolIcon           from '@mui/icons-material/School';
@@ -21,23 +22,25 @@ import DescriptionIcon      from '@mui/icons-material/Description';
 import CodeIcon             from '@mui/icons-material/Code';
 import SmartToyIcon         from '@mui/icons-material/SmartToy';
 import AddIcon              from '@mui/icons-material/Add';
-import { aboutMeData, skillsData, categoryColors, CATEGORIES } from '../data/aboutMeData';
+import EditIcon             from '@mui/icons-material/Edit';
+import DeleteIcon           from '@mui/icons-material/Delete';
+import { aboutMeData, categoryColors, CATEGORIES } from '../data/aboutMeData';
 
 /* ── 아이콘 매핑 ──────────────────────────────────────────── */
 const skillIconMap = {
-  'Adobe Photoshop':    <BrushIcon />,
-  'Adobe Illustrator':  <GestureIcon />,
-  'Figma':              <DesignServicesIcon />,
-  'Adobe Premiere Pro': <MovieIcon />,
-  'Adobe After Effects':<AutoAwesomeIcon />,
-  '문서작성':           <DescriptionIcon />,
-  'HTML/CSS':           <CodeIcon />,
-  'Claude 바이브코딩':  <SmartToyIcon />,
+  'Adobe Photoshop':     <BrushIcon />,
+  'Adobe Illustrator':   <GestureIcon />,
+  'Figma':               <DesignServicesIcon />,
+  'Adobe Premiere Pro':  <MovieIcon />,
+  'Adobe After Effects': <AutoAwesomeIcon />,
+  '문서작성':            <DescriptionIcon />,
+  'HTML/CSS':            <CodeIcon />,
+  'Claude 바이브코딩':   <SmartToyIcon />,
 };
 const getSkillIcon = (name) => skillIconMap[name] ?? <CodeIcon />;
 
 /* ── 섹션 레이블 ──────────────────────────────────────────── */
-function SectionLabel({ text }) {
+const SectionLabel = memo(function SectionLabel({ text }) {
   return (
     <Typography
       sx={{
@@ -48,8 +51,7 @@ function SectionLabel({ text }) {
         textTransform: 'uppercase',
         color: 'var(--color-primary)',
         bgcolor: 'var(--color-accent)',
-        px: 1.5,
-        py: 0.5,
+        px: 1.5, py: 0.5,
         borderRadius: 1,
         mb: 2,
       }}
@@ -57,21 +59,24 @@ function SectionLabel({ text }) {
       {text}
     </Typography>
   );
-}
+});
 
 /* ── 프로필 사진 업로드 ────────────────────────────────────── */
-function ProfilePhoto({ photo, onPhotoChange }) {
+const ProfilePhoto = memo(function ProfilePhoto({ photo, onPhotoChange }) {
   const fileInputRef = useRef(null);
-  const handleFileChange = (e) => {
+
+  const handleFileChange = useCallback((e) => {
     const file = e.target.files[0];
     if (!file) return;
     onPhotoChange(URL.createObjectURL(file));
-  };
+  }, [onPhotoChange]);
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
       <Box sx={{ position: 'relative', display: 'inline-block' }}>
         <Avatar
           src={photo}
+          imgProps={{ loading: 'lazy', alt: '프로필 사진' }}
           sx={{
             width: 160, height: 160,
             bgcolor: 'var(--color-accent)',
@@ -83,6 +88,7 @@ function ProfilePhoto({ photo, onPhotoChange }) {
         </Avatar>
         <IconButton
           onClick={() => fileInputRef.current?.click()}
+          aria-label="프로필 사진 업로드"
           sx={{
             position: 'absolute', bottom: 4, right: 4,
             bgcolor: 'var(--color-primary)', color: '#fff',
@@ -100,10 +106,10 @@ function ProfilePhoto({ photo, onPhotoChange }) {
       </Typography>
     </Box>
   );
-}
+});
 
 /* ── 기본 정보 카드 ────────────────────────────────────────── */
-function InfoCard({ icon, label, value }) {
+const InfoCard = memo(function InfoCard({ icon, label, value }) {
   return (
     <Card
       elevation={0}
@@ -126,10 +132,10 @@ function InfoCard({ icon, label, value }) {
       </Stack>
     </Card>
   );
-}
+});
 
 /* ── I AM 섹션 ────────────────────────────────────────────── */
-function IAmContent({ content }) {
+const IAmContent = memo(function IAmContent({ content }) {
   return (
     <Box sx={{ py: 4 }}>
       <Box sx={{ mb: 5 }}>
@@ -141,7 +147,10 @@ function IAmContent({ content }) {
       <Stack spacing={3}>
         {content.map((phrase, idx) => (
           <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 2.5, pl: 1 }}>
-            <Box sx={{ width: 10, height: 10, borderRadius: '50%', flexShrink: 0, bgcolor: idx === content.length - 1 ? 'var(--color-primary)' : 'var(--color-accent)' }} />
+            <Box sx={{
+              width: 10, height: 10, borderRadius: '50%', flexShrink: 0,
+              bgcolor: idx === content.length - 1 ? 'var(--color-primary)' : 'var(--color-accent)',
+            }} />
             <Typography sx={{ fontSize: { xs: '1.25rem', md: '1.75rem' }, fontWeight: 700, color: 'var(--color-text-primary)', lineHeight: 1.4, letterSpacing: '-0.3px' }}>
               {phrase}
             </Typography>
@@ -150,24 +159,53 @@ function IAmContent({ content }) {
       </Stack>
     </Box>
   );
-}
+});
 
 /* ── 스킬 카드 ────────────────────────────────────────────── */
-function SkillCard({ skill, animated, delay }) {
+const SkillCard = memo(function SkillCard({ skill, animated, delay, onEdit, onDelete }) {
   const color = categoryColors[skill.category] ?? '#999';
+
   return (
     <Tooltip title={skill.description ?? ''} placement="top" arrow>
       <Card
         elevation={0}
+        tabIndex={0}
+        aria-label={`${skill.name}, ${skill.category} 카테고리, ${skill.level}% 숙련도`}
         sx={{
           p: 2.5, borderRadius: 3, height: '100%',
           border: '1px solid var(--color-border)',
           bgcolor: 'var(--color-bg-primary)',
+          position: 'relative',
           transition: 'box-shadow 0.2s, transform 0.2s',
           cursor: 'default',
           '&:hover': { boxShadow: '0 4px 20px rgba(255,45,85,0.12)', transform: 'translateY(-2px)' },
+          '&:hover .skill-actions': { opacity: 1 },
+          '&:focus-visible': { outline: '2px solid var(--color-primary)', outlineOffset: 2 },
         }}
       >
+        {/* 수정 / 삭제 버튼 (hover 시 표시) */}
+        <Box
+          className="skill-actions"
+          sx={{ position: 'absolute', top: 6, right: 6, display: 'flex', gap: 0.2, opacity: 0, transition: 'opacity 0.15s' }}
+        >
+          <IconButton
+            size="small"
+            aria-label={`${skill.name} 수정`}
+            onClick={(e) => { e.stopPropagation(); onEdit(skill); }}
+            sx={{ width: 26, height: 26, color: 'var(--color-text-secondary)', '&:hover': { color: 'var(--color-primary)', bgcolor: 'var(--color-accent)' } }}
+          >
+            <EditIcon sx={{ fontSize: '0.85rem' }} />
+          </IconButton>
+          <IconButton
+            size="small"
+            aria-label={`${skill.name} 삭제`}
+            onClick={(e) => { e.stopPropagation(); onDelete(skill.id); }}
+            sx={{ width: 26, height: 26, color: 'var(--color-text-secondary)', '&:hover': { color: '#d32f2f', bgcolor: 'rgba(211,47,47,0.08)' } }}
+          >
+            <DeleteIcon sx={{ fontSize: '0.85rem' }} />
+          </IconButton>
+        </Box>
+
         <Stack direction="row" alignItems="center" spacing={1.5} sx={{ mb: 2 }}>
           <Box
             sx={{
@@ -196,8 +234,14 @@ function SkillCard({ skill, animated, delay }) {
           </Box>
         </Stack>
 
-        {/* 프로그레스 바 */}
-        <Box sx={{ bgcolor: 'var(--color-bg-soft)', borderRadius: 4, height: 8, overflow: 'hidden' }}>
+        <Box
+          role="progressbar"
+          aria-valuenow={skill.level}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label={`${skill.name} 숙련도 ${skill.level}%`}
+          sx={{ bgcolor: 'var(--color-bg-soft)', borderRadius: 4, height: 8, overflow: 'hidden' }}
+        >
           <Box
             sx={{
               width: animated ? `${skill.level}%` : '0%',
@@ -211,27 +255,44 @@ function SkillCard({ skill, animated, delay }) {
       </Card>
     </Tooltip>
   );
-}
+});
 
-/* ── 스킬 추가 다이얼로그 ─────────────────────────────────── */
-function AddSkillDialog({ open, onClose, onAdd }) {
-  const [form, setForm] = useState({ name: '', level: 50, category: 'Design', description: '' });
+/* ── 스킬 다이얼로그 (추가 / 수정 공용) ──────────────────── */
+function SkillDialog({ open, onClose, onSave, initialValues }) {
+  const isEdit = Boolean(initialValues);
+  const [form, setForm] = useState({ name: '', level: 50, category: 'Design', description: '', showInHome: false });
 
-  const handleAdd = () => {
+  useEffect(() => {
+    if (open) {
+      setForm(initialValues
+        ? {
+            name: initialValues.name,
+            level: initialValues.level,
+            category: initialValues.category,
+            description: initialValues.description ?? '',
+            showInHome: initialValues.showInHome,
+          }
+        : { name: '', level: 50, category: 'Design', description: '', showInHome: false }
+      );
+    }
+  }, [open, initialValues]);
+
+  const handleSave = () => {
     if (!form.name.trim()) return;
-    onAdd({ ...form, id: Date.now(), showInHome: form.level >= 60 });
-    setForm({ name: '', level: 50, category: 'Design', description: '' });
+    onSave(isEdit ? { ...initialValues, ...form } : { ...form, id: Date.now() });
     onClose();
   };
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target?.value ?? e }));
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
-      <DialogTitle sx={{ fontWeight: 700, color: 'var(--color-text-primary)' }}>스킬 추가</DialogTitle>
+    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth aria-labelledby="skill-dialog-title">
+      <DialogTitle id="skill-dialog-title" sx={{ fontWeight: 700, color: 'var(--color-text-primary)' }}>
+        {isEdit ? '스킬 수정' : '스킬 추가'}
+      </DialogTitle>
       <DialogContent>
         <Stack spacing={2.5} sx={{ pt: 1 }}>
-          <TextField label="기술명" value={form.name} onChange={set('name')} fullWidth size="small" />
+          <TextField label="기술명" value={form.name} onChange={set('name')} fullWidth size="small" autoFocus />
           <TextField select label="카테고리" value={form.category} onChange={set('category')} fullWidth size="small">
             {CATEGORIES.filter((c) => c !== '전체').map((cat) => (
               <MenuItem key={cat} value={cat}>{cat}</MenuItem>
@@ -239,31 +300,42 @@ function AddSkillDialog({ open, onClose, onAdd }) {
           </TextField>
           <Box>
             <Stack direction="row" justifyContent="space-between">
-              <Typography sx={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text-primary)' }}>
-                숙련도
-              </Typography>
-              <Typography sx={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-primary)' }}>
-                {form.level}%
-              </Typography>
+              <Typography sx={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text-primary)' }}>숙련도</Typography>
+              <Typography sx={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-primary)' }}>{form.level}%</Typography>
             </Stack>
             <Slider
               value={form.level}
               onChange={(_, v) => setForm((f) => ({ ...f, level: v }))}
               min={0} max={100}
+              aria-label="숙련도 슬라이더"
               sx={{ color: 'var(--color-primary)', mt: 0.5 }}
             />
           </Box>
           <TextField label="설명 (툴팁)" value={form.description} onChange={set('description')} fullWidth size="small" multiline rows={2} />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={form.showInHome}
+                onChange={(e) => setForm((f) => ({ ...f, showInHome: e.target.checked }))}
+                aria-label="홈 탭에 표시"
+                sx={{
+                  '& .MuiSwitch-switchBase.Mui-checked': { color: 'var(--color-primary)' },
+                  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': { bgcolor: 'var(--color-primary)' },
+                }}
+              />
+            }
+            label={<Typography sx={{ fontSize: '0.85rem', color: 'var(--color-text-primary)' }}>홈 탭에 표시</Typography>}
+          />
         </Stack>
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 2.5 }}>
         <Button onClick={onClose} sx={{ color: 'var(--color-text-secondary)' }}>취소</Button>
         <Button
-          onClick={handleAdd}
+          onClick={handleSave}
           variant="contained"
           sx={{ bgcolor: 'var(--color-button-primary)', '&:hover': { bgcolor: 'var(--color-button-hover)' }, fontWeight: 700 }}
         >
-          추가
+          {isEdit ? '저장' : '추가'}
         </Button>
       </DialogActions>
     </Dialog>
@@ -271,27 +343,56 @@ function AddSkillDialog({ open, onClose, onAdd }) {
 }
 
 /* ── 스킬 섹션 ────────────────────────────────────────────── */
-function SkillsContent() {
-  const [skills, setSkills] = useState(skillsData);
+function SkillsContent({ skills, onSkillsChange }) {
   const [filter, setFilter] = useState('전체');
   const [animated, setAnimated] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [editTarget, setEditTarget] = useState(null);
 
   useEffect(() => {
     const t = setTimeout(() => setAnimated(true), 120);
     return () => clearTimeout(t);
   }, []);
 
-  const filtered = (filter === '전체' ? skills : skills.filter((s) => s.category === filter))
-    .slice()
-    .sort((a, b) => b.level - a.level);
+  const filtered = useMemo(() =>
+    (filter === '전체' ? skills : skills.filter((s) => s.category === filter))
+      .slice()
+      .sort((a, b) => b.level - a.level),
+    [skills, filter]
+  );
 
-  const filterColor = (cat) => (cat !== '전체' ? categoryColors[cat] : 'var(--color-primary)');
+  const filterColor = useCallback(
+    (cat) => (cat !== '전체' ? categoryColors[cat] : 'var(--color-primary)'),
+    []
+  );
+
+  const handleOpenAdd = useCallback(() => {
+    setEditTarget(null);
+    setDialogOpen(true);
+  }, []);
+
+  const handleOpenEdit = useCallback((skill) => {
+    setEditTarget(skill);
+    setDialogOpen(true);
+  }, []);
+
+  const handleDelete = useCallback((skillId) => {
+    onSkillsChange((prev) => prev.filter((s) => s.id !== skillId));
+  }, [onSkillsChange]);
+
+  const handleSave = useCallback((savedSkill) => {
+    if (editTarget) {
+      onSkillsChange((prev) => prev.map((s) => s.id === savedSkill.id ? savedSkill : s));
+    } else {
+      onSkillsChange((prev) => [...prev, savedSkill]);
+    }
+    setFilter('전체');
+  }, [editTarget, onSkillsChange]);
 
   return (
     <Box sx={{ py: 4 }}>
       {/* 카테고리 필터 */}
-      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mb: 4 }}>
+      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mb: 4 }} role="toolbar" aria-label="카테고리 필터">
         {CATEGORIES.map((cat) => {
           const active = filter === cat;
           const color = filterColor(cat);
@@ -300,6 +401,7 @@ function SkillsContent() {
               key={cat}
               label={cat}
               onClick={() => setFilter(cat)}
+              aria-pressed={active}
               sx={{
                 fontWeight: 700,
                 fontSize: '0.8rem',
@@ -318,16 +420,29 @@ function SkillsContent() {
       <Grid container spacing={2} sx={{ mb: 4 }}>
         {filtered.map((skill, idx) => (
           <Grid item xs={12} sm={6} md={4} key={skill.id}>
-            <SkillCard skill={skill} animated={animated} delay={idx * 80} />
+            <SkillCard
+              skill={skill}
+              animated={animated}
+              delay={idx * 80}
+              onEdit={handleOpenEdit}
+              onDelete={handleDelete}
+            />
           </Grid>
         ))}
+        {filtered.length === 0 && (
+          <Grid item xs={12}>
+            <Box sx={{ textAlign: 'center', py: 6, color: 'var(--color-text-secondary)' }}>
+              <Typography sx={{ fontSize: '0.95rem' }}>해당 카테고리의 스킬이 없어요.</Typography>
+            </Box>
+          </Grid>
+        )}
       </Grid>
 
-      {/* 스킬 추가 버튼 */}
       <Button
         variant="outlined"
         startIcon={<AddIcon />}
-        onClick={() => setDialogOpen(true)}
+        onClick={handleOpenAdd}
+        aria-label="새 스킬 추가"
         sx={{
           borderColor: 'var(--color-border)',
           color: 'var(--color-text-secondary)',
@@ -340,20 +455,18 @@ function SkillsContent() {
         스킬 추가
       </Button>
 
-      <AddSkillDialog
+      <SkillDialog
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
-        onAdd={(newSkill) => {
-          setSkills((prev) => [...prev, newSkill]);
-          setFilter('전체');
-        }}
+        onSave={handleSave}
+        initialValues={editTarget}
       />
     </Box>
   );
 }
 
 /* ── 개인적인 이야기 ──────────────────────────────────────── */
-function PersonalContent({ content }) {
+const PersonalContent = memo(function PersonalContent({ content }) {
   return (
     <Box sx={{ py: 4 }}>
       <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 3 }}>
@@ -362,24 +475,37 @@ function PersonalContent({ content }) {
           취미 & 라이프스타일
         </Typography>
       </Stack>
-      <Box sx={{ bgcolor: 'var(--color-bg-soft)', borderLeft: '4px solid var(--color-primary)', borderRadius: '0 12px 12px 0', p: 3, maxWidth: 600 }}>
+      <Box sx={{
+        bgcolor: 'var(--color-bg-soft)',
+        borderLeft: '4px solid var(--color-primary)',
+        borderRadius: '0 12px 12px 0',
+        p: 3, maxWidth: 600,
+      }}>
         <Typography sx={{ fontSize: { xs: '1rem', md: '1.1rem' }, color: 'var(--color-text-primary)', lineHeight: 1.9 }}>
           {content}
         </Typography>
       </Box>
     </Box>
   );
-}
+});
 
 /* ── 탭 콘텐츠 라우터 ─────────────────────────────────────── */
-function SectionContent({ section }) {
-  if (section.id === 'i-am')    return <IAmContent content={section.content} />;
-  if (section.id === 'skills')  return <SkillsContent />;
+function SectionContent({ section, skills, onSkillsChange }) {
+  if (section.id === 'i-am')   return <IAmContent content={section.content} />;
+  if (section.id === 'skills') return <SkillsContent skills={skills} onSkillsChange={onSkillsChange} />;
   return <PersonalContent content={section.content} />;
 }
 
+/* ── 탭 페이드 인 래퍼 ────────────────────────────────────── */
+const fadeIn = {
+  '@keyframes tabFadeIn': {
+    from: { opacity: 0, transform: 'translateY(10px)' },
+    to:   { opacity: 1, transform: 'translateY(0)' },
+  },
+};
+
 /* ── 메인 ───────────────────────────────────────────────── */
-function AboutMePage({ photo, onPhotoChange }) {
+function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
   const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState(() => {
     const tab = Number(searchParams.get('tab'));
@@ -387,11 +513,13 @@ function AboutMePage({ photo, onPhotoChange }) {
   });
   const { basicInfo, sections } = aboutMeData;
 
-  const infoItems = [
+  const handleTabChange = useCallback((_, v) => setActiveTab(v), []);
+
+  const infoItems = useMemo(() => [
     { icon: <SchoolIcon fontSize="small" />, label: '학력', value: basicInfo.education },
     { icon: <PaletteIcon fontSize="small" />, label: '전공', value: basicInfo.major },
     { icon: <WorkIcon fontSize="small" />,   label: '경력', value: basicInfo.experience },
-  ];
+  ], [basicInfo.education, basicInfo.major, basicInfo.experience]);
 
   return (
     <Box sx={{ minHeight: 'calc(100vh - 64px)', bgcolor: 'var(--color-bg-primary)' }}>
@@ -403,7 +531,10 @@ function AboutMePage({ photo, onPhotoChange }) {
             <ProfilePhoto photo={photo} onPhotoChange={onPhotoChange} />
             <Box sx={{ flex: 1, textAlign: { xs: 'center', md: 'left' } }}>
               <SectionLabel text="About Me" />
-              <Typography variant="h1" sx={{ fontSize: { xs: '2.2rem', md: '3rem' }, fontWeight: 900, color: 'var(--color-text-white)', letterSpacing: '-1px', mb: 0.5 }}>
+              <Typography
+                variant="h1"
+                sx={{ fontSize: { xs: '2.2rem', md: '3rem' }, fontWeight: 900, color: 'var(--color-text-white)', letterSpacing: '-1px', mb: 0.5 }}
+              >
                 {basicInfo.name}
               </Typography>
               <Typography sx={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-accent)', mb: 3, letterSpacing: '0.5px' }}>
@@ -423,7 +554,8 @@ function AboutMePage({ photo, onPhotoChange }) {
       <Container maxWidth="md" sx={{ py: { xs: 4, md: 8 } }}>
         <Tabs
           value={activeTab}
-          onChange={(_, v) => setActiveTab(v)}
+          onChange={handleTabChange}
+          aria-label="About Me 섹션 탭"
           sx={{
             borderBottom: '2px solid var(--color-border)',
             mb: 1,
@@ -435,11 +567,17 @@ function AboutMePage({ photo, onPhotoChange }) {
           {sections.map((section) => (
             <Tab
               key={section.id}
+              id={`tab-${section.id}`}
+              aria-controls={`tabpanel-${section.id}`}
               label={
                 <Stack direction="row" spacing={0.8} alignItems="center">
                   <span>{section.title}</span>
                   {section.showInHome && (
-                    <Chip label="홈" size="small" sx={{ height: 18, fontSize: '0.6rem', fontWeight: 700, bgcolor: 'var(--color-accent)', color: 'var(--color-primary)', '& .MuiChip-label': { px: 0.8 } }} />
+                    <Chip
+                      label="홈"
+                      size="small"
+                      sx={{ height: 18, fontSize: '0.6rem', fontWeight: 700, bgcolor: 'var(--color-accent)', color: 'var(--color-primary)', '& .MuiChip-label': { px: 0.8 } }}
+                    />
                   )}
                 </Stack>
               }
@@ -448,8 +586,18 @@ function AboutMePage({ photo, onPhotoChange }) {
         </Tabs>
 
         {sections.map((section, idx) => (
-          <Box key={section.id} hidden={activeTab !== idx}>
-            {activeTab === idx && <SectionContent section={section} />}
+          <Box
+            key={section.id}
+            role="tabpanel"
+            id={`tabpanel-${section.id}`}
+            aria-labelledby={`tab-${section.id}`}
+            hidden={activeTab !== idx}
+          >
+            {activeTab === idx && (
+              <Box sx={{ ...fadeIn, animation: 'tabFadeIn 0.25s ease-out' }}>
+                <SectionContent section={section} skills={skills} onSkillsChange={onSkillsChange} />
+              </Box>
+            )}
           </Box>
         ))}
       </Container>
