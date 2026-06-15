@@ -591,22 +591,7 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
         {/* 컨텐츠 */}
         <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1 }}>
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 4, md: 6 }} alignItems="center">
-            {/* 프로필 사진 - 글로우 링 효과 추가 */}
-            <Box sx={{
-              position: 'relative', flexShrink: 0,
-              '&::before': {
-                content: '""', position: 'absolute',
-                inset: -6, borderRadius: '50%',
-                background: 'linear-gradient(135deg, rgba(255,45,85,0.6), rgba(30,58,110,0.6))',
-                animation: 'ringPulse 3s ease-in-out infinite',
-                '@keyframes ringPulse': {
-                  '0%,100%': { opacity: 0.5, transform: 'scale(1)' },
-                  '50%': { opacity: 1, transform: 'scale(1.04)' },
-                },
-              },
-            }}>
-              <ProfilePhoto photo={photo} onPhotoChange={onPhotoChange} />
-            </Box>
+            <ProfilePhoto photo={photo} onPhotoChange={onPhotoChange} />
 
             <Box sx={{ flex: 1, textAlign: { xs: 'center', md: 'left' } }}>
               <SectionLabel text="About Me" />
