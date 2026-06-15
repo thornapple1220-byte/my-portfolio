@@ -87,24 +87,8 @@ const ProfilePhoto = memo(function ProfilePhoto({ photo, onPhotoChange }) {
         >
           {!photo && <PersonIcon sx={{ fontSize: '4rem', color: 'var(--color-primary)' }} />}
         </Avatar>
-        <IconButton
-          onClick={() => fileInputRef.current?.click()}
-          aria-label="프로필 사진 업로드"
-          sx={{
-            position: 'absolute', bottom: 4, right: 4,
-            bgcolor: 'var(--color-primary)', color: '#fff',
-            width: 36, height: 36,
-            '&:hover': { bgcolor: 'var(--color-button-hover)', transform: 'scale(1.1)' },
-            transition: 'all 0.2s',
-          }}
-        >
-          <CameraAltIcon sx={{ fontSize: '1rem' }} />
-        </IconButton>
         <input ref={fileInputRef} type="file" accept="image/*" hidden onChange={handleFileChange} />
       </Box>
-      <Typography sx={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.7)', letterSpacing: '0.5px' }}>
-        클릭하여 사진 업로드
-      </Typography>
     </Box>
   );
 });
