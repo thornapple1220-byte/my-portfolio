@@ -574,13 +574,12 @@ function HomeProjectCard({ project }) {
       sx={{
         height: '100%', width: '100%', display: 'flex', flexDirection: 'column',
         borderRadius: 3, overflow: 'hidden',
-        bgcolor: 'rgba(255,255,255,0.05)',
-        border: '1px solid rgba(255,255,255,0.1)',
-        transition: 'transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease',
+        bgcolor: 'rgba(10,16,40,0.85)',
+        border: '1px solid rgba(255,255,255,0.12)',
+        transition: 'box-shadow 0.25s ease, border-color 0.25s ease',
         '&:hover': {
-          transform: 'translateY(-6px)',
-          boxShadow: '0 16px 40px rgba(0,0,0,0.35)',
-          borderColor: 'rgba(255,45,85,0.4)',
+          boxShadow: '0 8px 32px rgba(255,45,85,0.2)',
+          borderColor: 'rgba(255,45,85,0.5)',
         },
       }}
     >
@@ -592,8 +591,7 @@ function HomeProjectCard({ project }) {
         sx={{
           display: 'flex', flexDirection: 'column', alignItems: 'stretch',
           height: '100%', flexGrow: 1,
-          '&:hover .thumb-img': { transform: 'scale(1.05)' },
-          '& .MuiCardActionArea-focusHighlight': { bgcolor: 'transparent' },
+          '& .MuiCardActionArea-focusHighlight': { display: 'none' },
         }}
       >
         {/* 썸네일 */}
@@ -601,38 +599,52 @@ function HomeProjectCard({ project }) {
           {thumbnailSrc ? (
             <Box
               component="img"
-              className="thumb-img"
               src={thumbnailSrc}
               alt={project.title}
               loading="lazy"
               sx={{
                 position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
                 objectFit: 'cover', objectPosition: 'top',
-                transition: 'transform 0.4s ease',
+                transition: 'transform 0.35s ease',
+                '.MuiCardActionArea-root:hover &': { transform: 'scale(1.04)' },
               }}
             />
           ) : (
             <Box sx={{
               position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-              background: 'linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-mid) 100%)',
+              background: 'linear-gradient(135deg, #1a1650 0%, #0e2454 100%)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.85rem', textAlign: 'center', px: 2 }}>
+              <Typography sx={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem', textAlign: 'center', px: 2 }}>
                 {project.title}
               </Typography>
             </Box>
           )}
-          {/* 호버 오버레이 */}
+          {/* hover 오버레이 — 어둡게 + "보기" */}
           <Box sx={{
             position: 'absolute', inset: 0,
-            bgcolor: 'rgba(255,45,85,0.08)',
-            opacity: 0, transition: 'opacity 0.22s ease',
+            background: 'linear-gradient(to top, rgba(10,16,40,0.85) 0%, rgba(10,16,40,0.2) 100%)',
+            display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end',
+            p: 1.5,
+            opacity: 0, transition: 'opacity 0.25s ease',
             '.MuiCardActionArea-root:hover &': { opacity: 1 },
-          }} />
+          }}>
+            <Box sx={{
+              fontSize: '0.7rem', fontWeight: 700, color: '#fff',
+              border: '1px solid rgba(255,255,255,0.7)',
+              borderRadius: 1, px: 1.2, py: 0.4, letterSpacing: '1px',
+            }}>
+              자세히 보기 →
+            </Box>
+          </Box>
         </Box>
 
-        <CardContent sx={{ p: { xs: 1.2, sm: 2 }, flexGrow: 1 }}>
-          <Typography sx={{ fontWeight: 700, color: 'var(--color-text-white)', mb: 0.8, fontSize: { xs: '0.8rem', sm: '0.95rem' }, lineHeight: 1.4 }}>
+        {/* 텍스트 영역 */}
+        <CardContent sx={{ p: { xs: 1.4, sm: 1.8 }, flexGrow: 1, bgcolor: 'rgba(5,10,30,0.9)' }}>
+          <Typography sx={{
+            fontWeight: 700, color: '#ffffff',
+            mb: 0.8, fontSize: { xs: '0.82rem', sm: '0.95rem' }, lineHeight: 1.4,
+          }}>
             {project.title}
           </Typography>
           <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
@@ -641,7 +653,7 @@ function HomeProjectCard({ project }) {
                 key={tech}
                 label={tech}
                 size="small"
-                sx={{ bgcolor: 'rgba(255,45,85,0.15)', color: 'var(--color-accent)', fontSize: { xs: '0.55rem', sm: '0.6rem' }, height: 16, fontWeight: 600 }}
+                sx={{ bgcolor: 'rgba(255,45,85,0.18)', color: '#FF6B8A', fontSize: { xs: '0.55rem', sm: '0.6rem' }, height: 18, fontWeight: 600 }}
               />
             ))}
           </Stack>
