@@ -116,20 +116,21 @@ const InfoCard = memo(function InfoCard({ icon, label, value }) {
       sx={{
         bgcolor: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)',
         border: '1px solid rgba(255,255,255,0.25)',
-        borderRadius: 2.5, px: 2, py: 1.5, minWidth: 140,
+        borderRadius: 2.5, px: { xs: 1.5, sm: 2 }, py: { xs: 1.2, sm: 1.5 },
+        width: '100%', height: '100%', textAlign: 'left',
       }}
     >
-      <Stack direction="row" spacing={1.2} alignItems="center">
+      <Stack direction="row" spacing={0.7} alignItems="center" sx={{ mb: 0.5 }}>
         <Box sx={{ color: 'var(--color-accent)', display: 'flex', flexShrink: 0 }}>{icon}</Box>
-        <Box>
-          <Typography sx={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.6)', fontWeight: 700, letterSpacing: '0.8px', textTransform: 'uppercase' }}>
-            {label}
-          </Typography>
-          <Typography sx={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--color-text-white)' }}>
-            {value}
-          </Typography>
-        </Box>
+        <Typography noWrap sx={{ fontSize: { xs: '0.85rem', sm: '0.8rem' }, color: 'rgba(255,255,255,0.7)', fontWeight: 700, letterSpacing: '0.5px' }}>
+          {label}
+        </Typography>
       </Stack>
+      <Box sx={{ pl: '26px', overflow: 'hidden' }}>
+        <Typography noWrap sx={{ fontSize: { xs: '0.95rem', sm: '0.9rem' }, fontWeight: 700, color: 'var(--color-text-white)' }}>
+          {value}
+        </Typography>
+      </Box>
     </Card>
   );
 });
@@ -542,11 +543,13 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
               <Typography sx={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-accent)', mb: 3, letterSpacing: '0.5px' }}>
                 Web Designer
               </Typography>
-              <Stack direction="row" spacing={1.5} flexWrap="wrap" justifyContent={{ xs: 'center', md: 'flex-start' }} useFlexGap>
+              <Grid container spacing={1.5} alignItems="stretch">
                 {infoItems.map(({ icon, label, value }) => (
-                  <InfoCard key={label} icon={icon} label={label} value={value} />
+                  <Grid size={{ xs: 12, sm: 4 }} key={label} sx={{ display: 'flex' }}>
+                    <InfoCard icon={icon} label={label} value={value} />
+                  </Grid>
                 ))}
-              </Stack>
+              </Grid>
             </Box>
           </Stack>
         </Container>

@@ -162,6 +162,7 @@ function AboutSection({ photo }) {
               border: '5px solid var(--color-border)',
               boxShadow: '0 16px 48px rgba(255,45,85,0.18)',
               flexShrink: 0,
+              alignSelf: { xs: 'center', md: 'auto' },
             }}
           >
             <PersonIcon sx={{ fontSize: { xs: '5rem', md: '7rem' }, color: 'var(--color-primary)' }} />
@@ -178,33 +179,35 @@ function AboutSection({ photo }) {
               <Typography sx={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-primary)', mb: 2 }}>
                 Web Designer
               </Typography>
-              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap alignItems="center">
+              <Grid container spacing={1.5}>
                 {[
                   { icon: <SchoolIcon fontSize="small" />, label: '학력', value: basicInfo.education },
                   { icon: <PaletteIcon fontSize="small" />, label: '전공', value: basicInfo.major },
                   { icon: <WorkIcon fontSize="small" />,   label: '경력', value: basicInfo.experience },
                 ].map(({ icon, label, value }) => (
-                  <Box
-                    key={label}
-                    sx={{
-                      display: 'flex', alignItems: 'center', gap: 1,
-                      bgcolor: 'var(--color-bg-soft)',
-                      border: '1px solid var(--color-border)',
-                      borderRadius: 2, px: 2.5, py: 0.8,
-                    }}
-                  >
-                    <Box sx={{ color: 'var(--color-primary)', display: 'flex', flexShrink: 0 }}>{icon}</Box>
-                    <Box>
-                      <Typography sx={{ fontSize: '0.62rem', fontWeight: 700, color: 'var(--color-text-secondary)', letterSpacing: '0.5px', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
-                        {label}
-                      </Typography>
-                      <Typography sx={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--color-text-primary)', whiteSpace: 'nowrap' }}>
-                        {value}
-                      </Typography>
+                  <Grid size={{ xs: 12, sm: 4 }} key={label}>
+                    <Box
+                      sx={{
+                        bgcolor: 'var(--color-bg-soft)',
+                        border: '1px solid var(--color-border)',
+                        borderRadius: 2, px: 1.5, py: 1,
+                      }}
+                    >
+                      <Stack direction="row" spacing={0.7} alignItems="center" sx={{ mb: 0.5 }}>
+                        <Box sx={{ color: 'var(--color-primary)', display: 'flex', flexShrink: 0 }}>{icon}</Box>
+                        <Typography noWrap sx={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-text-secondary)', letterSpacing: '0.5px' }}>
+                          {label}
+                        </Typography>
+                      </Stack>
+                      <Box sx={{ pl: '26px', overflow: 'hidden' }}>
+                        <Typography noWrap sx={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-text-primary)' }}>
+                          {value}
+                        </Typography>
+                      </Box>
                     </Box>
-                  </Box>
+                  </Grid>
                 ))}
-              </Stack>
+              </Grid>
             </Box>
 
             {iAmSection && (
@@ -356,7 +359,7 @@ function HomeProjectCard({ project }) {
   return (
     <Card
       sx={{
-        height: '100%', display: 'flex', flexDirection: 'column',
+        height: '100%', width: '100%', display: 'flex', flexDirection: 'column',
         borderRadius: 3, overflow: 'hidden',
         bgcolor: 'rgba(255,255,255,0.05)',
         border: '1px solid rgba(255,255,255,0.1)',
@@ -455,7 +458,7 @@ function ProjectsSection() {
           <Box sx={{ overflow: 'hidden', mb: 6 }}>
             <Grid container spacing={{ xs: 1.5, sm: 3 }}>
               {projects.map((project) => (
-                <Grid item xs={6} sm={6} md={4} key={project.id}>
+                <Grid size={{ xs: 6, sm: 6, md: 4 }} key={project.id} sx={{ display: 'flex' }}>
                   <HomeProjectCard project={project} />
                 </Grid>
               ))}
