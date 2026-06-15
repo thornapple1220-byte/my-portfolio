@@ -1,6 +1,6 @@
 import { memo, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Container, Typography, Button, Divider, Grid, CircularProgress, Stack, Avatar, Card, CardContent, Chip, IconButton, Tooltip } from '@mui/material';
+import { Box, Container, Typography, Button, Divider, Grid, CircularProgress, Stack, Avatar, Card, CardContent, CardActionArea, Chip, IconButton, Tooltip } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
@@ -567,6 +567,8 @@ function HomeProjectCard({ project }) {
   const thumbnailSrc = project.thumbnail_url
     || (project.detail_url ? `${THUM_BASE}/${project.detail_url}` : null);
 
+  const href = project.detail_url || project.github_url || null;
+
   return (
     <Card
       sx={{
@@ -574,48 +576,77 @@ function HomeProjectCard({ project }) {
         borderRadius: 3, overflow: 'hidden',
         bgcolor: 'rgba(255,255,255,0.05)',
         border: '1px solid rgba(255,255,255,0.1)',
-        transition: 'transform 0.25s, box-shadow 0.25s',
-        '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 12px 32px rgba(0,0,0,0.3)' },
+        transition: 'transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease',
+        '&:hover': {
+          transform: 'translateY(-6px)',
+          boxShadow: '0 16px 40px rgba(0,0,0,0.35)',
+          borderColor: 'rgba(255,45,85,0.4)',
+        },
       }}
     >
-      {/* 썸네일 (16:10 비율) */}
-      <Box sx={{ position: 'relative', width: '100%', paddingTop: '62.5%', overflow: 'hidden' }}>
-        {thumbnailSrc ? (
-          <Box
-            component="img"
-            src={thumbnailSrc}
-            alt={project.title}
-            loading="lazy"
-            sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
-          />
-        ) : (
-          <Box sx={{
-            position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-            background: 'linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-mid) 100%)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.85rem', textAlign: 'center', px: 2 }}>
-              {project.title}
-            </Typography>
-          </Box>
-        )}
-      </Box>
-
-      <CardContent sx={{ p: { xs: 1.2, sm: 2 } }}>
-        <Typography sx={{ fontWeight: 700, color: 'var(--color-text-white)', mb: 0.8, fontSize: { xs: '0.8rem', sm: '0.95rem' }, lineHeight: 1.4 }}>
-          {project.title}
-        </Typography>
-        <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
-          {project.tech_stack?.slice(0, 2).map((tech) => (
-            <Chip
-              key={tech}
-              label={tech}
-              size="small"
-              sx={{ bgcolor: 'rgba(255,45,85,0.15)', color: 'var(--color-accent)', fontSize: { xs: '0.55rem', sm: '0.6rem' }, height: 16, fontWeight: 600 }}
+      <CardActionArea
+        component={href ? 'a' : 'div'}
+        href={href || undefined}
+        target={href ? '_blank' : undefined}
+        rel={href ? 'noopener noreferrer' : undefined}
+        sx={{
+          display: 'flex', flexDirection: 'column', alignItems: 'stretch',
+          height: '100%', flexGrow: 1,
+          '&:hover .thumb-img': { transform: 'scale(1.05)' },
+          '& .MuiCardActionArea-focusHighlight': { bgcolor: 'transparent' },
+        }}
+      >
+        {/* 썸네일 */}
+        <Box sx={{ position: 'relative', width: '100%', paddingTop: '62.5%', overflow: 'hidden' }}>
+          {thumbnailSrc ? (
+            <Box
+              component="img"
+              className="thumb-img"
+              src={thumbnailSrc}
+              alt={project.title}
+              loading="lazy"
+              sx={{
+                position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                objectFit: 'cover', objectPosition: 'top',
+                transition: 'transform 0.4s ease',
+              }}
             />
-          ))}
-        </Stack>
-      </CardContent>
+          ) : (
+            <Box sx={{
+              position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+              background: 'linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-mid) 100%)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.85rem', textAlign: 'center', px: 2 }}>
+                {project.title}
+              </Typography>
+            </Box>
+          )}
+          {/* 호버 오버레이 */}
+          <Box sx={{
+            position: 'absolute', inset: 0,
+            bgcolor: 'rgba(255,45,85,0.08)',
+            opacity: 0, transition: 'opacity 0.22s ease',
+            '.MuiCardActionArea-root:hover &': { opacity: 1 },
+          }} />
+        </Box>
+
+        <CardContent sx={{ p: { xs: 1.2, sm: 2 }, flexGrow: 1 }}>
+          <Typography sx={{ fontWeight: 700, color: 'var(--color-text-white)', mb: 0.8, fontSize: { xs: '0.8rem', sm: '0.95rem' }, lineHeight: 1.4 }}>
+            {project.title}
+          </Typography>
+          <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
+            {project.tech_stack?.slice(0, 2).map((tech) => (
+              <Chip
+                key={tech}
+                label={tech}
+                size="small"
+                sx={{ bgcolor: 'rgba(255,45,85,0.15)', color: 'var(--color-accent)', fontSize: { xs: '0.55rem', sm: '0.6rem' }, height: 16, fontWeight: 600 }}
+              />
+            ))}
+          </Stack>
+        </CardContent>
+      </CardActionArea>
     </Card>
   );
 }
