@@ -513,21 +513,120 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
     <Box sx={{ minHeight: 'calc(100vh - 64px)', bgcolor: 'var(--color-bg-primary)' }}>
 
       {/* ─ 프로필 히어로 ─ */}
-      <Box sx={{ background: 'linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-secondary-mid) 100%)', py: { xs: 6, md: 8 } }}>
-        <Container maxWidth="md">
+      <Box sx={{
+        position: 'relative', overflow: 'hidden',
+        background: 'linear-gradient(145deg, #0d1333 0%, #1a1650 50%, #0e2454 100%)',
+        py: { xs: 7, md: 10 },
+      }}>
+        {/* 도트 그리드 */}
+        <Box sx={{
+          position: 'absolute', inset: 0, pointerEvents: 'none',
+          backgroundImage: 'radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px)',
+          backgroundSize: '32px 32px',
+        }} />
+
+        {/* 글로우 원 - 우상단 */}
+        <Box sx={{
+          position: 'absolute', top: '-20%', right: '-5%',
+          width: { xs: 200, md: 380 }, height: { xs: 200, md: 380 },
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(255,45,85,0.15) 0%, transparent 68%)',
+          animation: 'aboutGlow1 9s ease-in-out infinite',
+          '@keyframes aboutGlow1': {
+            '0%,100%': { transform: 'scale(1) translateY(0)' },
+            '50%': { transform: 'scale(1.1) translateY(-20px)' },
+          },
+        }} />
+
+        {/* 글로우 원 - 좌하단 */}
+        <Box sx={{
+          position: 'absolute', bottom: '-20%', left: '-5%',
+          width: { xs: 160, md: 320 }, height: { xs: 160, md: 320 },
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(30,58,110,0.5) 0%, transparent 68%)',
+          animation: 'aboutGlow2 11s ease-in-out infinite',
+          '@keyframes aboutGlow2': {
+            '0%,100%': { transform: 'translateY(0)' },
+            '50%': { transform: 'translateY(16px)' },
+          },
+        }} />
+
+        {/* 링 장식 - 우하단 */}
+        <Box sx={{
+          display: { xs: 'none', sm: 'block' },
+          position: 'absolute', bottom: '10%', right: '6%',
+          width: { sm: 55, md: 80 }, height: { sm: 55, md: 80 },
+          border: '2px solid rgba(255,45,85,0.2)', borderRadius: '8px',
+          animation: 'aboutSpin 20s linear infinite',
+          '@keyframes aboutSpin': { '100%': { transform: 'rotate(360deg)' } },
+        }} />
+
+        {/* 링 - 좌상단 */}
+        <Box sx={{
+          position: 'absolute',
+          top: { xs: '5%', md: '12%' }, left: { xs: '-2%', md: '3%' },
+          width: { xs: 55, md: 100 }, height: { xs: 55, md: 100 },
+          borderRadius: '50%', border: '1px solid rgba(255,255,255,0.07)',
+          animation: 'aboutFloat 7s ease-in-out infinite',
+          '@keyframes aboutFloat': {
+            '0%,100%': { transform: 'translateY(0) rotate(0deg)' },
+            '50%': { transform: 'translateY(-12px) rotate(15deg)' },
+          },
+        }} />
+
+        {/* 수평 라인 (데스크톱) */}
+        <Box sx={{
+          display: { xs: 'none', lg: 'block' },
+          position: 'absolute', top: '50%', left: 0,
+          width: '8%', height: '1px',
+          background: 'linear-gradient(90deg, transparent, rgba(255,45,85,0.35))',
+        }} />
+        <Box sx={{
+          display: { xs: 'none', lg: 'block' },
+          position: 'absolute', top: '50%', right: 0,
+          width: '8%', height: '1px',
+          background: 'linear-gradient(270deg, transparent, rgba(255,45,85,0.35))',
+        }} />
+
+        {/* 컨텐츠 */}
+        <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1 }}>
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 4, md: 6 }} alignItems="center">
-            <ProfilePhoto photo={photo} onPhotoChange={onPhotoChange} />
+            {/* 프로필 사진 - 글로우 링 효과 추가 */}
+            <Box sx={{
+              position: 'relative', flexShrink: 0,
+              '&::before': {
+                content: '""', position: 'absolute',
+                inset: -6, borderRadius: '50%',
+                background: 'linear-gradient(135deg, rgba(255,45,85,0.6), rgba(30,58,110,0.6))',
+                animation: 'ringPulse 3s ease-in-out infinite',
+                '@keyframes ringPulse': {
+                  '0%,100%': { opacity: 0.5, transform: 'scale(1)' },
+                  '50%': { opacity: 1, transform: 'scale(1.04)' },
+                },
+              },
+            }}>
+              <ProfilePhoto photo={photo} onPhotoChange={onPhotoChange} />
+            </Box>
+
             <Box sx={{ flex: 1, textAlign: { xs: 'center', md: 'left' } }}>
               <SectionLabel text="About Me" />
-              <Typography
-                variant="h1"
-                sx={{ fontSize: { xs: '2.2rem', md: '3rem' }, fontWeight: 900, color: 'var(--color-text-white)', letterSpacing: '-1px', mb: 0.5 }}
-              >
+              <Typography variant="h1" sx={{
+                fontSize: { xs: '2.4rem', md: '3.2rem' },
+                fontWeight: 900, color: '#ffffff',
+                letterSpacing: '-1.5px', mb: 0.5,
+                textShadow: '0 4px 24px rgba(255,45,85,0.2)',
+              }}>
                 {basicInfo.name}
               </Typography>
-              <Typography sx={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-accent)', mb: 3, letterSpacing: '0.5px' }}>
+              <Typography sx={{
+                fontSize: { xs: '0.95rem', md: '1rem' },
+                fontWeight: 700, color: '#FF2D55',
+                mb: 3, letterSpacing: '3px', textTransform: 'uppercase',
+              }}>
                 Web Designer
               </Typography>
+              {/* 구분선 */}
+              <Box sx={{ width: 48, height: 3, bgcolor: '#FF2D55', borderRadius: 2, mb: 3, mx: { xs: 'auto', md: 0 } }} />
               <Grid container spacing={1.5} alignItems="stretch">
                 {infoItems.map(({ icon, label, value }) => (
                   <Grid size={{ xs: 12, sm: 4 }} key={label} sx={{ display: 'flex' }}>
