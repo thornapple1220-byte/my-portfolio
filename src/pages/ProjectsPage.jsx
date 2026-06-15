@@ -226,7 +226,7 @@ function ProjectsPage() {
     <Box
       sx={{
         minHeight: 'calc(100vh - 64px)',
-        bgcolor: '#FEF6F8',
+        bgcolor: 'rgb(255, 248, 249)',
         py: { xs: 8, md: 12 },
       }}
     >
