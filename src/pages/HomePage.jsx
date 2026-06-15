@@ -640,9 +640,9 @@ function HomeProjectCard({ project }) {
         </Box>
 
         {/* 텍스트 영역 */}
-        <CardContent sx={{ p: { xs: 1.4, sm: 1.8 }, flexGrow: 1, bgcolor: '#ffffff' }}>
+        <CardContent sx={{ p: { xs: 1.4, sm: 1.8 }, flexGrow: 1, bgcolor: '#FFF0F3' }}>
           <Typography sx={{
-            fontWeight: 700, color: '#111111',
+            fontWeight: 700, color: '#C0004E',
             mb: 0.8, fontSize: { xs: '0.82rem', sm: '0.95rem' }, lineHeight: 1.4,
           }}>
             {project.title}
@@ -653,7 +653,7 @@ function HomeProjectCard({ project }) {
                 key={tech}
                 label={tech}
                 size="small"
-                sx={{ bgcolor: 'rgba(255,45,85,0.1)', color: '#FF2D55', fontSize: { xs: '0.55rem', sm: '0.6rem' }, height: 18, fontWeight: 600 }}
+                sx={{ bgcolor: 'rgba(255,45,85,0.12)', color: '#FF2D55', fontSize: { xs: '0.55rem', sm: '0.6rem' }, height: 18, fontWeight: 600 }}
               />
             ))}
           </Stack>
@@ -688,13 +688,13 @@ function ProjectsSection() {
   }, []);
 
   return (
-    <Box sx={{ ...sectionBase, bgcolor: 'var(--color-bg-navy-mid)' }}>
+    <Box sx={{ ...sectionBase, bgcolor: '#ffffff' }}>
       <Container maxWidth="md">
         <SectionLabel text="Projects" />
-        <Typography variant="h2" sx={{ mb: 1, color: 'var(--color-text-white)', fontWeight: 800 }}>
+        <Typography variant="h2" sx={{ mb: 1, color: 'var(--color-text-primary)', fontWeight: 800 }}>
           프로젝트
         </Typography>
-        <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.65)', mb: 6 }}>
+        <Typography variant="body1" sx={{ color: 'var(--color-text-secondary)', mb: 6 }}>
           대표 작업물을 소개합니다.
         </Typography>
 
@@ -725,11 +725,10 @@ function ProjectsSection() {
           to="/projects"
           variant="outlined"
           sx={{
-            color: 'var(--color-text-white)',
-            borderColor: 'rgba(255,255,255,0.6)',
+            color: '#FF2D55',
+            borderColor: '#FF2D55',
             px: 4, py: 1.2, borderRadius: 2, fontWeight: 700, textTransform: 'none',
-            boxShadow: '0 3px 6px rgba(0,0,0,0.15)',
-            '&:hover': { bgcolor: 'rgba(255,255,255,0.15)', borderColor: 'var(--color-text-white)', boxShadow: '0 4px 10px rgba(0,0,0,0.2)' },
+            '&:hover': { bgcolor: 'rgba(255,45,85,0.06)', borderColor: '#e0002e' },
           }}
         >
           더 알아보기
