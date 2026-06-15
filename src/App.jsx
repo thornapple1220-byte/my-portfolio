@@ -26,38 +26,24 @@ function App() {
       });
   }, []);
 
-  const handlePhotoChange = async (file, previewUrl) => {
+  const handlePhotoChange = (file, previewUrl) => {
     // 즉시 미리보기
     setPhoto(previewUrl);
 
-    // Supabase Storage에 업로드
-    const ext = file.name.split('.').pop();
-    const path = `profile/photo.${ext}`;
+    // base64로 변환 후 Supabase settings 테이블에 저장
+    const reader = new FileReader();
+    reader.onload = async (ev) => {
+      const base64 = ev.target.result;
+      setPhoto(base64);
+      localStorage.setItem('portfolio_photo', base64);
 
-    const { error: uploadError } = await supabase.storage
-      .from('portfolio-assets')
-      .upload(path, file, { upsert: true, contentType: file.type });
-
-    if (uploadError) {
-      console.error('업로드 실패:', uploadError);
-      return;
-    }
-
-    const { data: { publicUrl } } = supabase.storage
-      .from('portfolio-assets')
-      .getPublicUrl(path);
-
-    // 캐시 방지용 타임스탬프 추가
-    const urlWithTs = `${publicUrl}?t=${Date.now()}`;
-
-    setPhoto(urlWithTs);
-    localStorage.setItem('portfolio_photo', urlWithTs);
-
-    // settings 테이블에 URL 저장
-    await supabase.from('settings').upsert(
-      { key: 'profile_photo_url', value: urlWithTs, updated_at: new Date().toISOString() },
-      { onConflict: 'key' }
-    );
+      const { error } = await supabase.from('settings').upsert(
+        { key: 'profile_photo_url', value: base64, updated_at: new Date().toISOString() },
+        { onConflict: 'key' }
+      );
+      if (error) console.error('[사진] DB 저장 실패:', error.message);
+    };
+    reader.readAsDataURL(file);
   };
 
   return (
