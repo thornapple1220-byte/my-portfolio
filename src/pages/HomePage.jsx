@@ -496,7 +496,7 @@ const SkillSection = memo(function SkillSection({ skills }) {
   }, []);
 
   return (
-    <Box sx={{ ...sectionBase, bgcolor: 'var(--color-bg-soft)' }}>
+    <Box sx={{ ...sectionBase, bgcolor: '#fbf6f8' }}>
       <Container maxWidth="md">
         <SectionLabel text="Skill Tree" />
         <Typography variant="h2" sx={{ mb: 1, color: 'var(--color-text-primary)', fontWeight: 800 }}>
