@@ -317,41 +317,7 @@ function HeroSection() {
           </Button>
         </Box>
 
-        {/* ── 소셜 링크 ── */}
-        <Box sx={{
-          display: 'flex', justifyContent: 'center',
-          gap: { xs: 1, sm: 1.5 },
-          mt: { xs: 3, md: 4 },
-          ...fadeUp(1.0),
-        }}>
-          {[
-            { icon: <GitHubIcon />,    label: 'GitHub',    href: 'https://github.com/thornapple1220-byte' },
-            { icon: <InstagramIcon />, label: 'Instagram', href: '#' },
-            { icon: <LinkedInIcon />,  label: 'LinkedIn',  href: '#' },
-          ].map(({ icon, label, href }) => (
-            <Tooltip key={label} title={label} arrow>
-              <IconButton
-                component="a" href={href} target="_blank" rel="noopener noreferrer"
-                sx={{
-                  color: 'rgba(255,255,255,0.5)',
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  borderRadius: 2,
-                  p: { xs: '10px', sm: '12px' },
-                  minWidth: 44, minHeight: 44,
-                  transition: 'all 0.22s ease',
-                  '&:hover': {
-                    color: '#FF2D55', borderColor: '#FF2D55',
-                    bgcolor: 'rgba(255,45,85,0.1)',
-                    transform: 'translateY(-3px)',
-                    boxShadow: '0 6px 20px rgba(255,45,85,0.25)',
-                  },
-                }}
-              >
-                {icon}
-              </IconButton>
-            </Tooltip>
-          ))}
-        </Box>
+        {/* 소셜 링크 - 현재 미사용 */}
 
         {/* ── 스크롤 유도 ── */}
         <Box sx={{
