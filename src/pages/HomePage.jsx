@@ -640,9 +640,9 @@ function HomeProjectCard({ project }) {
         </Box>
 
         {/* 텍스트 영역 */}
-        <CardContent sx={{ p: { xs: 1.4, sm: 1.8 }, flexGrow: 1, bgcolor: 'rgba(5,10,30,0.9)' }}>
+        <CardContent sx={{ p: { xs: 1.4, sm: 1.8 }, flexGrow: 1, bgcolor: '#ffffff' }}>
           <Typography sx={{
-            fontWeight: 700, color: '#ffffff',
+            fontWeight: 700, color: '#111111',
             mb: 0.8, fontSize: { xs: '0.82rem', sm: '0.95rem' }, lineHeight: 1.4,
           }}>
             {project.title}
@@ -653,7 +653,7 @@ function HomeProjectCard({ project }) {
                 key={tech}
                 label={tech}
                 size="small"
-                sx={{ bgcolor: 'rgba(255,45,85,0.18)', color: '#FF6B8A', fontSize: { xs: '0.55rem', sm: '0.6rem' }, height: 18, fontWeight: 600 }}
+                sx={{ bgcolor: 'rgba(255,45,85,0.1)', color: '#FF2D55', fontSize: { xs: '0.55rem', sm: '0.6rem' }, height: 18, fontWeight: 600 }}
               />
             ))}
           </Stack>
