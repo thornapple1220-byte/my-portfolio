@@ -68,7 +68,9 @@ const ProfilePhoto = memo(function ProfilePhoto({ photo, onPhotoChange }) {
   const handleFileChange = useCallback((e) => {
     const file = e.target.files[0];
     if (!file) return;
-    onPhotoChange(URL.createObjectURL(file));
+    const reader = new FileReader();
+    reader.onload = (ev) => onPhotoChange(ev.target.result);
+    reader.readAsDataURL(file);
   }, [onPhotoChange]);
 
   return (
