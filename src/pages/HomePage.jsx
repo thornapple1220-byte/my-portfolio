@@ -213,11 +213,6 @@ function HeroSection() {
         pb: { xs: 10, sm: 12, md: 14 },
       }}>
 
-        {/* PORTFOLIO 라벨 */}
-        <Box sx={{ mb: { xs: 3, md: 4 }, ...fadeUp(0.1) }}>
-          <SectionLabel text="Portfolio" />
-        </Box>
-
         {/* 이름 */}
         <Typography variant="h1" sx={{
           fontSize: { xs: '3rem', sm: '4.5rem', md: '5.5rem', lg: '6.5rem' },
@@ -396,7 +391,6 @@ function AboutSection({ photo }) {
 
           {/* 오른쪽: 텍스트 */}
           <Box sx={{ flex: 1 }}>
-            <SectionLabel text="About Me" />
             {/* 이름 + 카드 */}
             <Box sx={{ mb: 4 }}>
               <Typography variant="h2" sx={{ mb: 0.5, color: 'var(--color-text-primary)', fontWeight: 800 }}>
@@ -513,7 +507,6 @@ const SkillSection = memo(function SkillSection({ skills }) {
   return (
     <Box sx={{ ...sectionBase, bgcolor: '#fbf6f8' }}>
       <Container maxWidth="md">
-        <SectionLabel text="Skill Tree" />
         <Typography variant="h2" sx={{ mb: 1, color: 'var(--color-text-primary)', fontWeight: 800 }}>
           주요 스킬
         </Typography>
@@ -705,7 +698,6 @@ function ProjectsSection() {
   return (
     <Box sx={{ ...sectionBase, background: 'linear-gradient(145deg, #0d1333 0%, #1a1650 50%, #0e2454 100%)' }}>
       <Container maxWidth="md">
-        <SectionLabel text="Projects" />
         <Typography variant="h2" sx={{ mb: 1, color: '#ffffff', fontWeight: 800 }}>
           프로젝트
         </Typography>
@@ -785,7 +777,6 @@ function ContactSection() {
       <Container maxWidth="md">
         {/* 섹션 타이틀 */}
         <Box sx={{ textAlign: 'center', mb: 6 }}>
-          <SectionLabel text="Contact" />
           <Typography variant="h2" sx={{ color: 'var(--color-text-primary)', mb: 1.5 }}>
             연락하기
           </Typography>

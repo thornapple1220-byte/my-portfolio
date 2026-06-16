@@ -518,60 +518,74 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
         background: 'linear-gradient(145deg, #0d1333 0%, #1a1650 50%, #0e2454 100%)',
         py: { xs: 7, md: 10 },
       }}>
-        {/* 도트 그리드 */}
+        {/* 대각선 사선 패턴 */}
         <Box sx={{
           position: 'absolute', inset: 0, pointerEvents: 'none',
-          backgroundImage: 'radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px)',
-          backgroundSize: '32px 32px',
+          backgroundImage: 'repeating-linear-gradient(45deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 48px)',
         }} />
 
-        {/* 글로우 원 - 우상단 */}
+        {/* 유기적 블롭 - 우상단 (보라+핑크) */}
         <Box sx={{
-          position: 'absolute', top: '-20%', right: '-5%',
+          position: 'absolute', top: '-15%', right: '-5%',
           width: { xs: 200, md: 380 }, height: { xs: 200, md: 380 },
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(255,45,85,0.15) 0%, transparent 68%)',
-          animation: 'aboutGlow1 9s ease-in-out infinite',
-          '@keyframes aboutGlow1': {
-            '0%,100%': { transform: 'scale(1) translateY(0)' },
-            '50%': { transform: 'scale(1.1) translateY(-20px)' },
+          borderRadius: '60% 40% 70% 30% / 50% 60% 40% 50%',
+          background: 'radial-gradient(circle at 40% 40%, rgba(147,51,234,0.18) 0%, rgba(255,45,85,0.1) 50%, transparent 70%)',
+          animation: 'aboutMorphBlob1 12s ease-in-out infinite',
+          '@keyframes aboutMorphBlob1': {
+            '0%,100%': { borderRadius: '60% 40% 70% 30% / 50% 60% 40% 50%', transform: 'translateY(0) rotate(0deg)' },
+            '33%':     { borderRadius: '40% 60% 30% 70% / 60% 40% 60% 40%', transform: 'translateY(-16px) rotate(4deg)' },
+            '66%':     { borderRadius: '70% 30% 50% 50% / 30% 70% 30% 70%', transform: 'translateY(8px) rotate(-4deg)' },
           },
         }} />
 
-        {/* 글로우 원 - 좌하단 */}
+        {/* 유기적 블롭 - 좌하단 (티얼+네이비) */}
         <Box sx={{
           position: 'absolute', bottom: '-20%', left: '-5%',
-          width: { xs: 160, md: 320 }, height: { xs: 160, md: 320 },
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(30,58,110,0.5) 0%, transparent 68%)',
-          animation: 'aboutGlow2 11s ease-in-out infinite',
-          '@keyframes aboutGlow2': {
-            '0%,100%': { transform: 'translateY(0)' },
-            '50%': { transform: 'translateY(16px)' },
+          width: { xs: 160, md: 300 }, height: { xs: 160, md: 300 },
+          borderRadius: '40% 60% 30% 70% / 60% 30% 70% 40%',
+          background: 'radial-gradient(circle at 55% 50%, rgba(20,184,166,0.12) 0%, rgba(30,58,110,0.28) 55%, transparent 72%)',
+          animation: 'aboutMorphBlob2 15s ease-in-out infinite',
+          '@keyframes aboutMorphBlob2': {
+            '0%,100%': { borderRadius: '40% 60% 30% 70% / 60% 30% 70% 40%', transform: 'translateY(0)' },
+            '50%':     { borderRadius: '60% 40% 50% 50% / 40% 60% 40% 60%', transform: 'translateY(18px)' },
           },
         }} />
 
-        {/* 링 장식 - 우하단 */}
+        {/* 컬러 팔레트 도트 - 우하단 */}
         <Box sx={{
-          display: { xs: 'none', sm: 'block' },
-          position: 'absolute', bottom: '10%', right: '6%',
-          width: { sm: 55, md: 80 }, height: { sm: 55, md: 80 },
-          border: '2px solid rgba(255,45,85,0.2)', borderRadius: '8px',
-          animation: 'aboutSpin 20s linear infinite',
-          '@keyframes aboutSpin': { '100%': { transform: 'rotate(360deg)' } },
-        }} />
+          display: { xs: 'none', sm: 'flex' },
+          position: 'absolute', bottom: '10%', right: '5%',
+          flexDirection: 'column', gap: '8px',
+          animation: 'aboutPaletteFloat 6s ease-in-out infinite',
+          '@keyframes aboutPaletteFloat': {
+            '0%,100%': { transform: 'translateY(0)', opacity: 0.75 },
+            '50%':     { transform: 'translateY(-8px)', opacity: 1 },
+          },
+        }}>
+          {[['#FF2D55', '#FF9F0A'], ['#30D158', '#0A84FF'], ['#BF5AF2', 'rgba(255,255,255,0.5)']].map((row, ri) => (
+            <Box key={ri} sx={{ display: 'flex', gap: '8px' }}>
+              {row.map((color, ci) => (
+                <Box key={ci} sx={{
+                  width: { sm: 12, md: 16 }, height: { sm: 12, md: 16 },
+                  borderRadius: '50%', bgcolor: color, opacity: 0.7,
+                  boxShadow: `0 0 8px ${color}55`,
+                }} />
+              ))}
+            </Box>
+          ))}
+        </Box>
 
-        {/* 링 - 좌상단 */}
+        {/* 브러시 스트로크 링 - 좌상단 */}
         <Box sx={{
           position: 'absolute',
           top: { xs: '5%', md: '12%' }, left: { xs: '-2%', md: '3%' },
           width: { xs: 55, md: 100 }, height: { xs: 55, md: 100 },
-          borderRadius: '50%', border: '1px solid rgba(255,255,255,0.07)',
-          animation: 'aboutFloat 7s ease-in-out infinite',
-          '@keyframes aboutFloat': {
-            '0%,100%': { transform: 'translateY(0) rotate(0deg)' },
-            '50%': { transform: 'translateY(-12px) rotate(15deg)' },
-          },
+          borderRadius: '50%',
+          border: '2px solid transparent',
+          borderTop: '2px solid rgba(255,45,85,0.55)',
+          borderRight: '2px solid rgba(147,51,234,0.35)',
+          animation: 'aboutSpinBrush 10s linear infinite',
+          '@keyframes aboutSpinBrush': { '100%': { transform: 'rotate(360deg)' } },
         }} />
 
         {/* 수평 라인 (데스크톱) */}
@@ -594,7 +608,6 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
             <ProfilePhoto photo={photo} onPhotoChange={onPhotoChange} />
 
             <Box sx={{ flex: 1, textAlign: { xs: 'center', md: 'left' } }}>
-              <SectionLabel text="About Me" />
               <Typography variant="h1" sx={{
                 fontSize: { xs: '2.4rem', md: '3.2rem' },
                 fontWeight: 900, color: '#ffffff',
