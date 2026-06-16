@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import {
-  Box, Container, Typography, Grid, Card, CardMedia, CardContent,
-  CardActions, Button, Chip, Stack, CircularProgress, Alert,
+  Box, Container, Typography, Grid, Card, CardContent,
+  Button, Chip, Stack, CircularProgress, Alert,
 } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import ArticleIcon from '@mui/icons-material/Article';
 import supabase from '../utils/supabase';
 
 const THUM_BASE = 'https://image.thum.io/get/width/600/crop/800';
@@ -76,6 +75,7 @@ function ThumbnailImage({ src, alt }) {
 
 function ProjectCard({ project }) {
   const thumbnailSrc = getThumbnailUrl(project);
+  const hasLinks = project.demo_url || project.github_url || project.detail_url;
 
   const formattedDate = new Date(project.created_at).toLocaleDateString('ko-KR', {
     year: 'numeric',
@@ -89,30 +89,82 @@ function ProjectCard({ project }) {
         flexDirection: 'column',
         borderRadius: 3,
         overflow: 'hidden',
+        border: '1px solid var(--color-border)',
+        boxShadow: 'none',
         transition: 'transform 0.25s ease, box-shadow 0.25s ease',
         '&:hover': {
-          transform: 'scale(1.03)',
-          boxShadow: '0 12px 40px rgba(0,0,0,0.2)',
+          transform: 'translateY(-4px)',
+          boxShadow: '0 12px 36px rgba(123,104,238,0.18)',
         },
+        '&:hover .hover-overlay': { opacity: 1 },
       }}
     >
-      {/* 썸네일: detail_url 기반 thum.io 실시간 생성 */}
-      <ThumbnailImage src={thumbnailSrc} alt={project.title} />
+      {/* 썸네일 + 호버 오버레이 */}
+      <Box sx={{ position: 'relative' }}>
+        <ThumbnailImage src={thumbnailSrc} alt={project.title} />
+
+        {hasLinks && (
+          <Box
+            className="hover-overlay"
+            sx={{
+              position: 'absolute', inset: 0,
+              bgcolor: 'rgba(91,79,207,0.88)',
+              display: 'flex', flexDirection: 'column',
+              alignItems: 'center', justifyContent: 'center',
+              gap: 1.5,
+              opacity: 0,
+              transition: 'opacity 0.25s ease',
+            }}
+          >
+            {project.demo_url && (
+              <Button
+                variant="contained"
+                startIcon={<OpenInNewIcon />}
+                href={project.demo_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  bgcolor: '#fff', color: '#5B4FCF',
+                  fontWeight: 700, fontSize: '0.82rem',
+                  px: 3, borderRadius: 2, width: 152,
+                  '&:hover': { bgcolor: 'var(--color-accent)' },
+                }}
+              >
+                바로가기
+              </Button>
+            )}
+            {project.github_url && (
+              <Button
+                variant="outlined"
+                startIcon={<GitHubIcon />}
+                href={project.github_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  borderColor: 'rgba(255,255,255,0.7)', color: '#fff',
+                  fontWeight: 700, fontSize: '0.82rem',
+                  px: 3, borderRadius: 2, width: 152,
+                  '&:hover': { bgcolor: 'rgba(255,255,255,0.15)', borderColor: '#fff' },
+                }}
+              >
+                GitHub
+              </Button>
+            )}
+          </Box>
+        )}
+      </Box>
 
       {/* 카드 내용 */}
-      <CardContent sx={{ flex: 1, p: 1.5, pb: '0 !important', display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+      <CardContent sx={{ p: 1.5, pb: '12px !important', display: 'flex', flexDirection: 'column', gap: 0.5 }}>
         <Typography variant="caption" sx={{ color: 'var(--color-text-muted)' }}>
           {formattedDate}
         </Typography>
-
         <Typography
           variant="subtitle2"
           sx={{ fontWeight: 700, color: 'var(--color-text-primary)', lineHeight: 1.3 }}
         >
           {project.title}
         </Typography>
-
-        {/* 기술 스택 뱃지 */}
         <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ mt: 0.5 }}>
           {project.tech_stack?.map((tech) => (
             <Chip
@@ -131,68 +183,6 @@ function ProjectCard({ project }) {
           ))}
         </Stack>
       </CardContent>
-
-      {/* 버튼 */}
-      <CardActions sx={{ p: 1.5, pt: 0.5, flexWrap: 'wrap', gap: 0.5, flexShrink: 0 }}>
-        {project.demo_url && (
-          <Button
-            size="small"
-            variant="contained"
-            startIcon={<OpenInNewIcon fontSize="small" />}
-            href={project.demo_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{
-              bgcolor: 'var(--color-button-primary)',
-              '&:hover': { bgcolor: 'var(--color-button-hover)' },
-              fontSize: '0.72rem',
-              fontWeight: 600,
-              px: 1.5,
-            }}
-          >
-            Live Demo
-          </Button>
-        )}
-        {project.github_url && (
-          <Button
-            size="small"
-            variant="outlined"
-            startIcon={<GitHubIcon fontSize="small" />}
-            href={project.github_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{
-              borderColor: 'var(--color-primary)',
-              color: 'var(--color-primary)',
-              '&:hover': { bgcolor: 'var(--color-accent)', borderColor: 'var(--color-primary)' },
-              fontSize: '0.72rem',
-              fontWeight: 600,
-              px: 1.5,
-            }}
-          >
-            GitHub
-          </Button>
-        )}
-        {project.detail_url && (
-          <Button
-            size="small"
-            variant="text"
-            startIcon={<ArticleIcon fontSize="small" />}
-            href={project.detail_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{
-              color: 'var(--color-text-secondary)',
-              '&:hover': { color: 'var(--color-primary)' },
-              fontSize: '0.72rem',
-              fontWeight: 600,
-              ml: 'auto',
-            }}
-          >
-            View Details
-          </Button>
-        )}
-      </CardActions>
     </Card>
   );
 }
@@ -226,7 +216,7 @@ function ProjectsPage() {
     <Box
       sx={{
         minHeight: 'calc(100vh - 64px)',
-        bgcolor: 'rgb(255, 248, 249)',
+        bgcolor: 'var(--color-bg-soft)',
         py: { xs: 8, md: 12 },
       }}
     >
