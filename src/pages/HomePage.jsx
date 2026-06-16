@@ -106,74 +106,89 @@ function HeroSection() {
       background: 'linear-gradient(145deg, #0d1333 0%, #1a1650 45%, #0e2454 100%)',
     }}>
       {/* ── 배경 장식 ── */}
+      {/* 대각선 사선 패턴 */}
       <Box sx={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
-        backgroundImage: 'radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px)',
-        backgroundSize: { xs: '28px 28px', md: '36px 36px' },
+        backgroundImage: 'repeating-linear-gradient(45deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 48px)',
       }} />
 
-      {/* 글로우 원 - 우상단 */}
+      {/* 유기적 블롭 - 우상단 (보라+핑크) */}
       <Box sx={{
-        position: 'absolute', top: '-8%', right: '-8%',
-        width: { xs: 200, sm: 320, md: 520 }, height: { xs: 200, sm: 320, md: 520 },
-        borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(255,45,85,0.18) 0%, transparent 68%)',
-        animation: 'glow1 9s ease-in-out infinite',
-        '@keyframes glow1': {
-          '0%,100%': { transform: 'scale(1) translateY(0)' },
-          '50%': { transform: 'scale(1.08) translateY(-24px)' },
+        position: 'absolute', top: '-10%', right: '-5%',
+        width: { xs: 220, sm: 360, md: 560 }, height: { xs: 220, sm: 360, md: 560 },
+        borderRadius: '60% 40% 70% 30% / 50% 60% 40% 50%',
+        background: 'radial-gradient(circle at 40% 40%, rgba(147,51,234,0.18) 0%, rgba(255,45,85,0.1) 50%, transparent 70%)',
+        animation: 'morphBlob1 12s ease-in-out infinite',
+        '@keyframes morphBlob1': {
+          '0%,100%': { borderRadius: '60% 40% 70% 30% / 50% 60% 40% 50%', transform: 'translateY(0) rotate(0deg)' },
+          '33%':     { borderRadius: '40% 60% 30% 70% / 60% 40% 60% 40%', transform: 'translateY(-20px) rotate(5deg)' },
+          '66%':     { borderRadius: '70% 30% 50% 50% / 30% 70% 30% 70%', transform: 'translateY(10px) rotate(-5deg)' },
         },
       }} />
 
-      {/* 글로우 원 - 좌하단 */}
+      {/* 유기적 블롭 - 좌하단 (티얼+네이비) */}
       <Box sx={{
-        position: 'absolute', bottom: '-12%', left: '-8%',
-        width: { xs: 180, sm: 280, md: 440 }, height: { xs: 180, sm: 280, md: 440 },
-        borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(30,58,110,0.45) 0%, transparent 68%)',
-        animation: 'glow2 12s ease-in-out infinite',
-        '@keyframes glow2': {
-          '0%,100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(20px)' },
+        position: 'absolute', bottom: '-15%', left: '-10%',
+        width: { xs: 200, sm: 320, md: 480 }, height: { xs: 200, sm: 320, md: 480 },
+        borderRadius: '40% 60% 30% 70% / 60% 30% 70% 40%',
+        background: 'radial-gradient(circle at 55% 50%, rgba(20,184,166,0.13) 0%, rgba(30,58,110,0.28) 55%, transparent 72%)',
+        animation: 'morphBlob2 15s ease-in-out infinite',
+        '@keyframes morphBlob2': {
+          '0%,100%': { borderRadius: '40% 60% 30% 70% / 60% 30% 70% 40%', transform: 'translateY(0)' },
+          '50%':     { borderRadius: '60% 40% 50% 50% / 40% 60% 40% 60%', transform: 'translateY(24px)' },
         },
       }} />
 
-      {/* 회전 사각형 - 우하단 (모바일 숨김) */}
+      {/* 컬러 팔레트 도트 - 우하단 */}
       <Box sx={{
-        display: { xs: 'none', sm: 'block' },
-        position: 'absolute', bottom: '15%', right: '6%',
-        width: { sm: 60, md: 90 }, height: { sm: 60, md: 90 },
-        border: '2px solid rgba(255,45,85,0.25)', borderRadius: '8px',
-        animation: 'spin 18s linear infinite',
-        '@keyframes spin': { '100%': { transform: 'rotate(360deg)' } },
-      }} />
+        display: { xs: 'none', sm: 'flex' },
+        position: 'absolute', bottom: '13%', right: '5%',
+        flexDirection: 'column', gap: { sm: '8px', md: '10px' },
+        animation: 'paletteFloat 6s ease-in-out infinite',
+        '@keyframes paletteFloat': {
+          '0%,100%': { transform: 'translateY(0)', opacity: 0.75 },
+          '50%':     { transform: 'translateY(-10px)', opacity: 1 },
+        },
+      }}>
+        {[['#FF2D55', '#FF9F0A'], ['#30D158', '#0A84FF'], ['#BF5AF2', 'rgba(255,255,255,0.5)']].map((row, ri) => (
+          <Box key={ri} sx={{ display: 'flex', gap: { sm: '8px', md: '10px' } }}>
+            {row.map((color, ci) => (
+              <Box key={ci} sx={{
+                width: { sm: 14, md: 18 }, height: { sm: 14, md: 18 },
+                borderRadius: '50%', bgcolor: color, opacity: 0.7,
+                boxShadow: `0 0 10px ${color}55`,
+              }} />
+            ))}
+          </Box>
+        ))}
+      </Box>
 
-      {/* 링 - 좌측 (모바일에선 작게, 위치 조정) */}
+      {/* 브러시 스트로크 링 - 좌측 */}
       <Box sx={{
         position: 'absolute',
-        top: { xs: '8%', sm: '15%', md: '18%' },
-        left: { xs: '-3%', sm: '2%', md: '4%' },
-        width: { xs: 60, sm: 90, md: 130 }, height: { xs: 60, sm: 90, md: 130 },
+        top: { xs: '10%', sm: '18%', md: '22%' },
+        left: { xs: '-5%', sm: '1%', md: '3%' },
+        width: { xs: 70, sm: 100, md: 140 }, height: { xs: 70, sm: 100, md: 140 },
         borderRadius: '50%',
-        border: '1px solid rgba(255,255,255,0.07)',
-        animation: 'float 7s ease-in-out infinite',
-        '@keyframes float': {
-          '0%,100%': { transform: 'translateY(0) rotate(0deg)' },
-          '50%': { transform: 'translateY(-16px) rotate(20deg)' },
-        },
+        border: '2px solid transparent',
+        borderTop: '2px solid rgba(255,45,85,0.55)',
+        borderRight: '2px solid rgba(147,51,234,0.35)',
+        animation: 'spinBrush 10s linear infinite',
+        '@keyframes spinBrush': { '100%': { transform: 'rotate(360deg)' } },
       }} />
 
-      {/* 작은 링 - 우측 */}
+      {/* 다이아몬드 장식 - 우측 중단 */}
       <Box sx={{
         display: { xs: 'none', sm: 'block' },
-        position: 'absolute', top: '55%', right: '10%',
-        width: { sm: 36, md: 56 }, height: { sm: 36, md: 56 },
-        borderRadius: '50%',
-        border: '1px solid rgba(255,45,85,0.3)',
-        animation: 'float2 5s ease-in-out infinite',
-        '@keyframes float2': {
-          '0%,100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(14px)' },
+        position: 'absolute', top: '52%', right: '8%',
+        width: { sm: 22, md: 32 }, height: { sm: 22, md: 32 },
+        bgcolor: 'rgba(255,45,85,0.22)',
+        transform: 'rotate(45deg)',
+        borderRadius: '3px',
+        animation: 'floatDiamond 5s ease-in-out infinite',
+        '@keyframes floatDiamond': {
+          '0%,100%': { transform: 'rotate(45deg) translateY(0)', opacity: 0.6 },
+          '50%':     { transform: 'rotate(45deg) translateY(-12px)', opacity: 1 },
         },
       }} />
 
