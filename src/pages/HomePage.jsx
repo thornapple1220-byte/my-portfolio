@@ -490,9 +490,11 @@ const SkillSection = memo(function SkillSection({ skills }) {
   return (
     <Box sx={{ ...sectionBase, bgcolor: 'var(--color-bg-primary)' }}>
       <Container maxWidth="md">
-        <Typography variant="h2" sx={{ mb: 1, color: 'var(--color-text-primary)', fontWeight: 800 }}>
-          주요 스킬
-        </Typography>
+        <Box sx={{ borderLeft: '4px solid #7B68EE', pl: 2, mb: 1 }}>
+          <Typography variant="h2" sx={{ color: 'var(--color-text-primary)', fontWeight: 800 }}>
+            주요 스킬
+          </Typography>
+        </Box>
         <Typography variant="body1" sx={{ color: 'var(--color-text-secondary)', mb: 6 }}>
           카테고리 순으로 정렬됩니다.
         </Typography>
@@ -565,12 +567,14 @@ function HomeProjectCard({ project }) {
       sx={{
         height: '100%', width: '100%', display: 'flex', flexDirection: 'column',
         borderRadius: 3, overflow: 'hidden',
-        bgcolor: 'rgba(10,16,40,0.85)',
-        border: '1px solid rgba(255,255,255,0.12)',
-        transition: 'box-shadow 0.25s ease, border-color 0.25s ease',
+        bgcolor: '#ffffff',
+        border: '1px solid var(--color-border)',
+        boxShadow: 'none',
+        transition: 'box-shadow 0.25s ease, transform 0.25s ease',
         '&:hover': {
-          boxShadow: '0 8px 32px rgba(123,104,238,0.2)',
-          borderColor: 'rgba(123,104,238,0.5)',
+          transform: 'translateY(-4px)',
+          boxShadow: '0 8px 32px rgba(123,104,238,0.18)',
+          borderColor: 'var(--color-primary)',
         },
       }}
     >
@@ -603,31 +607,14 @@ function HomeProjectCard({ project }) {
           ) : (
             <Box sx={{
               position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-              background: 'linear-gradient(135deg, #1a1650 0%, #0e2454 100%)',
+              background: 'linear-gradient(135deg, #F0EEFF 0%, #E4DFFF 100%)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <Typography sx={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem', textAlign: 'center', px: 2 }}>
+              <Typography sx={{ color: 'var(--color-primary)', fontSize: '0.85rem', textAlign: 'center', px: 2, fontWeight: 600 }}>
                 {project.title}
               </Typography>
             </Box>
           )}
-          {/* hover 오버레이 — 어둡게 + "보기" */}
-          <Box sx={{
-            position: 'absolute', inset: 0,
-            background: 'linear-gradient(to top, rgba(10,16,40,0.85) 0%, rgba(10,16,40,0.2) 100%)',
-            display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end',
-            p: 1.5,
-            opacity: 0, transition: 'opacity 0.25s ease',
-            '.MuiCardActionArea-root:hover &': { opacity: 1 },
-          }}>
-            <Box sx={{
-              fontSize: '0.7rem', fontWeight: 700, color: '#fff',
-              border: '1px solid rgba(255,255,255,0.7)',
-              borderRadius: 1, px: 1.2, py: 0.4, letterSpacing: '1px',
-            }}>
-              자세히 보기 →
-            </Box>
-          </Box>
         </Box>
 
         {/* 텍스트 영역 */}
@@ -679,12 +666,14 @@ function ProjectsSection() {
   }, []);
 
   return (
-    <Box sx={{ ...sectionBase, background: 'linear-gradient(145deg, #0d1333 0%, #1a1650 50%, #0e2454 100%)' }}>
+    <Box sx={{ ...sectionBase, background: 'linear-gradient(160deg, #EDE9FF 0%, #E4DFFF 50%, #EDE9FF 100%)' }}>
       <Container maxWidth="md">
-        <Typography variant="h2" sx={{ mb: 1, color: '#ffffff', fontWeight: 800 }}>
-          프로젝트
-        </Typography>
-        <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.6)', mb: 6 }}>
+        <Box sx={{ borderLeft: '4px solid #7B68EE', pl: 2, mb: 1 }}>
+          <Typography variant="h2" sx={{ color: 'var(--color-text-primary)', fontWeight: 800 }}>
+            프로젝트
+          </Typography>
+        </Box>
+        <Typography variant="body1" sx={{ color: 'var(--color-text-secondary)', mb: 6 }}>
           대표 작업물을 소개합니다.
         </Typography>
 
@@ -694,12 +683,12 @@ function ProjectsSection() {
           </Box>
         ) : projects.length === 0 ? (
           <Box sx={{ textAlign: 'center', py: 6 }}>
-            <Typography sx={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.95rem' }}>
+            <Typography sx={{ color: 'var(--color-text-muted)', fontSize: '0.95rem' }}>
               등록된 프로젝트가 없습니다.
             </Typography>
           </Box>
         ) : (
-          <Box sx={{ overflow: 'hidden', mb: 6 }}>
+          <Box sx={{ mb: 6, pt: 1 }}>
             <Grid container spacing={{ xs: 1.5, sm: 3 }}>
               {projects.map((project) => (
                 <Grid size={{ xs: 6, sm: 6, md: 4 }} key={project.id} sx={{ display: 'flex' }}>
@@ -715,11 +704,11 @@ function ProjectsSection() {
           to="/projects"
           variant="outlined"
           sx={{
-            color: 'rgba(255,255,255,0.9)',
-            borderColor: 'rgba(255,255,255,0.35)',
+            color: 'var(--color-primary)',
+            borderColor: 'rgba(123,104,238,0.4)',
             px: 4, py: 1.2, borderRadius: 2, fontWeight: 700, textTransform: 'none',
             transition: 'all 0.22s ease',
-            '&:hover': { bgcolor: 'rgba(255,255,255,0.08)', borderColor: 'rgba(255,255,255,0.75)' },
+            '&:hover': { bgcolor: 'var(--color-accent)', borderColor: 'var(--color-primary)' },
           }}
         >
           더 알아보기
@@ -759,10 +748,12 @@ function ContactSection() {
     <Box id="contact-section" sx={{ ...sectionBase, bgcolor: 'var(--color-bg-soft)' }}>
       <Container maxWidth="md">
         {/* 섹션 타이틀 */}
-        <Box sx={{ textAlign: 'center', mb: 6 }}>
-          <Typography variant="h2" sx={{ color: 'var(--color-text-primary)', mb: 1.5 }}>
-            연락하기
-          </Typography>
+        <Box sx={{ mb: 6 }}>
+          <Box sx={{ borderLeft: '4px solid #7B68EE', pl: 2, mb: 1.5 }}>
+            <Typography variant="h2" sx={{ color: 'var(--color-text-primary)' }}>
+              연락하기
+            </Typography>
+          </Box>
           <Typography variant="body1" sx={{ color: 'var(--color-text-secondary)' }}>
             편하게 연락주세요. 방명록도 남겨주시면 감사합니다 😊
           </Typography>
