@@ -505,7 +505,7 @@ const SkillSection = memo(function SkillSection({ skills }) {
   }, []);
 
   return (
-    <Box sx={{ ...sectionBase, bgcolor: '#fbf6f8' }}>
+    <Box sx={{ ...sectionBase, bgcolor: 'var(--color-bg-primary)' }}>
       <Container maxWidth="md">
         <Typography variant="h2" sx={{ mb: 1, color: 'var(--color-text-primary)', fontWeight: 800 }}>
           주요 스킬
@@ -835,9 +835,11 @@ function HomePage({ photo, skills }) {
     <Box>
       <HeroSection />
       <Divider sx={{ borderColor: 'var(--color-border)' }} />
-      <AboutSection photo={photo} />
-      <Divider sx={{ borderColor: 'var(--color-border)' }} />
-      <SkillSection skills={skills} />
+      <Box sx={{ bgcolor: 'var(--color-bg-primary)' }}>
+        <AboutSection photo={photo} />
+        <Divider sx={{ borderColor: 'var(--color-border)', mx: { xs: 3, md: 'auto' }, maxWidth: 'md' }} />
+        <SkillSection skills={skills} />
+      </Box>
       <Divider sx={{ borderColor: 'var(--color-border)' }} />
       <ProjectsSection />
       <Divider sx={{ borderColor: 'var(--color-border)' }} />
