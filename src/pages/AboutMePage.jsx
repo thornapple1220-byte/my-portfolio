@@ -99,20 +99,20 @@ const InfoCard = memo(function InfoCard({ icon, label, value }) {
     <Card
       elevation={0}
       sx={{
-        bgcolor: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)',
-        border: '1px solid rgba(255,255,255,0.25)',
+        bgcolor: 'var(--color-bg-soft)',
+        border: '1px solid var(--color-border)',
         borderRadius: 2.5, px: { xs: 1.5, sm: 2 }, py: { xs: 1.2, sm: 1.5 },
         width: '100%', height: '100%', textAlign: 'left',
       }}
     >
       <Stack direction="row" spacing={0.7} alignItems="center" sx={{ mb: 0.5 }}>
-        <Box sx={{ color: 'var(--color-accent)', display: 'flex', flexShrink: 0 }}>{icon}</Box>
-        <Typography noWrap sx={{ fontSize: { xs: '0.85rem', sm: '0.8rem' }, color: 'rgba(255,255,255,0.7)', fontWeight: 700, letterSpacing: '0.5px' }}>
+        <Box sx={{ color: 'var(--color-primary)', display: 'flex', flexShrink: 0 }}>{icon}</Box>
+        <Typography noWrap sx={{ fontSize: { xs: '0.85rem', sm: '0.8rem' }, color: 'var(--color-text-secondary)', fontWeight: 700, letterSpacing: '0.5px' }}>
           {label}
         </Typography>
       </Stack>
       <Box sx={{ pl: '26px', overflow: 'hidden' }}>
-        <Typography noWrap sx={{ fontSize: { xs: '0.95rem', sm: '0.9rem' }, fontWeight: 700, color: 'var(--color-text-white)' }}>
+        <Typography noWrap sx={{ fontSize: { xs: '0.95rem', sm: '0.9rem' }, fontWeight: 700, color: 'var(--color-text-primary)' }}>
           {value}
         </Typography>
       </Box>
@@ -515,92 +515,73 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
       {/* ─ 프로필 히어로 ─ */}
       <Box sx={{
         position: 'relative', overflow: 'hidden',
-        background: 'linear-gradient(145deg, #0d1333 0%, #1a1650 50%, #0e2454 100%)',
+        background: 'linear-gradient(160deg, #FFFFFF 0%, #F4F2FF 55%, #FFFFFF 100%)',
         py: { xs: 7, md: 10 },
+        borderBottom: '1px solid var(--color-border)',
       }}>
-        {/* 대각선 사선 패턴 */}
+        {/* 소프트 블롭 - 우상단 */}
         <Box sx={{
-          position: 'absolute', inset: 0, pointerEvents: 'none',
-          backgroundImage: 'repeating-linear-gradient(45deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 48px)',
-        }} />
-
-        {/* 유기적 블롭 - 우상단 (보라+핑크) */}
-        <Box sx={{
-          position: 'absolute', top: '-15%', right: '-5%',
+          position: 'absolute', top: '-20%', right: '-5%',
           width: { xs: 200, md: 380 }, height: { xs: 200, md: 380 },
           borderRadius: '60% 40% 70% 30% / 50% 60% 40% 50%',
-          background: 'radial-gradient(circle at 40% 40%, rgba(147,51,234,0.18) 0%, rgba(123,104,238,0.1) 50%, transparent 70%)',
+          background: 'radial-gradient(circle at 40% 40%, rgba(123,104,238,0.1) 0%, rgba(123,104,238,0.04) 55%, transparent 72%)',
           animation: 'aboutMorphBlob1 12s ease-in-out infinite',
           '@keyframes aboutMorphBlob1': {
-            '0%,100%': { borderRadius: '60% 40% 70% 30% / 50% 60% 40% 50%', transform: 'translateY(0) rotate(0deg)' },
-            '33%':     { borderRadius: '40% 60% 30% 70% / 60% 40% 60% 40%', transform: 'translateY(-16px) rotate(4deg)' },
-            '66%':     { borderRadius: '70% 30% 50% 50% / 30% 70% 30% 70%', transform: 'translateY(8px) rotate(-4deg)' },
+            '0%,100%': { borderRadius: '60% 40% 70% 30% / 50% 60% 40% 50%', transform: 'translateY(0)' },
+            '33%':     { borderRadius: '40% 60% 30% 70% / 60% 40% 60% 40%', transform: 'translateY(-14px)' },
+            '66%':     { borderRadius: '70% 30% 50% 50% / 30% 70% 30% 70%', transform: 'translateY(8px)' },
           },
         }} />
 
-        {/* 유기적 블롭 - 좌하단 (티얼+네이비) */}
+        {/* 소프트 블롭 - 좌하단 */}
         <Box sx={{
           position: 'absolute', bottom: '-20%', left: '-5%',
           width: { xs: 160, md: 300 }, height: { xs: 160, md: 300 },
           borderRadius: '40% 60% 30% 70% / 60% 30% 70% 40%',
-          background: 'radial-gradient(circle at 55% 50%, rgba(20,184,166,0.12) 0%, rgba(30,58,110,0.28) 55%, transparent 72%)',
+          background: 'radial-gradient(circle at 55% 50%, rgba(155,135,245,0.08) 0%, rgba(123,104,238,0.04) 55%, transparent 72%)',
           animation: 'aboutMorphBlob2 15s ease-in-out infinite',
           '@keyframes aboutMorphBlob2': {
             '0%,100%': { borderRadius: '40% 60% 30% 70% / 60% 30% 70% 40%', transform: 'translateY(0)' },
-            '50%':     { borderRadius: '60% 40% 50% 50% / 40% 60% 40% 60%', transform: 'translateY(18px)' },
+            '50%':     { borderRadius: '60% 40% 50% 50% / 40% 60% 40% 60%', transform: 'translateY(16px)' },
           },
         }} />
 
-        {/* 컬러 팔레트 도트 - 우하단 */}
+        {/* 회전 링 - 좌상단 */}
+        <Box sx={{
+          display: { xs: 'none', md: 'block' },
+          position: 'absolute', top: '12%', left: '3%',
+          width: 90, height: 90,
+          borderRadius: '50%',
+          border: '1.5px solid transparent',
+          borderTop: '1.5px solid rgba(123,104,238,0.3)',
+          borderRight: '1.5px solid rgba(123,104,238,0.15)',
+          animation: 'aboutSpinBrush 10s linear infinite',
+          '@keyframes aboutSpinBrush': { '100%': { transform: 'rotate(360deg)' } },
+        }} />
+
+        {/* 파스텔 도트 - 우하단 */}
         <Box sx={{
           display: { xs: 'none', sm: 'flex' },
           position: 'absolute', bottom: '10%', right: '5%',
           flexDirection: 'column', gap: '8px',
-          animation: 'aboutPaletteFloat 6s ease-in-out infinite',
-          '@keyframes aboutPaletteFloat': {
-            '0%,100%': { transform: 'translateY(0)', opacity: 0.75 },
+          animation: 'aboutDotFloat 6s ease-in-out infinite',
+          '@keyframes aboutDotFloat': {
+            '0%,100%': { transform: 'translateY(0)', opacity: 0.6 },
             '50%':     { transform: 'translateY(-8px)', opacity: 1 },
           },
         }}>
-          {[['#7B68EE', '#FF9F0A'], ['#30D158', '#0A84FF'], ['#BF5AF2', 'rgba(255,255,255,0.5)']].map((row, ri) => (
+          {[['#7B68EE', '#9D8FF2'], ['#B8AEFF', '#D4CDFF']].map((row, ri) => (
             <Box key={ri} sx={{ display: 'flex', gap: '8px' }}>
               {row.map((color, ci) => (
                 <Box key={ci} sx={{
-                  width: { sm: 12, md: 16 }, height: { sm: 12, md: 16 },
-                  borderRadius: '50%', bgcolor: color, opacity: 0.7,
-                  boxShadow: `0 0 8px ${color}55`,
+                  width: { sm: 10, md: 13 }, height: { sm: 10, md: 13 },
+                  borderRadius: '50%', bgcolor: color,
+                  boxShadow: `0 0 6px ${color}44`,
                 }} />
               ))}
             </Box>
           ))}
         </Box>
-
-        {/* 브러시 스트로크 링 - 좌상단 */}
-        <Box sx={{
-          position: 'absolute',
-          top: { xs: '5%', md: '12%' }, left: { xs: '-2%', md: '3%' },
-          width: { xs: 55, md: 100 }, height: { xs: 55, md: 100 },
-          borderRadius: '50%',
-          border: '2px solid transparent',
-          borderTop: '2px solid rgba(123,104,238,0.55)',
-          borderRight: '2px solid rgba(147,51,234,0.35)',
-          animation: 'aboutSpinBrush 10s linear infinite',
-          '@keyframes aboutSpinBrush': { '100%': { transform: 'rotate(360deg)' } },
-        }} />
-
-        {/* 수평 라인 (데스크톱) */}
-        <Box sx={{
-          display: { xs: 'none', lg: 'block' },
-          position: 'absolute', top: '50%', left: 0,
-          width: '8%', height: '1px',
-          background: 'linear-gradient(90deg, transparent, rgba(123,104,238,0.35))',
-        }} />
-        <Box sx={{
-          display: { xs: 'none', lg: 'block' },
-          position: 'absolute', top: '50%', right: 0,
-          width: '8%', height: '1px',
-          background: 'linear-gradient(270deg, transparent, rgba(123,104,238,0.35))',
-        }} />
 
         {/* 컨텐츠 */}
         <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1 }}>
@@ -610,9 +591,8 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
             <Box sx={{ flex: 1, textAlign: { xs: 'center', md: 'left' } }}>
               <Typography variant="h1" sx={{
                 fontSize: { xs: '2.4rem', md: '3.2rem' },
-                fontWeight: 900, color: '#ffffff',
+                fontWeight: 900, color: 'var(--color-text-primary)',
                 letterSpacing: '-1.5px', mb: 0.5,
-                textShadow: '0 4px 24px rgba(123,104,238,0.2)',
               }}>
                 {basicInfo.name}
               </Typography>

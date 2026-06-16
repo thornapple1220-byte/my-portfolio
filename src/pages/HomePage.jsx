@@ -331,31 +331,54 @@ function AboutSection({ photo }) {
         <Stack
           direction={{ xs: 'column', md: 'row' }}
           spacing={{ xs: 6, md: 8 }}
-          alignItems="center"
+          alignItems="flex-start"
         >
-          {/* 왼쪽: 프로필 사진 */}
-          <Avatar
-            src={photo}
-            sx={{
-              width: { xs: 200, md: 260 },
-              height: { xs: 200, md: 260 },
-              bgcolor: 'var(--color-accent)',
-              border: '5px solid var(--color-border)',
-              boxShadow: '0 16px 48px rgba(123,104,238,0.18)',
-              flexShrink: 0,
-              alignSelf: { xs: 'center', md: 'auto' },
-            }}
-          >
-            <PersonIcon sx={{ fontSize: { xs: '5rem', md: '7rem' }, color: 'var(--color-primary)' }} />
-          </Avatar>
+          {/* 왼쪽: 프로필 사진 + 이름 */}
+          <Box sx={{ flexShrink: 0, alignSelf: { xs: 'center', md: 'flex-start' }, textAlign: 'center' }}>
+            <Box
+              sx={{
+                width: { xs: 240, md: 300 },
+                borderRadius: 3,
+                overflow: 'hidden',
+                border: '1px solid var(--color-border)',
+                boxShadow: '0 16px 48px rgba(123,104,238,0.14)',
+              }}
+            >
+              {photo ? (
+                <Box
+                  component="img"
+                  src={photo}
+                  alt="프로필 사진"
+                  sx={{ width: '100%', display: 'block', objectFit: 'contain' }}
+                />
+              ) : (
+                <Box
+                  sx={{
+                    width: '100%',
+                    aspectRatio: '3/4',
+                    bgcolor: 'var(--color-accent)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}
+                >
+                  <PersonIcon sx={{ fontSize: '7rem', color: 'var(--color-primary)' }} />
+                </Box>
+              )}
+            </Box>
+            <Typography sx={{
+              mt: 2.5,
+              fontSize: { xs: '1.8rem', md: '2.2rem' },
+              fontWeight: 900,
+              letterSpacing: '-0.5px',
+              color: 'var(--color-text-primary)',
+            }}>
+              {basicInfo.name}
+            </Typography>
+          </Box>
 
           {/* 오른쪽: 텍스트 */}
           <Box sx={{ flex: 1 }}>
-            {/* 이름 + 카드 */}
+            {/* 직함 + 카드 */}
             <Box sx={{ mb: 4 }}>
-              <Typography variant="h2" sx={{ mb: 0.5, color: 'var(--color-text-primary)', fontWeight: 800 }}>
-                {basicInfo.name}
-              </Typography>
               <Typography sx={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-primary)', mb: 2 }}>
                 Web Designer
               </Typography>
