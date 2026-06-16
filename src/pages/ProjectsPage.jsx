@@ -233,7 +233,6 @@ function ProjectsPage() {
       <Container maxWidth="xl">
         {/* 헤더 */}
         <Box sx={{ textAlign: 'center', mb: 8 }}>
-          <SectionLabel text="Projects" />
           <Typography variant="h2" sx={{ color: 'var(--color-text-primary)', mb: 2 }}>
             프로젝트
           </Typography>
