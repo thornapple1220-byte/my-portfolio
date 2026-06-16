@@ -73,21 +73,33 @@ const ProfilePhoto = memo(function ProfilePhoto({ photo, onPhotoChange }) {
   }, [onPhotoChange]);
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-      <Box sx={{ position: 'relative', display: 'inline-block' }}>
-        <Avatar
-          src={photo}
-          imgProps={{ loading: 'lazy', alt: '프로필 사진' }}
-          sx={{
-            width: 160, height: 160,
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Box
+        sx={{
+          width: { xs: 160, md: 180 },
+          borderRadius: 3,
+          overflow: 'hidden',
+          border: '1px solid var(--color-border)',
+          boxShadow: '0 8px 32px rgba(123,104,238,0.14)',
+        }}
+      >
+        {photo ? (
+          <Box
+            component="img"
+            src={photo}
+            alt="프로필 사진"
+            loading="lazy"
+            sx={{ width: '100%', display: 'block', objectFit: 'contain' }}
+          />
+        ) : (
+          <Box sx={{
+            width: '100%', aspectRatio: '3/4',
             bgcolor: 'var(--color-accent)',
-            border: '4px solid rgba(255,255,255,0.9)',
-            boxShadow: '0 8px 32px rgba(123,104,238,0.2)',
-          }}
-        >
-          {!photo && <PersonIcon sx={{ fontSize: '4rem', color: 'var(--color-primary)' }} />}
-        </Avatar>
-        <input ref={fileInputRef} type="file" accept="image/*" hidden onChange={handleFileChange} />
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <PersonIcon sx={{ fontSize: '5rem', color: 'var(--color-primary)' }} />
+          </Box>
+        )}
       </Box>
     </Box>
   );
@@ -585,27 +597,27 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
 
         {/* 컨텐츠 */}
         <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1 }}>
-          <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 4, md: 6 }} alignItems="center">
+          <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 4, md: 8 }} alignItems={{ xs: 'center', md: 'flex-end' }}>
             <ProfilePhoto photo={photo} onPhotoChange={onPhotoChange} />
 
-            <Box sx={{ flex: 1, textAlign: { xs: 'center', md: 'left' } }}>
+            <Box sx={{ flex: 1, textAlign: { xs: 'center', md: 'left' }, pb: { md: 1 } }}>
               <Typography variant="h1" sx={{
-                fontSize: { xs: '2.4rem', md: '3.2rem' },
+                fontSize: { xs: '2.8rem', md: '4rem' },
                 fontWeight: 900, color: 'var(--color-text-primary)',
-                letterSpacing: '-1.5px', mb: 0.5,
+                letterSpacing: '-2px', mb: 0.5,
               }}>
                 {basicInfo.name}
               </Typography>
               <Typography sx={{
-                fontSize: { xs: '0.95rem', md: '1rem' },
+                fontSize: { xs: '1rem', md: '1.15rem' },
                 fontWeight: 700, color: '#7B68EE',
-                mb: 3, letterSpacing: '3px', textTransform: 'uppercase',
+                mb: 3, letterSpacing: '4px', textTransform: 'uppercase',
               }}>
                 Web Designer
               </Typography>
               {/* 구분선 */}
-              <Box sx={{ width: 48, height: 3, bgcolor: '#7B68EE', borderRadius: 2, mb: 3, mx: { xs: 'auto', md: 0 } }} />
-              <Grid container spacing={1.5} alignItems="stretch">
+              <Box sx={{ width: 56, height: 3, bgcolor: '#7B68EE', borderRadius: 2, mb: 4, mx: { xs: 'auto', md: 0 } }} />
+              <Grid container spacing={2} alignItems="stretch">
                 {infoItems.map(({ icon, label, value }) => (
                   <Grid size={{ xs: 12, sm: 4 }} key={label} sx={{ display: 'flex' }}>
                     <InfoCard icon={icon} label={label} value={value} />
@@ -636,18 +648,7 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
               key={section.id}
               id={`tab-${section.id}`}
               aria-controls={`tabpanel-${section.id}`}
-              label={
-                <Stack direction="row" spacing={0.8} alignItems="center">
-                  <span>{section.title}</span>
-                  {section.showInHome && (
-                    <Chip
-                      label="홈"
-                      size="small"
-                      sx={{ height: 18, fontSize: '0.6rem', fontWeight: 700, bgcolor: 'var(--color-accent)', color: 'var(--color-primary)', '& .MuiChip-label': { px: 0.8 } }}
-                    />
-                  )}
-                </Stack>
-              }
+              label={section.title}
             />
           ))}
         </Tabs>
