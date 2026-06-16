@@ -1,5 +1,5 @@
 import { memo, useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Box, Container, Typography, Button, Divider, Grid, CircularProgress, Stack, Avatar, Card, CardContent, CardActionArea, Chip, IconButton, Tooltip } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -91,7 +91,14 @@ function TypingText({ texts }) {
 /* ── Hero 섹션 ─────────────────────────────────────── */
 function HeroSection() {
   const [visible, setVisible] = useState(false);
+  const [transitioning, setTransitioning] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => { const t = setTimeout(() => setVisible(true), 100); return () => clearTimeout(t); }, []);
+
+  const handleDotsClick = () => {
+    setTransitioning(true);
+    setTimeout(() => navigate('/projects'), 650);
+  };
 
   const fadeUp = (delay = 0) => ({
     opacity: visible ? 1 : 0,
@@ -105,6 +112,18 @@ function HeroSection() {
       minHeight: '100vh', display: 'flex', alignItems: 'center',
       background: 'linear-gradient(160deg, #FFFFFF 0%, #F4F2FF 55%, #FFFFFF 100%)',
     }}>
+      {/* 페이지 전환 오버레이 */}
+      {transitioning && (
+        <Box sx={{
+          position: 'fixed', inset: 0, zIndex: 9999,
+          background: 'linear-gradient(135deg, #7B68EE, #5B4FCF)',
+          animation: 'rippleExpand 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards',
+          '@keyframes rippleExpand': {
+            '0%':   { clipPath: 'circle(0% at 88% 82%)' },
+            '100%': { clipPath: 'circle(160% at 88% 82%)' },
+          },
+        }} />
+      )}
       {/* ── 배경 장식 ── */}
       {/* 소프트 블롭 - 우상단 */}
       <Box sx={{
@@ -146,26 +165,49 @@ function HeroSection() {
         '@keyframes spinBrush': { '100%': { transform: 'rotate(360deg)' } },
       }} />
 
-      {/* 작은 점 장식 - 우하단 */}
-      <Box sx={{
-        display: { xs: 'none', sm: 'flex' },
-        position: 'absolute', bottom: '14%', right: '6%',
-        flexDirection: 'column', gap: '10px',
-        animation: 'dotFloat 6s ease-in-out infinite',
-        '@keyframes dotFloat': {
-          '0%,100%': { transform: 'translateY(0)', opacity: 0.6 },
-          '50%':     { transform: 'translateY(-10px)', opacity: 1 },
-        },
-      }}>
-        {[['#7B68EE', '#9D8FF2'], ['#B8AEFF', '#D4CDFF']].map((row, ri) => (
-          <Box key={ri} sx={{ display: 'flex', gap: '10px' }}>
-            {row.map((color, ci) => (
-              <Box key={ci} sx={{
-                width: { sm: 10, md: 14 }, height: { sm: 10, md: 14 },
-                borderRadius: '50%', bgcolor: color,
-                boxShadow: `0 0 8px ${color}44`,
-              }} />
-            ))}
+      {/* 인터랙티브 도트 - 우하단 */}
+      <Box
+        onClick={handleDotsClick}
+        sx={{
+          display: { xs: 'none', sm: 'flex' },
+          position: 'absolute', bottom: '14%', right: '6%',
+          flexDirection: 'column', gap: '10px',
+          cursor: 'pointer',
+          '&:hover .dot': { transform: 'scale(1.35)', filter: 'brightness(1.2)' },
+          '@keyframes dotBounce0': { '0%,100%': { transform: 'translateY(0)' }, '40%': { transform: 'translateY(-10px)' } },
+          '@keyframes dotBounce1': { '0%,100%': { transform: 'translateY(0)' }, '40%': { transform: 'translateY(-10px)' } },
+          '@keyframes dotBounce2': { '0%,100%': { transform: 'translateY(0)' }, '40%': { transform: 'translateY(-10px)' } },
+          '@keyframes dotBounce3': { '0%,100%': { transform: 'translateY(0)' }, '40%': { transform: 'translateY(-10px)' } },
+        }}
+      >
+        {[
+          { color: '#7B68EE', size: 16, delay: '0s' },
+          { color: '#9D8FF2', size: 13, delay: '0.15s' },
+          { color: '#B8AEFF', size: 14, delay: '0.3s' },
+          { color: '#D4CDFF', size: 11, delay: '0.45s' },
+        ].reduce((rows, dot, i) => {
+          if (i % 2 === 0) rows.push([]);
+          rows[rows.length - 1].push(dot);
+          return rows;
+        }, []).map((row, ri) => (
+          <Box key={ri} sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+            {row.map((dot, ci) => {
+              const idx = ri * 2 + ci;
+              return (
+                <Box
+                  key={ci}
+                  className="dot"
+                  sx={{
+                    width: dot.size, height: dot.size,
+                    borderRadius: '50%',
+                    bgcolor: dot.color,
+                    boxShadow: `0 0 10px ${dot.color}66`,
+                    animation: `dotBounce${idx} 1.6s ease-in-out ${dot.delay} infinite`,
+                    transition: 'transform 0.2s ease, filter 0.2s ease',
+                  }}
+                />
+              );
+            })}
           </Box>
         ))}
       </Box>
@@ -689,7 +731,7 @@ function ProjectsSection() {
   }, []);
 
   return (
-    <Box sx={{ ...sectionBase, background: 'linear-gradient(160deg, #EDE9FF 0%, #E4DFFF 50%, #EDE9FF 100%)' }}>
+    <Box id="projects-section" sx={{ ...sectionBase, background: 'linear-gradient(160deg, #EDE9FF 0%, #E4DFFF 50%, #EDE9FF 100%)' }}>
       <Container maxWidth="md">
         <Box sx={{ borderLeft: '4px solid #7B68EE', pl: 2, mb: 1 }}>
           <Typography variant="h2" sx={{ color: 'var(--color-text-primary)', fontWeight: 800 }}>
