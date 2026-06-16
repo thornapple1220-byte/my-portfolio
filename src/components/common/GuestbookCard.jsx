@@ -24,7 +24,7 @@ function GuestbookCard({ entry }) {
         transition: 'transform 0.15s, box-shadow 0.15s',
         '&:hover': {
           transform: 'translateY(-2px)',
-          boxShadow: '0 4px 20px rgba(255,45,85,0.1)',
+          boxShadow: '0 4px 20px rgba(123,104,238,0.1)',
         },
       }}
     >

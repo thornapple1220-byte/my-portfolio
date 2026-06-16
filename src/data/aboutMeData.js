@@ -1,10 +1,10 @@
 export const CATEGORIES = ['전체', 'Design', 'Frontend', 'Framework', '기타'];
 
 export const categoryColors = {
-  Design:    '#FF2D55',  // 핫핑크
-  Frontend:  '#2D5AA0',  // 네이비
-  Framework: '#7B61FF',  // 퍼플
-  기타:      '#FF9500',  // 오렌지
+  Design:    '#7B68EE',  // 퍼플
+  Frontend:  '#5B4FCF',  // 딥퍼플
+  Framework: '#9D8FF2',  // 라이트퍼플
+  기타:      '#FF9F0A',  // 오렌지 (Moving 팔레트)
 };
 
 export const skillsData = [

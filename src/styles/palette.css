@@ -1,70 +1,70 @@
 /* ==========================================================
    Color Palette — my-portfolio
-   출처: 야놀자(Yanolja) 채용 페이지
-   분석 날짜: 2026-06-08
+   출처: Moving 앱 컬러 팔레트
+   분석 날짜: 2026-06-16
    ========================================================== */
 
 :root {
-  /* Primary — 핫 핑크 계열 */
-  --color-primary:        #FF2D55;
-  --color-primary-light:  #FF6B8A;
-  --color-primary-dark:   #E0002E;
+  /* Primary — 퍼플 계열 */
+  --color-primary:        #7B68EE;
+  --color-primary-light:  #9D8FF2;
+  --color-primary-dark:   #5B4FCF;
 
-  /* Secondary — 라이트 네이비 계열 */
-  --color-secondary:      #1E3A6E;
-  --color-secondary-mid:  #2D5AA0;
+  /* Secondary — 딥 퍼플 */
+  --color-secondary:      #5B4FCF;
+  --color-secondary-mid:  #7B68EE;
 
-  /* Accent */
-  --color-accent:         #FFB3C6;
+  /* Accent — 연보라 틴트 */
+  --color-accent:         #F0EEFF;
 
   /* Background */
   --color-bg-primary:     #FFFFFF;
-  --color-bg-secondary:   #1E3A6E;
-  --color-bg-soft:        #FFF0F4;
-  --color-bg-navy-light:  #E8EFF9;
-  --color-bg-navy-mid:    #2D5AA0;
+  --color-bg-secondary:   #5B4FCF;
+  --color-bg-soft:        #F7F7FA;
+  --color-bg-navy-light:  #F0EEFF;
+  --color-bg-navy-mid:    #7B68EE;
 
   /* Text */
-  --color-text-primary:   #222222;
-  --color-text-secondary: #666666;
-  --color-text-muted:     #999999;
+  --color-text-primary:   #2D2D2D;
+  --color-text-secondary: #888888;
+  --color-text-muted:     #AAAAAA;
   --color-text-white:     #FFFFFF;
 
   /* Interactive */
-  --color-button-primary: #FF2D55;
-  --color-button-hover:   #E0002E;
-  --color-link:           #FF2D55;
-  --color-link-hover:     #FF6B8A;
+  --color-button-primary: #7B68EE;
+  --color-button-hover:   #5B4FCF;
+  --color-link:           #7B68EE;
+  --color-link-hover:     #5B4FCF;
 
   /* Border */
-  --color-border:         #FFB3C6;
-  --color-border-dark:    rgba(255, 255, 255, 0.2);
+  --color-border:         #E8E4FF;
+  --color-border-dark:    rgba(123, 104, 238, 0.2);
 }
 
 /* 다크 모드 */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg-primary:     #1E3A6E;
-    --color-bg-soft:        #243F78;
+    --color-bg-primary:     #1A1535;
+    --color-bg-soft:        #221D45;
     --color-text-primary:   #FFFFFF;
     --color-text-secondary: #AAAAAA;
     --color-text-muted:     #666666;
-    --color-border:         rgba(255, 45, 85, 0.3);
+    --color-border:         rgba(123, 104, 238, 0.3);
   }
 }
 
-/* 모바일 — 핑크 채도 완화 */
+/* 모바일 */
 @media (max-width: 600px) {
   :root {
-    --color-primary:        #FF4D6D;
-    --color-button-primary: #FF4D6D;
+    --color-primary:        #8B7CF6;
+    --color-button-primary: #8B7CF6;
   }
 }
 
-/* 대형 화면 — 더 깊은 우주 배경 */
+/* 대형 화면 */
 @media (min-width: 1440px) {
   :root {
-    --color-bg-secondary: #163060;
+    --color-bg-secondary: #3D2FB0;
   }
 }
 

@@ -80,7 +80,7 @@ function TypingText({ texts }) {
       {displayed}
       <Box component="span" sx={{
         display: 'inline-block', width: '2px', height: '0.85em',
-        bgcolor: '#FF2D55', ml: '3px', verticalAlign: 'middle',
+        bgcolor: '#7B68EE', ml: '3px', verticalAlign: 'middle',
         animation: 'cursorBlink 1s step-end infinite',
         '@keyframes cursorBlink': { '0%,100%': { opacity: 1 }, '50%': { opacity: 0 } },
       }} />
@@ -103,108 +103,72 @@ function HeroSection() {
     <Box sx={{
       position: 'relative', overflow: 'hidden',
       minHeight: '100vh', display: 'flex', alignItems: 'center',
-      background: 'linear-gradient(145deg, #0d1333 0%, #1a1650 45%, #0e2454 100%)',
+      background: 'linear-gradient(160deg, #FFFFFF 0%, #F4F2FF 55%, #FFFFFF 100%)',
     }}>
       {/* ── 배경 장식 ── */}
-      {/* 대각선 사선 패턴 */}
+      {/* 소프트 블롭 - 우상단 */}
       <Box sx={{
-        position: 'absolute', inset: 0, pointerEvents: 'none',
-        backgroundImage: 'repeating-linear-gradient(45deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 48px)',
-      }} />
-
-      {/* 유기적 블롭 - 우상단 (보라+핑크) */}
-      <Box sx={{
-        position: 'absolute', top: '-10%', right: '-5%',
-        width: { xs: 220, sm: 360, md: 560 }, height: { xs: 220, sm: 360, md: 560 },
+        position: 'absolute', top: '-8%', right: '-6%',
+        width: { xs: 280, sm: 420, md: 620 }, height: { xs: 280, sm: 420, md: 620 },
         borderRadius: '60% 40% 70% 30% / 50% 60% 40% 50%',
-        background: 'radial-gradient(circle at 40% 40%, rgba(147,51,234,0.18) 0%, rgba(255,45,85,0.1) 50%, transparent 70%)',
+        background: 'radial-gradient(circle at 40% 40%, rgba(123,104,238,0.13) 0%, rgba(123,104,238,0.05) 55%, transparent 72%)',
         animation: 'morphBlob1 12s ease-in-out infinite',
         '@keyframes morphBlob1': {
-          '0%,100%': { borderRadius: '60% 40% 70% 30% / 50% 60% 40% 50%', transform: 'translateY(0) rotate(0deg)' },
-          '33%':     { borderRadius: '40% 60% 30% 70% / 60% 40% 60% 40%', transform: 'translateY(-20px) rotate(5deg)' },
-          '66%':     { borderRadius: '70% 30% 50% 50% / 30% 70% 30% 70%', transform: 'translateY(10px) rotate(-5deg)' },
+          '0%,100%': { borderRadius: '60% 40% 70% 30% / 50% 60% 40% 50%', transform: 'translateY(0)' },
+          '33%':     { borderRadius: '40% 60% 30% 70% / 60% 40% 60% 40%', transform: 'translateY(-18px)' },
+          '66%':     { borderRadius: '70% 30% 50% 50% / 30% 70% 30% 70%', transform: 'translateY(10px)' },
         },
       }} />
 
-      {/* 유기적 블롭 - 좌하단 (티얼+네이비) */}
+      {/* 소프트 블롭 - 좌하단 */}
       <Box sx={{
-        position: 'absolute', bottom: '-15%', left: '-10%',
-        width: { xs: 200, sm: 320, md: 480 }, height: { xs: 200, sm: 320, md: 480 },
+        position: 'absolute', bottom: '-12%', left: '-6%',
+        width: { xs: 240, sm: 360, md: 520 }, height: { xs: 240, sm: 360, md: 520 },
         borderRadius: '40% 60% 30% 70% / 60% 30% 70% 40%',
-        background: 'radial-gradient(circle at 55% 50%, rgba(20,184,166,0.13) 0%, rgba(30,58,110,0.28) 55%, transparent 72%)',
+        background: 'radial-gradient(circle at 55% 50%, rgba(155,135,245,0.1) 0%, rgba(123,104,238,0.05) 55%, transparent 72%)',
         animation: 'morphBlob2 15s ease-in-out infinite',
         '@keyframes morphBlob2': {
           '0%,100%': { borderRadius: '40% 60% 30% 70% / 60% 30% 70% 40%', transform: 'translateY(0)' },
-          '50%':     { borderRadius: '60% 40% 50% 50% / 40% 60% 40% 60%', transform: 'translateY(24px)' },
+          '50%':     { borderRadius: '60% 40% 50% 50% / 40% 60% 40% 60%', transform: 'translateY(20px)' },
         },
       }} />
 
-      {/* 컬러 팔레트 도트 - 우하단 */}
+      {/* 회전 링 - 좌측 */}
+      <Box sx={{
+        display: { xs: 'none', md: 'block' },
+        position: 'absolute', top: '22%', left: '4%',
+        width: 130, height: 130,
+        borderRadius: '50%',
+        border: '1.5px solid transparent',
+        borderTop: '1.5px solid rgba(123,104,238,0.3)',
+        borderRight: '1.5px solid rgba(123,104,238,0.15)',
+        animation: 'spinBrush 10s linear infinite',
+        '@keyframes spinBrush': { '100%': { transform: 'rotate(360deg)' } },
+      }} />
+
+      {/* 작은 점 장식 - 우하단 */}
       <Box sx={{
         display: { xs: 'none', sm: 'flex' },
-        position: 'absolute', bottom: '13%', right: '5%',
-        flexDirection: 'column', gap: { sm: '8px', md: '10px' },
-        animation: 'paletteFloat 6s ease-in-out infinite',
-        '@keyframes paletteFloat': {
-          '0%,100%': { transform: 'translateY(0)', opacity: 0.75 },
+        position: 'absolute', bottom: '14%', right: '6%',
+        flexDirection: 'column', gap: '10px',
+        animation: 'dotFloat 6s ease-in-out infinite',
+        '@keyframes dotFloat': {
+          '0%,100%': { transform: 'translateY(0)', opacity: 0.6 },
           '50%':     { transform: 'translateY(-10px)', opacity: 1 },
         },
       }}>
-        {[['#FF2D55', '#FF9F0A'], ['#30D158', '#0A84FF'], ['#BF5AF2', 'rgba(255,255,255,0.5)']].map((row, ri) => (
-          <Box key={ri} sx={{ display: 'flex', gap: { sm: '8px', md: '10px' } }}>
+        {[['#7B68EE', '#9D8FF2'], ['#B8AEFF', '#D4CDFF']].map((row, ri) => (
+          <Box key={ri} sx={{ display: 'flex', gap: '10px' }}>
             {row.map((color, ci) => (
               <Box key={ci} sx={{
-                width: { sm: 14, md: 18 }, height: { sm: 14, md: 18 },
-                borderRadius: '50%', bgcolor: color, opacity: 0.7,
-                boxShadow: `0 0 10px ${color}55`,
+                width: { sm: 10, md: 14 }, height: { sm: 10, md: 14 },
+                borderRadius: '50%', bgcolor: color,
+                boxShadow: `0 0 8px ${color}44`,
               }} />
             ))}
           </Box>
         ))}
       </Box>
-
-      {/* 브러시 스트로크 링 - 좌측 */}
-      <Box sx={{
-        position: 'absolute',
-        top: { xs: '10%', sm: '18%', md: '22%' },
-        left: { xs: '-5%', sm: '1%', md: '3%' },
-        width: { xs: 70, sm: 100, md: 140 }, height: { xs: 70, sm: 100, md: 140 },
-        borderRadius: '50%',
-        border: '2px solid transparent',
-        borderTop: '2px solid rgba(255,45,85,0.55)',
-        borderRight: '2px solid rgba(147,51,234,0.35)',
-        animation: 'spinBrush 10s linear infinite',
-        '@keyframes spinBrush': { '100%': { transform: 'rotate(360deg)' } },
-      }} />
-
-      {/* 다이아몬드 장식 - 우측 중단 */}
-      <Box sx={{
-        display: { xs: 'none', sm: 'block' },
-        position: 'absolute', top: '52%', right: '8%',
-        width: { sm: 22, md: 32 }, height: { sm: 22, md: 32 },
-        bgcolor: 'rgba(255,45,85,0.22)',
-        transform: 'rotate(45deg)',
-        borderRadius: '3px',
-        animation: 'floatDiamond 5s ease-in-out infinite',
-        '@keyframes floatDiamond': {
-          '0%,100%': { transform: 'rotate(45deg) translateY(0)', opacity: 0.6 },
-          '50%':     { transform: 'rotate(45deg) translateY(-12px)', opacity: 1 },
-        },
-      }} />
-
-      {/* 수평 라인 (데스크톱 전용) */}
-      <Box sx={{
-        display: { xs: 'none', lg: 'block' },
-        position: 'absolute', top: '42%', left: 0,
-        width: '10%', height: '1px',
-        background: 'linear-gradient(90deg, transparent, rgba(255,45,85,0.4))',
-      }} />
-      <Box sx={{
-        display: { xs: 'none', lg: 'block' },
-        position: 'absolute', top: '42%', right: 0,
-        width: '10%', height: '1px',
-        background: 'linear-gradient(270deg, transparent, rgba(255,45,85,0.4))',
-      }} />
 
       {/* ── 메인 콘텐츠 ── */}
       <Container maxWidth="md" sx={{
@@ -218,8 +182,7 @@ function HeroSection() {
           fontSize: { xs: '3rem', sm: '4.5rem', md: '5.5rem', lg: '6.5rem' },
           fontWeight: 900,
           letterSpacing: { xs: '-1px', sm: '-2px', md: '-3px' },
-          lineHeight: 1, color: '#ffffff', mb: 2,
-          textShadow: '0 4px 32px rgba(255,45,85,0.25)',
+          lineHeight: 1, color: '#2D2D2D', mb: 2,
           ...fadeUp(0.25),
         }}>
           장지은
@@ -231,7 +194,7 @@ function HeroSection() {
           fontWeight: 700,
           letterSpacing: { xs: '2px', sm: '3px', md: '4px' },
           textTransform: 'uppercase',
-          color: '#FF2D55', mb: { xs: 3, md: 5 },
+          color: '#7B68EE', mb: { xs: 3, md: 5 },
           minHeight: { xs: '1.6rem', sm: '2rem', md: '2.6rem' },
           ...fadeUp(0.4),
         }}>
@@ -240,18 +203,18 @@ function HeroSection() {
 
         {/* 애니메이션 구분선 */}
         <Box sx={{
-          height: 3, bgcolor: '#FF2D55', mx: 'auto',
+          height: 3, bgcolor: '#7B68EE', mx: 'auto',
           mb: { xs: 3, md: 5 }, borderRadius: 2,
-          width: visible ? 72 : 0,
+          width: visible ? 60 : 0,
           transition: 'width 0.9s ease 0.55s',
         }} />
 
         {/* 헤드라인 */}
         <Typography sx={{
-          fontSize: { xs: '0.95rem', sm: '1.05rem', md: '1.2rem', lg: '1.3rem' },
-          color: 'rgba(255,255,255,0.78)',
+          fontSize: { xs: '0.95rem', sm: '1.05rem', md: '1.15rem' },
+          color: '#888888',
           lineHeight: { xs: 1.9, md: 2.1 },
-          maxWidth: { xs: '100%', md: 560 },
+          maxWidth: { xs: '100%', md: 520 },
           mx: 'auto', mb: { xs: 5, md: 7 },
           wordBreak: 'keep-all',
           px: { xs: 1, sm: 0 },
@@ -260,7 +223,7 @@ function HeroSection() {
           회사에서만 6년, 프리랜서로도 꾸준히!<br />
           상세페이지, 배너, 쇼핑몰 관리, 간단한 영상까지<br />
           <Box component="span" sx={{
-            color: '#FF2D55', fontWeight: 900,
+            color: '#7B68EE', fontWeight: 900,
             fontSize: { xs: '1.3rem', sm: '1.5rem', md: '1.8rem', lg: '2rem' },
             letterSpacing: '-0.5px',
           }}>
@@ -280,7 +243,7 @@ function HeroSection() {
           <Button
             component={Link} to="/projects" variant="contained"
             sx={{
-              bgcolor: '#FF2D55', color: '#fff',
+              bgcolor: '#7B68EE', color: '#fff',
               width: { xs: '100%', sm: 'auto' },
               maxWidth: { xs: 320, sm: 'none' },
               px: { xs: 3, sm: 5 },
@@ -289,11 +252,11 @@ function HeroSection() {
               borderRadius: 2, fontWeight: 700,
               textTransform: 'none',
               fontSize: { xs: '0.95rem', sm: '1rem' },
-              boxShadow: '0 4px 20px rgba(255,45,85,0.4)',
+              boxShadow: '0 4px 20px rgba(123,104,238,0.3)',
               transition: 'all 0.22s ease',
               '&:hover': {
-                bgcolor: '#e0002e', transform: 'translateY(-3px)',
-                boxShadow: '0 10px 32px rgba(255,45,85,0.55)',
+                bgcolor: '#5B4FCF', transform: 'translateY(-3px)',
+                boxShadow: '0 10px 32px rgba(123,104,238,0.45)',
               },
             }}
           >
@@ -305,7 +268,7 @@ function HeroSection() {
             onClick={() => document.getElementById('contact-section')?.scrollIntoView({ behavior: 'smooth' })}
             startIcon={<EmailIcon />}
             sx={{
-              borderColor: 'rgba(255,255,255,0.35)', color: 'rgba(255,255,255,0.88)',
+              borderColor: 'rgba(123,104,238,0.4)', color: '#7B68EE',
               width: { xs: '100%', sm: 'auto' },
               maxWidth: { xs: 320, sm: 'none' },
               px: { xs: 3, sm: 5 },
@@ -316,18 +279,15 @@ function HeroSection() {
               fontSize: { xs: '0.95rem', sm: '1rem' },
               transition: 'all 0.22s ease',
               '&:hover': {
-                bgcolor: 'rgba(255,255,255,0.08)',
-                borderColor: 'rgba(255,255,255,0.75)',
+                bgcolor: '#F0EEFF',
+                borderColor: '#7B68EE',
                 transform: 'translateY(-3px)',
-                boxShadow: '0 8px 24px rgba(255,255,255,0.1)',
               },
             }}
           >
             연락하기
           </Button>
         </Box>
-
-        {/* 소셜 링크 - 현재 미사용 */}
 
         {/* ── 스크롤 유도 ── */}
         <Box sx={{
@@ -340,13 +300,13 @@ function HeroSection() {
           onClick={() => window.scrollBy({ top: window.innerHeight * 0.85, behavior: 'smooth' })}
         >
           <Typography sx={{
-            fontSize: '0.6rem', color: 'rgba(255,255,255,0.4)',
+            fontSize: '0.6rem', color: 'rgba(0,0,0,0.25)',
             letterSpacing: '3px', textTransform: 'uppercase',
           }}>
             Scroll
           </Typography>
           <KeyboardArrowDownIcon className="arrow-icon" sx={{
-            color: 'rgba(255,255,255,0.35)', fontSize: '1.8rem',
+            color: 'rgba(123,104,238,0.4)', fontSize: '1.8rem',
             transition: 'transform 0.3s ease',
             animation: 'bounce 2s ease-in-out infinite',
             '@keyframes bounce': {
@@ -381,7 +341,7 @@ function AboutSection({ photo }) {
               height: { xs: 200, md: 260 },
               bgcolor: 'var(--color-accent)',
               border: '5px solid var(--color-border)',
-              boxShadow: '0 16px 48px rgba(255,45,85,0.18)',
+              boxShadow: '0 16px 48px rgba(123,104,238,0.18)',
               flexShrink: 0,
               alignSelf: { xs: 'center', md: 'auto' },
             }}
@@ -586,8 +546,8 @@ function HomeProjectCard({ project }) {
         border: '1px solid rgba(255,255,255,0.12)',
         transition: 'box-shadow 0.25s ease, border-color 0.25s ease',
         '&:hover': {
-          boxShadow: '0 8px 32px rgba(255,45,85,0.2)',
-          borderColor: 'rgba(255,45,85,0.5)',
+          boxShadow: '0 8px 32px rgba(123,104,238,0.2)',
+          borderColor: 'rgba(123,104,238,0.5)',
         },
       }}
     >
@@ -661,7 +621,7 @@ function HomeProjectCard({ project }) {
                 key={tech}
                 label={tech}
                 size="small"
-                sx={{ bgcolor: 'rgba(255,45,85,0.1)', color: '#FF2D55', fontSize: { xs: '0.55rem', sm: '0.6rem' }, height: 18, fontWeight: 600 }}
+                sx={{ bgcolor: 'rgba(123,104,238,0.1)', color: '#7B68EE', fontSize: { xs: '0.55rem', sm: '0.6rem' }, height: 18, fontWeight: 600 }}
               />
             ))}
           </Stack>

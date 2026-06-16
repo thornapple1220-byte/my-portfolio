@@ -82,7 +82,7 @@ const ProfilePhoto = memo(function ProfilePhoto({ photo, onPhotoChange }) {
             width: 160, height: 160,
             bgcolor: 'var(--color-accent)',
             border: '4px solid rgba(255,255,255,0.9)',
-            boxShadow: '0 8px 32px rgba(255,45,85,0.2)',
+            boxShadow: '0 8px 32px rgba(123,104,238,0.2)',
           }}
         >
           {!photo && <PersonIcon sx={{ fontSize: '4rem', color: 'var(--color-primary)' }} />}
@@ -164,7 +164,7 @@ const SkillCard = memo(function SkillCard({ skill, animated, delay, onEdit, onDe
           position: 'relative',
           transition: 'box-shadow 0.2s, transform 0.2s',
           cursor: 'default',
-          '&:hover': { boxShadow: '0 4px 20px rgba(255,45,85,0.12)', transform: 'translateY(-2px)' },
+          '&:hover': { boxShadow: '0 4px 20px rgba(123,104,238,0.12)', transform: 'translateY(-2px)' },
           '&:hover .skill-actions': { opacity: 1 },
           '&:focus-visible': { outline: '2px solid var(--color-primary)', outlineOffset: 2 },
         }}
@@ -529,7 +529,7 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
           position: 'absolute', top: '-15%', right: '-5%',
           width: { xs: 200, md: 380 }, height: { xs: 200, md: 380 },
           borderRadius: '60% 40% 70% 30% / 50% 60% 40% 50%',
-          background: 'radial-gradient(circle at 40% 40%, rgba(147,51,234,0.18) 0%, rgba(255,45,85,0.1) 50%, transparent 70%)',
+          background: 'radial-gradient(circle at 40% 40%, rgba(147,51,234,0.18) 0%, rgba(123,104,238,0.1) 50%, transparent 70%)',
           animation: 'aboutMorphBlob1 12s ease-in-out infinite',
           '@keyframes aboutMorphBlob1': {
             '0%,100%': { borderRadius: '60% 40% 70% 30% / 50% 60% 40% 50%', transform: 'translateY(0) rotate(0deg)' },
@@ -562,7 +562,7 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
             '50%':     { transform: 'translateY(-8px)', opacity: 1 },
           },
         }}>
-          {[['#FF2D55', '#FF9F0A'], ['#30D158', '#0A84FF'], ['#BF5AF2', 'rgba(255,255,255,0.5)']].map((row, ri) => (
+          {[['#7B68EE', '#FF9F0A'], ['#30D158', '#0A84FF'], ['#BF5AF2', 'rgba(255,255,255,0.5)']].map((row, ri) => (
             <Box key={ri} sx={{ display: 'flex', gap: '8px' }}>
               {row.map((color, ci) => (
                 <Box key={ci} sx={{
@@ -582,7 +582,7 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
           width: { xs: 55, md: 100 }, height: { xs: 55, md: 100 },
           borderRadius: '50%',
           border: '2px solid transparent',
-          borderTop: '2px solid rgba(255,45,85,0.55)',
+          borderTop: '2px solid rgba(123,104,238,0.55)',
           borderRight: '2px solid rgba(147,51,234,0.35)',
           animation: 'aboutSpinBrush 10s linear infinite',
           '@keyframes aboutSpinBrush': { '100%': { transform: 'rotate(360deg)' } },
@@ -593,13 +593,13 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
           display: { xs: 'none', lg: 'block' },
           position: 'absolute', top: '50%', left: 0,
           width: '8%', height: '1px',
-          background: 'linear-gradient(90deg, transparent, rgba(255,45,85,0.35))',
+          background: 'linear-gradient(90deg, transparent, rgba(123,104,238,0.35))',
         }} />
         <Box sx={{
           display: { xs: 'none', lg: 'block' },
           position: 'absolute', top: '50%', right: 0,
           width: '8%', height: '1px',
-          background: 'linear-gradient(270deg, transparent, rgba(255,45,85,0.35))',
+          background: 'linear-gradient(270deg, transparent, rgba(123,104,238,0.35))',
         }} />
 
         {/* 컨텐츠 */}
@@ -612,19 +612,19 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
                 fontSize: { xs: '2.4rem', md: '3.2rem' },
                 fontWeight: 900, color: '#ffffff',
                 letterSpacing: '-1.5px', mb: 0.5,
-                textShadow: '0 4px 24px rgba(255,45,85,0.2)',
+                textShadow: '0 4px 24px rgba(123,104,238,0.2)',
               }}>
                 {basicInfo.name}
               </Typography>
               <Typography sx={{
                 fontSize: { xs: '0.95rem', md: '1rem' },
-                fontWeight: 700, color: '#FF2D55',
+                fontWeight: 700, color: '#7B68EE',
                 mb: 3, letterSpacing: '3px', textTransform: 'uppercase',
               }}>
                 Web Designer
               </Typography>
               {/* 구분선 */}
-              <Box sx={{ width: 48, height: 3, bgcolor: '#FF2D55', borderRadius: 2, mb: 3, mx: { xs: 'auto', md: 0 } }} />
+              <Box sx={{ width: 48, height: 3, bgcolor: '#7B68EE', borderRadius: 2, mb: 3, mx: { xs: 'auto', md: 0 } }} />
               <Grid container spacing={1.5} alignItems="stretch">
                 {infoItems.map(({ icon, label, value }) => (
                   <Grid size={{ xs: 12, sm: 4 }} key={label} sx={{ display: 'flex' }}>
