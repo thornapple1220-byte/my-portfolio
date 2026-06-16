@@ -560,7 +560,8 @@ function HomeProjectCard({ project }) {
   const thumbnailSrc = project.thumbnail_url
     || (project.detail_url ? `${THUM_BASE}/${project.detail_url}` : null);
 
-  const href = project.detail_url || project.github_url || null;
+  const href = project.detail_url || project.github_url
+    || (project.category === '상세페이지' ? project.thumbnail_url : null);
 
   return (
     <Card
@@ -615,6 +616,24 @@ function HomeProjectCard({ project }) {
               </Typography>
             </Box>
           )}
+          {/* 호버 오버레이 */}
+          {href && (
+            <Box sx={{
+              position: 'absolute', inset: 0,
+              bgcolor: 'rgba(91,79,207,0.75)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              opacity: 0, transition: 'opacity 0.25s ease',
+              '.MuiCardActionArea-root:hover &': { opacity: 1 },
+            }}>
+              <Box sx={{
+                fontSize: '0.75rem', fontWeight: 700, color: '#fff',
+                border: '1px solid rgba(255,255,255,0.8)',
+                borderRadius: 1.5, px: 1.8, py: 0.6, letterSpacing: '0.5px',
+              }}>
+                {project.category === '상세페이지' ? '전체 보기 →' : '바로가기 →'}
+              </Box>
+            </Box>
+          )}
         </Box>
 
         {/* 텍스트 영역 */}
@@ -646,6 +665,8 @@ function ProjectsSection() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const CATEGORY_ORDER = { '상세페이지': 0, 'UI디자인': 1, '바이브코딩': 2 };
+
   useEffect(() => {
     async function fetchProjects() {
       try {
@@ -653,9 +674,11 @@ function ProjectsSection() {
           .from('projects')
           .select('*')
           .eq('is_published', true)
-          .order('sort_order', { ascending: true })
-          .limit(3);
-        setProjects(data || []);
+          .order('sort_order', { ascending: true });
+        const sorted = (data || [])
+          .sort((a, b) => (CATEGORY_ORDER[a.category] ?? 99) - (CATEGORY_ORDER[b.category] ?? 99))
+          .slice(0, 3);
+        setProjects(sorted);
       } catch (e) {
         console.error('[Projects] fetch error:', e);
       } finally {
