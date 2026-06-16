@@ -37,11 +37,31 @@ function SectionLabel({ text }) {
   );
 }
 
-function ThumbnailImage({ src, alt }) {
+function ThumbnailImage({ src, alt, scrollable = false }) {
   const [imgError, setImgError] = useState(false);
 
+  if (scrollable && src && !imgError) {
+    return (
+      <Box sx={{
+        position: 'relative', width: '100%', height: 280,
+        flexShrink: 0, overflow: 'hidden',
+        '&:hover img': {
+          transform: 'translateY(calc(-100% + 280px))',
+          transition: 'transform 10s ease-in-out',
+        },
+      }}>
+        <Box
+          component="img"
+          src={src}
+          alt={alt}
+          onError={() => setImgError(true)}
+          sx={{ width: '100%', height: 'auto', display: 'block', transform: 'translateY(0)', transition: 'transform 0.3s ease' }}
+        />
+      </Box>
+    );
+  }
+
   return (
-    /* 3:4 비율 고정 (133.33% = 4/3) */
     <Box sx={{ position: 'relative', width: '100%', paddingTop: '133.33%', flexShrink: 0, overflow: 'hidden' }}>
       {src && !imgError ? (
         <Box
@@ -60,11 +80,11 @@ function ThumbnailImage({ src, alt }) {
           sx={{
             position: 'absolute', top: 0, left: 0,
             width: '100%', height: '100%',
-            background: 'linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-mid) 100%)',
+            background: 'linear-gradient(135deg, var(--color-accent) 0%, #E4DFFF 100%)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', px: 2,
           }}
         >
-          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.6)', fontWeight: 600, textAlign: 'center' }}>
+          <Typography variant="body2" sx={{ color: 'var(--color-primary)', fontWeight: 600, textAlign: 'center' }}>
             {alt}
           </Typography>
         </Box>
@@ -75,7 +95,8 @@ function ThumbnailImage({ src, alt }) {
 
 function ProjectCard({ project }) {
   const thumbnailSrc = getThumbnailUrl(project);
-  const hasLinks = project.demo_url || project.github_url || project.detail_url;
+  const isDetailPage = project.category === '상세페이지';
+  const hasLinks = project.demo_url || project.github_url || project.detail_url || isDetailPage;
 
   const formattedDate = new Date(project.created_at).toLocaleDateString('ko-KR', {
     year: 'numeric',
@@ -101,7 +122,7 @@ function ProjectCard({ project }) {
     >
       {/* 썸네일 + 호버 오버레이 */}
       <Box sx={{ position: 'relative' }}>
-        <ThumbnailImage src={thumbnailSrc} alt={project.title} />
+        <ThumbnailImage src={thumbnailSrc} alt={project.title} scrollable={project.category === '상세페이지'} />
 
         {hasLinks && (
           <Box
@@ -116,7 +137,24 @@ function ProjectCard({ project }) {
               transition: 'opacity 0.25s ease',
             }}
           >
-            {project.demo_url && (
+            {isDetailPage && thumbnailSrc && (
+              <Button
+                variant="contained"
+                startIcon={<OpenInNewIcon />}
+                href={thumbnailSrc}
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  bgcolor: '#fff', color: '#5B4FCF',
+                  fontWeight: 700, fontSize: '0.82rem',
+                  px: 3, borderRadius: 2, width: 152,
+                  '&:hover': { bgcolor: 'var(--color-accent)' },
+                }}
+              >
+                전체 보기
+              </Button>
+            )}
+            {!isDetailPage && project.demo_url && (
               <Button
                 variant="contained"
                 startIcon={<OpenInNewIcon />}
@@ -187,10 +225,13 @@ function ProjectCard({ project }) {
   );
 }
 
+const CATEGORIES = ['전체', '상세페이지', 'UI디자인', '바이브코딩'];
+
 function ProjectsPage() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeCategory, setActiveCategory] = useState('전체');
 
   useEffect(() => {
     async function fetchProjects() {
@@ -212,27 +253,54 @@ function ProjectsPage() {
     fetchProjects();
   }, []);
 
+  const CATEGORY_ORDER = { '상세페이지': 0, 'UI디자인': 1, '바이브코딩': 2 };
+
+  const filtered = (activeCategory === '전체'
+    ? [...projects].sort((a, b) =>
+        (CATEGORY_ORDER[a.category] ?? 99) - (CATEGORY_ORDER[b.category] ?? 99)
+      )
+    : projects.filter((p) => p.category === activeCategory));
+
   return (
-    <Box
-      sx={{
-        minHeight: 'calc(100vh - 64px)',
-        bgcolor: 'var(--color-bg-soft)',
-        py: { xs: 8, md: 12 },
-      }}
-    >
+    <Box sx={{ minHeight: 'calc(100vh - 64px)', bgcolor: 'var(--color-bg-soft)', py: { xs: 8, md: 12 } }}>
       <Container maxWidth="xl">
         {/* 헤더 */}
-        <Box sx={{ textAlign: 'center', mb: 8 }}>
+        <Box sx={{ textAlign: 'center', mb: 6 }}>
           <Typography variant="h2" sx={{ color: 'var(--color-text-primary)', mb: 2 }}>
             프로젝트
           </Typography>
-          <Typography
-            variant="body1"
-            sx={{ color: 'var(--color-text-secondary)', maxWidth: 480, mx: 'auto' }}
-          >
-            직접 기획하고 디자인한 프로젝트들을 소개합니다.
-          </Typography>
         </Box>
+
+        {/* 카테고리 필터 */}
+        <Stack direction="row" spacing={1} justifyContent="center" flexWrap="wrap" useFlexGap sx={{ mb: 8 }}>
+          {CATEGORIES.map((cat) => {
+            const active = activeCategory === cat;
+            return (
+              <Chip
+                key={cat}
+                label={cat}
+                onClick={() => setActiveCategory(cat)}
+                sx={{
+                  fontWeight: 700,
+                  fontSize: '0.85rem',
+                  px: 1,
+                  height: 36,
+                  borderRadius: 2,
+                  cursor: 'pointer',
+                  bgcolor: active ? '#7B68EE' : '#ffffff',
+                  color: active ? '#ffffff' : 'var(--color-text-secondary)',
+                  border: active ? 'none' : '1px solid var(--color-border)',
+                  boxShadow: active ? '0 4px 12px rgba(123,104,238,0.3)' : 'none',
+                  transition: 'all 0.18s ease',
+                  '&:hover': {
+                    bgcolor: active ? '#5B4FCF' : 'var(--color-accent)',
+                    color: active ? '#ffffff' : 'var(--color-primary)',
+                  },
+                }}
+              />
+            );
+          })}
+        </Stack>
 
         {/* 로딩 */}
         {loading && (
@@ -243,15 +311,13 @@ function ProjectsPage() {
 
         {/* 에러 */}
         {error && (
-          <Alert severity="error" sx={{ maxWidth: 480, mx: 'auto' }}>
-            {error}
-          </Alert>
+          <Alert severity="error" sx={{ maxWidth: 480, mx: 'auto' }}>{error}</Alert>
         )}
 
         {/* 프로젝트 그리드 */}
         {!loading && !error && (
           <Grid container spacing={3}>
-            {projects.length === 0 ? (
+            {filtered.length === 0 ? (
               <Grid size={12}>
                 <Box sx={{ textAlign: 'center', py: 10 }}>
                   <Typography variant="body1" sx={{ color: 'var(--color-text-muted)' }}>
@@ -260,7 +326,7 @@ function ProjectsPage() {
                 </Box>
               </Grid>
             ) : (
-              projects.map((project) => (
+              filtered.map((project) => (
                 <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={project.id}>
                   <ProjectCard project={project} />
                 </Grid>
