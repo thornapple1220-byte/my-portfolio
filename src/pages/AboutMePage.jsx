@@ -1,7 +1,7 @@
 import { memo, useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
-  Box, Container, Typography, Card, Stack,
+  Box, Typography, Card, Stack,
   Tab, Tabs, Avatar, Chip, IconButton,
   Grid, Dialog, DialogTitle, DialogContent, DialogActions,
   TextField, MenuItem, Slider, Button, Tooltip,
@@ -596,7 +596,7 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
         </Box>
 
         {/* 컨텐츠 */}
-        <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1 }}>
+        <Box sx={{ position: 'relative', zIndex: 1, px: { xs: 3, md: 6 } }}>
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 4, md: 8 }} alignItems={{ xs: 'center', md: 'flex-end' }}>
             <ProfilePhoto photo={photo} onPhotoChange={onPhotoChange} />
 
@@ -626,11 +626,11 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
               </Grid>
             </Box>
           </Stack>
-        </Container>
+        </Box>
       </Box>
 
       {/* ─ 콘텐츠 탭 ─ */}
-      <Container maxWidth="md" sx={{ py: { xs: 4, md: 8 } }}>
+      <Box sx={{ py: { xs: 4, md: 8 }, px: { xs: 3, md: 6 } }}>
         <Tabs
           value={activeTab}
           onChange={handleTabChange}
@@ -668,7 +668,7 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
             )}
           </Box>
         ))}
-      </Container>
+      </Box>
     </Box>
   );
 }

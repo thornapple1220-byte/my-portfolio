@@ -22,9 +22,11 @@ function Header() {
         top: 0,
         zIndex: 100,
         display: 'flex',
-        justifyContent: 'space-between',
+        flexDirection: { xs: 'row', md: 'column' },
+        justifyContent: { xs: 'flex-end', md: 'center' },
         alignItems: 'center',
-        height: '64px',
+        height: { xs: '64px', md: 'auto' },
+        py: { md: 1.5 },
         px: { xs: 3, md: 6 },
         bgcolor: 'rgba(255,255,255,0.95)',
         backdropFilter: 'blur(10px)',
@@ -36,11 +38,16 @@ function Header() {
         component={Link}
         to="/"
         sx={{
+          position: { xs: 'absolute', md: 'static' },
+          left: { xs: '50%', md: 'auto' },
+          transform: { xs: 'translateX(-50%)', md: 'none' },
           fontSize: '1.2rem',
           fontWeight: 700,
           color: 'var(--color-primary)',
           textDecoration: 'none',
           letterSpacing: '-0.5px',
+          zIndex: 1,
+          mb: { md: 0.5 },
         }}
       >
         Portfolio.

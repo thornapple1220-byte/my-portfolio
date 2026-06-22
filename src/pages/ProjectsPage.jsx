@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
-  Box, Container, Typography, Grid, Card, CardContent,
+  Box, Typography, Grid, Card, CardContent,
   Button, Chip, Stack, CircularProgress, Alert,
 } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
@@ -263,7 +263,7 @@ function ProjectsPage() {
 
   return (
     <Box sx={{ minHeight: 'calc(100vh - 64px)', bgcolor: 'var(--color-bg-soft)', py: { xs: 8, md: 12 } }}>
-      <Container maxWidth="xl">
+      <Box sx={{ px: { xs: 3, md: 6 } }}>
         {/* 헤더 */}
         <Box sx={{ textAlign: 'center', mb: 6 }}>
           <Typography variant="h2" sx={{ color: 'var(--color-text-primary)', mb: 2 }}>
@@ -334,7 +334,7 @@ function ProjectsPage() {
             )}
           </Grid>
         )}
-      </Container>
+      </Box>
     </Box>
   );
 }

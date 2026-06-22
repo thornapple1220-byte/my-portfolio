@@ -1,4 +1,4 @@
-import { memo, useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { memo, useState, useEffect, useMemo, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Box, Container, Typography, Button, Divider, Grid, CircularProgress, Stack, Avatar, Card, CardContent, CardActionArea, Chip, IconButton, Tooltip } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
@@ -12,8 +12,6 @@ import WorkIcon from '@mui/icons-material/Work';
 import PaletteIcon from '@mui/icons-material/Palette';
 import { aboutMeData, categoryColors } from '../data/aboutMeData';
 import ContactInfoCard from '../components/common/ContactInfoCard';
-import GuestbookForm from '../components/common/GuestbookForm';
-import GuestbookCard from '../components/common/GuestbookCard';
 import supabase from '../utils/supabase';
 
 const sectionBase = {
@@ -213,10 +211,12 @@ function HeroSection() {
       </Box>
 
       {/* ── 메인 콘텐츠 ── */}
-      <Container maxWidth="md" sx={{
+      <Box sx={{
         position: 'relative', zIndex: 1, textAlign: 'center',
         pt: { xs: 12, sm: 14, md: 16 },
         pb: { xs: 10, sm: 12, md: 14 },
+        px: { xs: 3, md: 6 },
+        width: '100%',
       }}>
 
         {/* 이름 */}
@@ -357,7 +357,7 @@ function HeroSection() {
             },
           }} />
         </Box>
-      </Container>
+      </Box>
     </Box>
   );
 }
@@ -368,7 +368,7 @@ function AboutSection({ photo }) {
   const iAmSection = sections.find((s) => s.showInHome && s.id === 'i-am');
 
   return (
-    <Box sx={{ ...sectionBase, bgcolor: 'var(--color-bg-primary)' }}>
+    <Box sx={{ width: '100%', pt: { xs: 8, md: 12 }, pb: { xs: 4, md: 6 }, bgcolor: 'var(--color-bg-primary)' }}>
       <Container maxWidth="md">
         <Stack
           direction={{ xs: 'column', md: 'row' }}
@@ -530,16 +530,15 @@ const SkillSection = memo(function SkillSection({ skills }) {
   }, []);
 
   return (
-    <Box sx={{ ...sectionBase, bgcolor: 'var(--color-bg-primary)' }}>
+    <Box sx={{ width: '100%', pt: { xs: 4, md: 6 }, pb: { xs: 8, md: 12 }, bgcolor: 'var(--color-bg-primary)' }}>
       <Container maxWidth="md">
-        <Box sx={{ borderLeft: '4px solid #7B68EE', pl: 2, mb: 1 }}>
+        <Box sx={{ textAlign: 'center', mb: 1 }}>
+          <Box sx={{ width: 40, height: 4, bgcolor: '#7B68EE', mx: 'auto', mb: 1.5, borderRadius: 1 }} />
           <Typography variant="h2" sx={{ color: 'var(--color-text-primary)', fontWeight: 800 }}>
             주요 스킬
           </Typography>
         </Box>
-        <Typography variant="body1" sx={{ color: 'var(--color-text-secondary)', mb: 6 }}>
-          카테고리 순으로 정렬됩니다.
-        </Typography>
+        <Box sx={{ mb: 6 }} />
 
         <Stack spacing={2.5} sx={{ mb: 6 }}>
           {homeSkills.map((skill, idx) => {
@@ -576,20 +575,22 @@ const SkillSection = memo(function SkillSection({ skills }) {
           })}
         </Stack>
 
-        <Button
-          component={Link}
-          to="/about?tab=1"
-          variant="outlined"
-          sx={{
-            borderColor: 'var(--color-primary)',
-            color: 'var(--color-primary)',
-            px: 4, py: 1.2, borderRadius: 2, fontWeight: 700, textTransform: 'none',
-            boxShadow: '0 3px 6px rgba(0,0,0,0.15)',
-            '&:hover': { bgcolor: 'var(--color-accent)', borderColor: 'var(--color-primary)', boxShadow: '0 4px 10px rgba(0,0,0,0.2)' },
-          }}
-        >
-          더 알아보기
-        </Button>
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Button
+            component={Link}
+            to="/about?tab=1"
+            variant="outlined"
+            sx={{
+              borderColor: 'var(--color-primary)',
+              color: 'var(--color-primary)',
+              px: 4, py: 1.2, borderRadius: 2, fontWeight: 700, textTransform: 'none',
+              boxShadow: '0 3px 6px rgba(0,0,0,0.15)',
+              '&:hover': { bgcolor: 'var(--color-accent)', borderColor: 'var(--color-primary)', boxShadow: '0 4px 10px rgba(0,0,0,0.2)' },
+            }}
+          >
+            더 알아보기
+          </Button>
+        </Box>
       </Container>
     </Box>
   );
@@ -732,13 +733,14 @@ function ProjectsSection() {
 
   return (
     <Box id="projects-section" sx={{ ...sectionBase, background: 'linear-gradient(160deg, #EDE9FF 0%, #E4DFFF 50%, #EDE9FF 100%)' }}>
-      <Container maxWidth="md">
-        <Box sx={{ borderLeft: '4px solid #7B68EE', pl: 2, mb: 1 }}>
+      <Box sx={{ px: { xs: 3, md: 6 } }}>
+        <Box sx={{ textAlign: 'center', mb: 1 }}>
+          <Box sx={{ width: 40, height: 4, bgcolor: '#7B68EE', mx: 'auto', mb: 1.5, borderRadius: 1 }} />
           <Typography variant="h2" sx={{ color: 'var(--color-text-primary)', fontWeight: 800 }}>
             프로젝트
           </Typography>
         </Box>
-        <Typography variant="body1" sx={{ color: 'var(--color-text-secondary)', mb: 6 }}>
+        <Typography variant="body1" sx={{ color: 'var(--color-text-secondary)', mb: 6, textAlign: 'center' }}>
           대표 작업물을 소개합니다.
         </Typography>
 
@@ -764,106 +766,46 @@ function ProjectsSection() {
           </Box>
         )}
 
-        <Button
-          component={Link}
-          to="/projects"
-          variant="outlined"
-          sx={{
-            color: 'var(--color-primary)',
-            borderColor: 'rgba(123,104,238,0.4)',
-            px: 4, py: 1.2, borderRadius: 2, fontWeight: 700, textTransform: 'none',
-            transition: 'all 0.22s ease',
-            '&:hover': { bgcolor: 'var(--color-accent)', borderColor: 'var(--color-primary)' },
-          }}
-        >
-          더 알아보기
-        </Button>
-      </Container>
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Button
+            component={Link}
+            to="/projects"
+            variant="outlined"
+            sx={{
+              color: 'var(--color-primary)',
+              borderColor: 'rgba(123,104,238,0.4)',
+              px: 4, py: 1.2, borderRadius: 2, fontWeight: 700, textTransform: 'none',
+              transition: 'all 0.22s ease',
+              '&:hover': { bgcolor: 'var(--color-accent)', borderColor: 'var(--color-primary)' },
+            }}
+          >
+            더 알아보기
+          </Button>
+        </Box>
+      </Box>
     </Box>
   );
 }
 
 /* ── Contact 섹션 ──────────────────────────────────── */
 function ContactSection() {
-  const [entries, setEntries] = useState([]);
-  const [loadingEntries, setLoadingEntries] = useState(true);
-
-  const fetchEntries = useCallback(async () => {
-    setLoadingEntries(true);
-    try {
-      const { data, error } = await supabase
-        .from('guestbook')
-        .select('*')
-        .eq('is_public', true)
-        .order('created_at', { ascending: false });
-      if (error) console.error('[Guestbook] fetch error:', error);
-      setEntries(data || []);
-    } catch (e) {
-      console.error('[Guestbook] unexpected error:', e);
-    } finally {
-      setLoadingEntries(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchEntries();
-  }, [fetchEntries]);
 
   return (
     <Box id="contact-section" sx={{ ...sectionBase, bgcolor: 'var(--color-bg-soft)' }}>
       <Container maxWidth="md">
         {/* 섹션 타이틀 */}
-        <Box sx={{ mb: 6 }}>
-          <Box sx={{ borderLeft: '4px solid #7B68EE', pl: 2, mb: 1.5 }}>
-            <Typography variant="h2" sx={{ color: 'var(--color-text-primary)' }}>
-              연락하기
-            </Typography>
-          </Box>
-          <Typography variant="body1" sx={{ color: 'var(--color-text-secondary)' }}>
-            편하게 연락주세요. 방명록도 남겨주시면 감사합니다 😊
+        <Box sx={{ textAlign: 'center', mb: 6 }}>
+          <Box sx={{ width: 40, height: 4, bgcolor: '#7B68EE', mx: 'auto', mb: 1.5, borderRadius: 1 }} />
+          <Typography variant="h2" sx={{ color: 'var(--color-text-primary)' }}>
+            연락하기
+          </Typography>
+          <Typography variant="body1" sx={{ color: 'var(--color-text-secondary)', mt: 1 }}>
+            편하게 연락주세요.
           </Typography>
         </Box>
 
         {/* 연락처 카드 */}
-        <Box sx={{ mb: 8 }}>
-          <ContactInfoCard />
-        </Box>
-
-        <Divider sx={{ borderColor: 'var(--color-border)', mb: 8 }} />
-
-        {/* 방명록 입력 폼 */}
-        <Box sx={{ mb: 8 }}>
-          <Box sx={{ textAlign: 'center', mb: 4 }}>
-            <Typography variant="h3" sx={{ color: 'var(--color-text-primary)', fontWeight: 700 }}>
-              방명록
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'var(--color-text-secondary)', mt: 0.5 }}>
-              방문 기념으로 한마디 남겨주세요!
-            </Typography>
-          </Box>
-          <GuestbookForm onSubmitSuccess={fetchEntries} />
-        </Box>
-
-        {/* 방명록 목록 */}
-        {loadingEntries ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
-            <CircularProgress sx={{ color: 'var(--color-primary)' }} />
-          </Box>
-        ) : entries.length === 0 ? (
-          <Box sx={{ textAlign: 'center', py: 6 }}>
-            <Typography variant="body1" sx={{ color: 'var(--color-text-secondary)' }}>
-              아직 방명록이 없어요. 첫 번째로 남겨주세요! 🎉
-            </Typography>
-          </Box>
-        ) : (
-          <Grid container spacing={2}>
-            {entries.map((entry) => (
-              <Grid item xs={12} sm={6} key={entry.id}>
-                <GuestbookCard entry={entry} />
-              </Grid>
-            ))}
-          </Grid>
-        )}
+        <ContactInfoCard />
       </Container>
     </Box>
   );
@@ -876,7 +818,6 @@ function HomePage({ photo, skills }) {
       <Divider sx={{ borderColor: 'var(--color-border)' }} />
       <Box sx={{ bgcolor: 'var(--color-bg-primary)' }}>
         <AboutSection photo={photo} />
-        <Divider sx={{ borderColor: 'var(--color-border)', mx: { xs: 3, md: 'auto' }, maxWidth: 'md' }} />
         <SkillSection skills={skills} />
       </Box>
       <Divider sx={{ borderColor: 'var(--color-border)' }} />
