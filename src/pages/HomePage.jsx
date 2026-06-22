@@ -634,7 +634,7 @@ function HomeProjectCard({ project }) {
         }}
       >
         {/* 썸네일 */}
-        <Box sx={{ position: 'relative', width: '100%', paddingTop: '62.5%', overflow: 'hidden' }}>
+        <Box sx={{ position: 'relative', width: '100%', paddingTop: '133.33%', overflow: 'hidden' }}>
           {thumbnailSrc ? (
             <Box
               component="img"
