@@ -122,7 +122,7 @@ function ProjectCard({ project }) {
     >
       {/* 썸네일 + 호버 오버레이 */}
       <Box sx={{ position: 'relative' }}>
-        <ThumbnailImage src={thumbnailSrc} alt={project.title} scrollable={project.category === '상세페이지'} />
+        <ThumbnailImage src={thumbnailSrc} alt={project.title} />
 
         {hasLinks && (
           <Box
