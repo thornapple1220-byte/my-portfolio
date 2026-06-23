@@ -620,20 +620,30 @@ function CareerContent({ careers: initialCareers = [], skills = [] }) {
     );
   };
 
+  const sorted = useMemo(() => {
+    const toScore = (period = '') => {
+      const end = period.split(' - ')[1]?.trim();
+      if (!end || end === '현재') return 999999;
+      const [y, m = '0'] = end.split('.');
+      return Number(y) * 100 + Number(m);
+    };
+    return [...careers].sort((a, b) => toScore(b.period) - toScore(a.period));
+  }, [careers]);
+
   return (
     <Box sx={{ py: 1 }}>
-      {careers.map((item, idx) => (
+      {sorted.map((item, idx) => (
         <Box key={item.id} sx={{ display: 'flex', gap: { xs: 2, md: 3 }, mb: idx < careers.length - 1 ? 3 : 0 }}>
           {/* 타임라인 */}
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
             <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: 'var(--color-primary)', border: '2px solid var(--color-accent)', mt: '4px', flexShrink: 0 }} />
-            {idx < careers.length - 1 && (
+            {idx < sorted.length - 1 && (
               <Box sx={{ width: 2, flex: 1, bgcolor: 'var(--color-border)', mt: 0.5 }} />
             )}
           </Box>
 
           {/* 내용 */}
-          <Box sx={{ pb: idx < careers.length - 1 ? 3 : 0, flex: 1, position: 'relative', '&:hover .career-actions': { opacity: 1 } }}>
+          <Box sx={{ pb: idx < sorted.length - 1 ? 3 : 0, flex: 1, position: 'relative', '&:hover .career-actions': { opacity: 1 } }}>
             {/* 편집/삭제 버튼 */}
             <Box className="career-actions" sx={{ position: 'absolute', top: 0, right: 0, display: 'flex', gap: 0.2, opacity: 0, transition: 'opacity 0.15s' }}>
               <IconButton size="small" onClick={() => handleEdit(item)}
