@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Fab, Zoom, Tooltip } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -49,7 +49,18 @@ function ScrollToTopButton() {
 
 function App() {
   const [photo, setPhoto] = useState(() => localStorage.getItem('portfolio_photo') || '');
-  const [skills, setSkills] = useState(skillsData);
+  const [skills, setSkills] = useState(() => {
+    try {
+      const stored = localStorage.getItem('portfolio_skills');
+      return stored ? JSON.parse(stored) : skillsData;
+    } catch {
+      return skillsData;
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem('portfolio_skills', JSON.stringify(skills));
+  }, [skills]);
 
   // 앱 시작 시 Supabase에서 사진 URL 로드
   useEffect(() => {
