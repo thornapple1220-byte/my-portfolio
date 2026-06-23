@@ -25,6 +25,7 @@ import AddIcon              from '@mui/icons-material/Add';
 import EditIcon             from '@mui/icons-material/Edit';
 import DeleteIcon           from '@mui/icons-material/Delete';
 import { aboutMeData, categoryColors, CATEGORIES } from '../data/aboutMeData';
+import supabase from '../utils/supabase';
 
 /* ── 아이콘 매핑 ──────────────────────────────────────────── */
 const skillIconMap = {
@@ -606,9 +607,35 @@ function CareerContent({ careers: initialCareers = [], skills = [] }) {
   });
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editTarget, setEditTarget] = useState(null);
+  const careerReady = useRef(false);
 
+  // 마운트 시 Supabase에서 경력 로드
   useEffect(() => {
-    localStorage.setItem(CAREER_STORAGE_KEY, JSON.stringify(careers));
+    supabase.from('settings').select('value')
+      .eq('key', CAREER_STORAGE_KEY).maybeSingle()
+      .then(({ data }) => {
+        if (data?.value) {
+          try {
+            const parsed = JSON.parse(data.value);
+            setCareers(parsed);
+            localStorage.setItem(CAREER_STORAGE_KEY, data.value);
+          } catch {}
+        }
+        careerReady.current = true;
+      });
+  }, []);
+
+  // 경력 변경 시 Supabase + localStorage 동기화
+  useEffect(() => {
+    if (!careerReady.current) return;
+    const json = JSON.stringify(careers);
+    localStorage.setItem(CAREER_STORAGE_KEY, json);
+    supabase.from('settings').upsert(
+      { key: CAREER_STORAGE_KEY, value: json, updated_at: new Date().toISOString() },
+      { onConflict: 'key' }
+    ).then(({ error }) => {
+      if (error) console.error('[경력] DB 저장 실패:', error.message);
+    });
   }, [careers]);
 
   const handleAdd  = () => { setEditTarget(null); setDialogOpen(true); };

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Fab, Zoom, Tooltip } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -57,25 +57,42 @@ function App() {
       return skillsData;
     }
   });
+  const skillsReady = useRef(false);
 
+  // 앱 시작 시 Supabase에서 사진·스킬 로드
   useEffect(() => {
-    localStorage.setItem('portfolio_skills', JSON.stringify(skills));
-  }, [skills]);
-
-  // 앱 시작 시 Supabase에서 사진 URL 로드
-  useEffect(() => {
-    supabase
-      .from('settings')
-      .select('value')
-      .eq('key', 'profile_photo_url')
-      .maybeSingle()
+    supabase.from('settings').select('key,value')
+      .in('key', ['profile_photo_url', 'portfolio_skills'])
       .then(({ data }) => {
-        if (data?.value) {
-          setPhoto(data.value);
-          localStorage.setItem('portfolio_photo', data.value);
-        }
+        data?.forEach(({ key, value }) => {
+          if (key === 'profile_photo_url' && value) {
+            setPhoto(value);
+            localStorage.setItem('portfolio_photo', value);
+          }
+          if (key === 'portfolio_skills' && value) {
+            try {
+              const parsed = JSON.parse(value);
+              setSkills(parsed);
+              localStorage.setItem('portfolio_skills', value);
+            } catch {}
+          }
+        });
+        skillsReady.current = true;
       });
   }, []);
+
+  // 스킬 변경 시 Supabase + localStorage 동기화
+  useEffect(() => {
+    if (!skillsReady.current) return;
+    const json = JSON.stringify(skills);
+    localStorage.setItem('portfolio_skills', json);
+    supabase.from('settings').upsert(
+      { key: 'portfolio_skills', value: json, updated_at: new Date().toISOString() },
+      { onConflict: 'key' }
+    ).then(({ error }) => {
+      if (error) console.error('[스킬] DB 저장 실패:', error.message);
+    });
+  }, [skills]);
 
   const handlePhotoChange = (file, previewUrl) => {
     // 즉시 미리보기
