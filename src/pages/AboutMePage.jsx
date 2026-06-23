@@ -622,11 +622,11 @@ function CareerContent({ careers: initialCareers = [], skills = [] }) {
 
   const toScore = useCallback((period) => {
     try {
-      const end = String(period ?? '').split(' - ')[1]?.trim();
+      const end = String(period ?? '').split(/\s*[-~]\s*/).pop()?.trim();
       if (!end || end === '현재') return 999999;
-      const [y = '0', m = '0'] = end.split('.');
-      const score = Number(y) * 100 + Number(m);
-      return Number.isFinite(score) ? score : 0;
+      const match = end.match(/(\d{4})\.(\d{1,2})/);
+      if (!match) return 0;
+      return Number(match[1]) * 100 + Number(match[2]);
     } catch {
       return 0;
     }
