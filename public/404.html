@@ -3,9 +3,29 @@
   <head>
     <meta charset="utf-8" />
     <title>My Portfolio</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        background: #ffffff;
+        background-image: radial-gradient(circle, rgba(123,104,238,0.1) 1.5px, transparent 1.5px);
+        background-size: 30px 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: -apple-system, sans-serif;
+      }
+      .spinner {
+        width: 36px;
+        height: 36px;
+        border: 3px solid rgba(123,104,238,0.2);
+        border-top-color: #7B68EE;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
     <script>
-      // GitHub Pages SPA 라우팅 처리
-      // /my-portfolio/about → /?/about 로 리다이렉트 후 index.html이 복원
       var segmentCount = 1;
       var l = window.location;
       l.replace(
@@ -17,5 +37,7 @@
       );
     </script>
   </head>
-  <body></body>
+  <body>
+    <div class="spinner"></div>
+  </body>
 </html>
