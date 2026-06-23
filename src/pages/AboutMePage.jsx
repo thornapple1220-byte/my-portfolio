@@ -593,10 +593,23 @@ function CareerDialog({ open, onClose, onSave, initialValues, skills = [] }) {
 }
 
 /* ── 경력사항 컨텐츠 ─────────────────────────────────────── */
+const CAREER_STORAGE_KEY = 'portfolio_careers';
+
 function CareerContent({ careers: initialCareers = [], skills = [] }) {
-  const [careers, setCareers] = useState(initialCareers);
+  const [careers, setCareers] = useState(() => {
+    try {
+      const stored = localStorage.getItem(CAREER_STORAGE_KEY);
+      return stored ? JSON.parse(stored) : initialCareers;
+    } catch {
+      return initialCareers;
+    }
+  });
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editTarget, setEditTarget] = useState(null);
+
+  useEffect(() => {
+    localStorage.setItem(CAREER_STORAGE_KEY, JSON.stringify(careers));
+  }, [careers]);
 
   const handleAdd  = () => { setEditTarget(null); setDialogOpen(true); };
   const handleEdit = (item) => { setEditTarget(item); setDialogOpen(true); };
