@@ -491,29 +491,40 @@ const PersonalContent = memo(function PersonalContent({ content }) {
 
 /* ── 탭 콘텐츠 라우터 ─────────────────────────────────────── */
 /* ── 경력 다이얼로그 ─────────────────────────────────────── */
-function CareerDialog({ open, onClose, onSave, initialValues }) {
+function CareerDialog({ open, onClose, onSave, initialValues, skills = [] }) {
   const isEdit = Boolean(initialValues);
-  const empty = { company: '', role: '', period: '', description: '', tags: '' };
-  const [form, setForm] = useState(empty);
+  const skillNames = skills.map((s) => s.name);
+
+  const [form, setForm] = useState({ company: '', role: '', period: '', description: '' });
+  const [selectedSkills, setSelectedSkills] = useState([]);
+  const [customTags, setCustomTags] = useState('');
 
   useEffect(() => {
-    if (open) {
-      setForm(initialValues
-        ? { ...initialValues, tags: (initialValues.tags ?? []).join(', ') }
-        : empty
-      );
+    if (!open) return;
+    if (initialValues) {
+      const { company, role, period, description, tags = [] } = initialValues;
+      setForm({ company, role, period, description });
+      setSelectedSkills(tags.filter((t) => skillNames.includes(t)));
+      setCustomTags(tags.filter((t) => !skillNames.includes(t)).join(', '));
+    } else {
+      setForm({ company: '', role: '', period: '', description: '' });
+      setSelectedSkills([]);
+      setCustomTags('');
     }
   }, [open, initialValues]);
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
+  const toggleSkill = (name) =>
+    setSelectedSkills((prev) =>
+      prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]
+    );
+
   const handleSave = () => {
     if (!form.company.trim()) return;
-    const tags = form.tags.split(',').map((t) => t.trim()).filter(Boolean);
-    onSave(isEdit
-      ? { ...initialValues, ...form, tags }
-      : { ...form, id: Date.now(), tags }
-    );
+    const extra = customTags.split(',').map((t) => t.trim()).filter(Boolean);
+    const tags = [...selectedSkills, ...extra.filter((t) => !selectedSkills.includes(t))];
+    onSave(isEdit ? { ...initialValues, ...form, tags } : { ...form, id: Date.now(), tags });
     onClose();
   };
 
@@ -528,12 +539,42 @@ function CareerDialog({ open, onClose, onSave, initialValues }) {
           <TextField label="직책 / 역할" value={form.role} onChange={set('role')} fullWidth size="small" />
           <TextField label="기간 (예: 2022.03 - 현재)" value={form.period} onChange={set('period')} fullWidth size="small" />
           <TextField label="업무 설명" value={form.description} onChange={set('description')} fullWidth size="small" multiline rows={3} />
+
+          {/* 스킬 선택 */}
+          <Box>
+            <Typography sx={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--color-text-secondary)', mb: 1 }}>
+              스킬트리에서 선택
+            </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.7 }}>
+              {skillNames.map((name) => {
+                const active = selectedSkills.includes(name);
+                return (
+                  <Chip
+                    key={name}
+                    label={name}
+                    size="small"
+                    onClick={() => toggleSkill(name)}
+                    sx={{
+                      cursor: 'pointer',
+                      fontWeight: 600,
+                      fontSize: '0.7rem',
+                      bgcolor: active ? 'var(--color-primary)' : 'rgba(123,104,238,0.08)',
+                      color: active ? '#fff' : 'var(--color-primary)',
+                      '&:hover': { bgcolor: active ? 'var(--color-primary-dark)' : 'rgba(123,104,238,0.18)' },
+                    }}
+                  />
+                );
+              })}
+            </Box>
+          </Box>
+
+          {/* 직접 추가 */}
           <TextField
-            label="사용 기술 (쉼표로 구분)"
-            value={form.tags}
-            onChange={set('tags')}
+            label="직접 추가 (쉼표로 구분)"
+            value={customTags}
+            onChange={(e) => setCustomTags(e.target.value)}
             fullWidth size="small"
-            placeholder="Photoshop, Figma, Illustrator"
+            placeholder="예: After Effects, Notion"
           />
         </Stack>
       </DialogContent>
@@ -552,7 +593,7 @@ function CareerDialog({ open, onClose, onSave, initialValues }) {
 }
 
 /* ── 경력사항 컨텐츠 ─────────────────────────────────────── */
-function CareerContent({ careers: initialCareers = [] }) {
+function CareerContent({ careers: initialCareers = [], skills = [] }) {
   const [careers, setCareers] = useState(initialCareers);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editTarget, setEditTarget] = useState(null);
@@ -624,7 +665,7 @@ function CareerContent({ careers: initialCareers = [] }) {
         경력 추가
       </Button>
 
-      <CareerDialog open={dialogOpen} onClose={() => setDialogOpen(false)} onSave={handleSave} initialValues={editTarget} />
+      <CareerDialog open={dialogOpen} onClose={() => setDialogOpen(false)} onSave={handleSave} initialValues={editTarget} skills={skills} />
     </Box>
   );
 }
@@ -632,7 +673,7 @@ function CareerContent({ careers: initialCareers = [] }) {
 function SectionContent({ section, skills, onSkillsChange }) {
   if (section.id === 'i-am')   return <IAmContent content={section.content} />;
   if (section.id === 'skills') return <SkillsContent skills={skills} onSkillsChange={onSkillsChange} />;
-  if (section.id === 'career') return <CareerContent careers={section.careers} />;
+  if (section.id === 'career') return <CareerContent careers={section.careers} skills={skills} />;
   return <PersonalContent content={section.content} />;
 }
 
