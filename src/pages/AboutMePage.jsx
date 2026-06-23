@@ -620,22 +620,20 @@ function CareerContent({ careers: initialCareers = [], skills = [] }) {
     );
   };
 
-  const toScore = useCallback((period) => {
+  const getScore = (period) => {
     try {
-      const end = String(period ?? '').split(/\s*[-~]\s*/).pop()?.trim();
-      if (!end || end === '현재') return 999999;
+      const parts = String(period ?? '').split(/[~\-]/).map(s => s.trim()).filter(Boolean);
+      const end = parts[parts.length - 1] ?? '';
+      if (!end || end.includes('현재')) return 999999;
       const match = end.match(/(\d{4})\.(\d{1,2})/);
       if (!match) return 0;
       return Number(match[1]) * 100 + Number(match[2]);
     } catch {
       return 0;
     }
-  }, []);
+  };
 
-  const sorted = useMemo(
-    () => [...careers].sort((a, b) => toScore(b.period) - toScore(a.period)),
-    [careers, toScore],
-  );
+  const sorted = [...careers].sort((a, b) => getScore(b.period) - getScore(a.period));
 
   return (
     <Box sx={{ py: 1 }}>
