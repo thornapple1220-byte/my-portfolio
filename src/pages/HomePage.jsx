@@ -241,10 +241,7 @@ function HeroSection() {
           fontWeight: 900,
           letterSpacing: { xs: '-1px', sm: '-2px', md: '-3px' },
           lineHeight: 1, mb: 2,
-          color: 'transparent',
-          backgroundClip: 'text',
-          WebkitBackgroundClip: 'text',
-          backgroundImage: 'linear-gradient(135deg, #4A3CC5 0%, #7B68EE 45%, #9D8FF2 100%)',
+          color: '#111111',
           ...fadeUp(0.25),
         }}>
           장지은
@@ -256,7 +253,7 @@ function HeroSection() {
           fontWeight: 700,
           letterSpacing: { xs: '2px', sm: '3px', md: '4px' },
           textTransform: 'uppercase',
-          color: '#7B68EE', mb: { xs: 3, md: 5 },
+          color: '#111111', mb: { xs: 3, md: 5 },
           minHeight: { xs: '1.6rem', sm: '2rem', md: '2.6rem' },
           ...fadeUp(0.4),
         }}>
@@ -285,7 +282,7 @@ function HeroSection() {
           회사에서만 6년, 프리랜서로도 꾸준히!<br />
           상세페이지, 배너, 쇼핑몰 관리, 간단한 영상까지<br />
           <Box component="span" sx={{
-            color: '#7B68EE', fontWeight: 900,
+            color: '#111111', fontWeight: 900,
             fontSize: { xs: '1.3rem', sm: '1.5rem', md: '1.8rem', lg: '2rem' },
             letterSpacing: '-0.5px',
           }}>
