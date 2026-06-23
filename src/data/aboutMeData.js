@@ -43,6 +43,37 @@ export const aboutMeData = {
       showInHome: true,
     },
     {
+      id: 'career',
+      title: '경력사항',
+      showInHome: false,
+      careers: [
+        {
+          id: 1,
+          company: '회사명 A',
+          role: '디자이너',
+          period: '2022.03 - 현재',
+          tags: ['Photoshop', 'Illustrator', 'Figma'],
+          description: '상세페이지 제작, 배너 디자인, 쇼핑몰 MD 관리 등 전반적인 디자인 업무 담당',
+        },
+        {
+          id: 2,
+          company: '회사명 B',
+          role: '웹 디자이너',
+          period: '2020.01 - 2022.02',
+          tags: ['Photoshop', 'Premiere Pro'],
+          description: '브랜드 SNS 콘텐츠 제작, 영상 편집, 온라인 광고 배너 제작',
+        },
+        {
+          id: 3,
+          company: '회사명 C',
+          role: '디자이너',
+          period: '2018.06 - 2019.12',
+          tags: ['Illustrator', 'Photoshop'],
+          description: '인쇄물 디자인, 로고 제작, 명함·브로셔 등 편집 디자인',
+        },
+      ],
+    },
+    {
       id: 'personal',
       title: '개인적인 이야기',
       content:

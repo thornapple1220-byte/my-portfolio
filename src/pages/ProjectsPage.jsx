@@ -262,7 +262,7 @@ function ProjectsPage() {
     : projects.filter((p) => p.category === activeCategory));
 
   return (
-    <Box sx={{ minHeight: 'calc(100vh - 64px)', bgcolor: 'var(--color-bg-soft)', py: { xs: 8, md: 12 } }}>
+    <Box sx={{ minHeight: 'calc(100vh - 64px)', py: { xs: 8, md: 12 } }}>
       <Box sx={{ px: { xs: 3, md: 6 } }}>
         {/* 헤더 */}
         <Box sx={{ textAlign: 'center', mb: 6 }}>

@@ -2,7 +2,7 @@ import { memo, useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
   Box, Typography, Card, Stack,
-  Tab, Tabs, Avatar, Chip, IconButton,
+  Avatar, Chip, IconButton,
   Grid, Dialog, DialogTitle, DialogContent, DialogActions,
   TextField, MenuItem, Slider, Button, Tooltip,
   Switch, FormControlLabel,
@@ -490,9 +490,149 @@ const PersonalContent = memo(function PersonalContent({ content }) {
 });
 
 /* ── 탭 콘텐츠 라우터 ─────────────────────────────────────── */
+/* ── 경력 다이얼로그 ─────────────────────────────────────── */
+function CareerDialog({ open, onClose, onSave, initialValues }) {
+  const isEdit = Boolean(initialValues);
+  const empty = { company: '', role: '', period: '', description: '', tags: '' };
+  const [form, setForm] = useState(empty);
+
+  useEffect(() => {
+    if (open) {
+      setForm(initialValues
+        ? { ...initialValues, tags: (initialValues.tags ?? []).join(', ') }
+        : empty
+      );
+    }
+  }, [open, initialValues]);
+
+  const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+
+  const handleSave = () => {
+    if (!form.company.trim()) return;
+    const tags = form.tags.split(',').map((t) => t.trim()).filter(Boolean);
+    onSave(isEdit
+      ? { ...initialValues, ...form, tags }
+      : { ...form, id: Date.now(), tags }
+    );
+    onClose();
+  };
+
+  return (
+    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth aria-labelledby="career-dialog-title">
+      <DialogTitle id="career-dialog-title" sx={{ fontWeight: 700, color: 'var(--color-text-primary)' }}>
+        {isEdit ? '경력 수정' : '경력 추가'}
+      </DialogTitle>
+      <DialogContent>
+        <Stack spacing={2.5} sx={{ pt: 1 }}>
+          <TextField label="회사명" value={form.company} onChange={set('company')} fullWidth size="small" autoFocus />
+          <TextField label="직책 / 역할" value={form.role} onChange={set('role')} fullWidth size="small" />
+          <TextField label="기간 (예: 2022.03 - 현재)" value={form.period} onChange={set('period')} fullWidth size="small" />
+          <TextField label="업무 설명" value={form.description} onChange={set('description')} fullWidth size="small" multiline rows={3} />
+          <TextField
+            label="사용 기술 (쉼표로 구분)"
+            value={form.tags}
+            onChange={set('tags')}
+            fullWidth size="small"
+            placeholder="Photoshop, Figma, Illustrator"
+          />
+        </Stack>
+      </DialogContent>
+      <DialogActions sx={{ px: 3, pb: 2.5 }}>
+        <Button onClick={onClose} sx={{ color: 'var(--color-text-secondary)' }}>취소</Button>
+        <Button
+          onClick={handleSave}
+          variant="contained"
+          sx={{ bgcolor: 'var(--color-button-primary)', '&:hover': { bgcolor: 'var(--color-button-hover)' }, fontWeight: 700 }}
+        >
+          {isEdit ? '저장' : '추가'}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
+/* ── 경력사항 컨텐츠 ─────────────────────────────────────── */
+function CareerContent({ careers: initialCareers = [] }) {
+  const [careers, setCareers] = useState(initialCareers);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editTarget, setEditTarget] = useState(null);
+
+  const handleAdd  = () => { setEditTarget(null); setDialogOpen(true); };
+  const handleEdit = (item) => { setEditTarget(item); setDialogOpen(true); };
+  const handleDelete = (id) => setCareers((prev) => prev.filter((c) => c.id !== id));
+  const handleSave = (saved) => {
+    setCareers((prev) =>
+      editTarget ? prev.map((c) => c.id === saved.id ? saved : c) : [...prev, saved]
+    );
+  };
+
+  return (
+    <Box sx={{ py: 1 }}>
+      {careers.map((item, idx) => (
+        <Box key={item.id} sx={{ display: 'flex', gap: { xs: 2, md: 3 }, mb: idx < careers.length - 1 ? 3 : 0 }}>
+          {/* 타임라인 */}
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
+            <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: 'var(--color-primary)', border: '2px solid var(--color-accent)', mt: '4px', flexShrink: 0 }} />
+            {idx < careers.length - 1 && (
+              <Box sx={{ width: 2, flex: 1, bgcolor: 'var(--color-border)', mt: 0.5 }} />
+            )}
+          </Box>
+
+          {/* 내용 */}
+          <Box sx={{ pb: idx < careers.length - 1 ? 3 : 0, flex: 1, position: 'relative', '&:hover .career-actions': { opacity: 1 } }}>
+            {/* 편집/삭제 버튼 */}
+            <Box className="career-actions" sx={{ position: 'absolute', top: 0, right: 0, display: 'flex', gap: 0.2, opacity: 0, transition: 'opacity 0.15s' }}>
+              <IconButton size="small" onClick={() => handleEdit(item)}
+                sx={{ width: 26, height: 26, color: 'var(--color-text-secondary)', '&:hover': { color: 'var(--color-primary)', bgcolor: 'var(--color-accent)' } }}>
+                <EditIcon sx={{ fontSize: '0.85rem' }} />
+              </IconButton>
+              <IconButton size="small" onClick={() => handleDelete(item.id)}
+                sx={{ width: 26, height: 26, color: 'var(--color-text-secondary)', '&:hover': { color: '#d32f2f', bgcolor: 'rgba(211,47,47,0.08)' } }}>
+                <DeleteIcon sx={{ fontSize: '0.85rem' }} />
+              </IconButton>
+            </Box>
+
+            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 1, mb: 0.5 }}>
+              <Typography sx={{ fontWeight: 800, fontSize: '1rem', color: 'var(--color-text-primary)' }}>
+                {item.company}
+              </Typography>
+              <Chip label={item.role} size="small"
+                sx={{ bgcolor: 'var(--color-accent)', color: 'var(--color-primary)', fontWeight: 700, fontSize: '0.7rem', height: 20 }} />
+            </Box>
+            <Typography sx={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', mb: 1, fontWeight: 500 }}>
+              {item.period}
+            </Typography>
+            <Typography sx={{ fontSize: '0.88rem', color: 'var(--color-text-primary)', lineHeight: 1.7, mb: 1.2 }}>
+              {item.description}
+            </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.7 }}>
+              {item.tags.map((tag) => (
+                <Chip key={tag} label={tag} size="small"
+                  sx={{ bgcolor: 'rgba(123,104,238,0.08)', color: 'var(--color-primary)', fontSize: '0.68rem', height: 20, fontWeight: 600 }} />
+              ))}
+            </Box>
+          </Box>
+        </Box>
+      ))}
+
+      <Button
+        onClick={handleAdd}
+        startIcon={<AddIcon />}
+        size="small"
+        sx={{ mt: careers.length > 0 ? 3 : 0, color: 'var(--color-primary)', fontWeight: 700, textTransform: 'none', '&:hover': { bgcolor: 'var(--color-accent)' } }}
+      >
+        경력 추가
+      </Button>
+
+      <CareerDialog open={dialogOpen} onClose={() => setDialogOpen(false)} onSave={handleSave} initialValues={editTarget} />
+    </Box>
+  );
+}
+
 function SectionContent({ section, skills, onSkillsChange }) {
   if (section.id === 'i-am')   return <IAmContent content={section.content} />;
   if (section.id === 'skills') return <SkillsContent skills={skills} onSkillsChange={onSkillsChange} />;
+  if (section.id === 'career') return <CareerContent careers={section.careers} />;
   return <PersonalContent content={section.content} />;
 }
 
@@ -522,12 +662,13 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
   ], [basicInfo.education, basicInfo.major, basicInfo.experience]);
 
   return (
-    <Box sx={{ minHeight: 'calc(100vh - 64px)', bgcolor: 'var(--color-bg-primary)' }}>
+    <Box sx={{ minHeight: 'calc(100vh - 64px)' }}>
 
       {/* ─ 프로필 히어로 ─ */}
       <Box sx={{
         position: 'relative', overflow: 'hidden',
-        background: 'linear-gradient(160deg, #FFFFFF 0%, #F4F2FF 55%, #FFFFFF 100%)',
+        background: 'radial-gradient(circle, rgba(123,104,238,0.1) 1.5px, transparent 1.5px), linear-gradient(175deg, #C9C0FF 0%, #DDD8FF 22%, #EDE9FF 48%, #F8F6FF 72%, #FFFFFF 100%)',
+        backgroundSize: '30px 30px, auto',
         py: { xs: 7, md: 10 },
         borderBottom: '1px solid var(--color-border)',
       }}>
@@ -571,29 +712,6 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
           '@keyframes aboutSpinBrush': { '100%': { transform: 'rotate(360deg)' } },
         }} />
 
-        {/* 파스텔 도트 - 우하단 */}
-        <Box sx={{
-          display: { xs: 'none', sm: 'flex' },
-          position: 'absolute', bottom: '10%', right: '5%',
-          flexDirection: 'column', gap: '8px',
-          animation: 'aboutDotFloat 6s ease-in-out infinite',
-          '@keyframes aboutDotFloat': {
-            '0%,100%': { transform: 'translateY(0)', opacity: 0.6 },
-            '50%':     { transform: 'translateY(-8px)', opacity: 1 },
-          },
-        }}>
-          {[['#7B68EE', '#9D8FF2'], ['#B8AEFF', '#D4CDFF']].map((row, ri) => (
-            <Box key={ri} sx={{ display: 'flex', gap: '8px' }}>
-              {row.map((color, ci) => (
-                <Box key={ci} sx={{
-                  width: { sm: 10, md: 13 }, height: { sm: 10, md: 13 },
-                  borderRadius: '50%', bgcolor: color,
-                  boxShadow: `0 0 6px ${color}44`,
-                }} />
-              ))}
-            </Box>
-          ))}
-        </Box>
 
         {/* 컨텐츠 */}
         <Box sx={{ position: 'relative', zIndex: 1, px: { xs: 3, md: 6 } }}>
@@ -631,43 +749,73 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
 
       {/* ─ 콘텐츠 탭 ─ */}
       <Box sx={{ py: { xs: 4, md: 8 }, px: { xs: 3, md: 6 } }}>
-        <Tabs
-          value={activeTab}
-          onChange={handleTabChange}
-          aria-label="About Me 섹션 탭"
-          sx={{
-            borderBottom: '2px solid var(--color-border)',
-            mb: 1,
-            '& .MuiTab-root': { fontWeight: 600, fontSize: '0.95rem', color: 'var(--color-text-secondary)', textTransform: 'none', minWidth: 'auto', px: { xs: 2, md: 3 }, py: 1.5 },
-            '& .Mui-selected': { color: 'var(--color-primary) !important' },
-            '& .MuiTabs-indicator': { bgcolor: 'var(--color-primary)', height: 3, borderRadius: '3px 3px 0 0' },
-          }}
-        >
-          {sections.map((section) => (
-            <Tab
-              key={section.id}
-              id={`tab-${section.id}`}
-              aria-controls={`tabpanel-${section.id}`}
-              label={section.title}
-            />
-          ))}
-        </Tabs>
-
-        {sections.map((section, idx) => (
-          <Box
-            key={section.id}
-            role="tabpanel"
-            id={`tabpanel-${section.id}`}
-            aria-labelledby={`tab-${section.id}`}
-            hidden={activeTab !== idx}
-          >
-            {activeTab === idx && (
-              <Box sx={{ ...fadeIn, animation: 'tabFadeIn 0.25s ease-out' }}>
-                <SectionContent section={section} skills={skills} onSkillsChange={onSkillsChange} />
+        {/* 폴더 탭 */}
+        <Box sx={{ display: 'flex', alignItems: 'flex-end', gap: '4px' }}>
+          {sections.map((section, idx) => {
+            const active = activeTab === idx;
+            return (
+              <Box
+                key={section.id}
+                role="tab"
+                tabIndex={0}
+                aria-selected={active}
+                onClick={() => handleTabChange(null, idx)}
+                onKeyDown={(e) => e.key === 'Enter' && handleTabChange(null, idx)}
+                sx={{
+                  px: { xs: 2, md: 3 },
+                  pt: active ? 1.4 : 1.1,
+                  pb: 1.2,
+                  cursor: 'pointer',
+                  borderRadius: '8px 8px 0 0',
+                  border: '1.5px solid var(--color-border)',
+                  borderBottom: active ? '1.5px solid #ffffff' : '1.5px solid var(--color-border)',
+                  bgcolor: active ? '#ffffff' : 'rgba(123,104,238,0.05)',
+                  color: active ? 'var(--color-primary)' : 'var(--color-text-secondary)',
+                  fontWeight: active ? 700 : 600,
+                  fontSize: { xs: '0.82rem', md: '0.92rem' },
+                  mb: '-1.5px',
+                  position: 'relative',
+                  zIndex: active ? 2 : 1,
+                  userSelect: 'none',
+                  whiteSpace: 'nowrap',
+                  transition: 'background-color 0.15s ease, color 0.15s ease',
+                  '&:hover': {
+                    bgcolor: active ? '#ffffff' : 'rgba(123,104,238,0.12)',
+                    color: 'var(--color-primary)',
+                  },
+                }}
+              >
+                {section.title}
               </Box>
-            )}
-          </Box>
-        ))}
+            );
+          })}
+        </Box>
+
+        {/* 콘텐츠 패널 */}
+        <Box sx={{
+          border: '1.5px solid var(--color-border)',
+          borderRadius: '0 8px 8px 8px',
+          bgcolor: '#ffffff',
+          p: { xs: 3, md: 4 },
+          position: 'relative',
+          zIndex: 0,
+        }}>
+          {sections.map((section, idx) => (
+            <Box
+              key={section.id}
+              role="tabpanel"
+              id={`tabpanel-${section.id}`}
+              aria-labelledby={`tab-${section.id}`}
+              hidden={activeTab !== idx}
+            >
+              {activeTab === idx && (
+                <Box sx={{ ...fadeIn, animation: 'tabFadeIn 0.25s ease-out' }}>
+                  <SectionContent section={section} skills={skills} onSkillsChange={onSkillsChange} />
+                </Box>
+              )}
+            </Box>
+          ))}
+        </Box>
       </Box>
     </Box>
   );

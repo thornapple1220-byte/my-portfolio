@@ -108,7 +108,8 @@ function HeroSection() {
     <Box sx={{
       position: 'relative', overflow: 'hidden',
       minHeight: '100vh', display: 'flex', alignItems: 'center',
-      background: 'linear-gradient(160deg, #FFFFFF 0%, #F4F2FF 55%, #FFFFFF 100%)',
+      background: 'radial-gradient(circle, rgba(123,104,238,0.1) 1.5px, transparent 1.5px), linear-gradient(175deg, #C9C0FF 0%, #DDD8FF 22%, #EDE9FF 48%, #F8F6FF 72%, #FFFFFF 100%)',
+      backgroundSize: '30px 30px, auto',
     }}>
       {/* 페이지 전환 오버레이 */}
       {transitioning && (
@@ -128,7 +129,8 @@ function HeroSection() {
         position: 'absolute', top: '-8%', right: '-6%',
         width: { xs: 280, sm: 420, md: 620 }, height: { xs: 280, sm: 420, md: 620 },
         borderRadius: '60% 40% 70% 30% / 50% 60% 40% 50%',
-        background: 'radial-gradient(circle at 40% 40%, rgba(123,104,238,0.13) 0%, rgba(123,104,238,0.05) 55%, transparent 72%)',
+        background: 'radial-gradient(circle at 40% 40%, rgba(123,104,238,0.5) 0%, rgba(123,104,238,0.22) 50%, transparent 72%)',
+        filter: 'blur(2px)',
         animation: 'morphBlob1 12s ease-in-out infinite',
         '@keyframes morphBlob1': {
           '0%,100%': { borderRadius: '60% 40% 70% 30% / 50% 60% 40% 50%', transform: 'translateY(0)' },
@@ -142,7 +144,8 @@ function HeroSection() {
         position: 'absolute', bottom: '-12%', left: '-6%',
         width: { xs: 240, sm: 360, md: 520 }, height: { xs: 240, sm: 360, md: 520 },
         borderRadius: '40% 60% 30% 70% / 60% 30% 70% 40%',
-        background: 'radial-gradient(circle at 55% 50%, rgba(155,135,245,0.1) 0%, rgba(123,104,238,0.05) 55%, transparent 72%)',
+        background: 'radial-gradient(circle at 55% 50%, rgba(155,135,245,0.45) 0%, rgba(123,104,238,0.2) 50%, transparent 72%)',
+        filter: 'blur(2px)',
         animation: 'morphBlob2 15s ease-in-out infinite',
         '@keyframes morphBlob2': {
           '0%,100%': { borderRadius: '40% 60% 30% 70% / 60% 30% 70% 40%', transform: 'translateY(0)' },
@@ -157,10 +160,22 @@ function HeroSection() {
         width: 130, height: 130,
         borderRadius: '50%',
         border: '1.5px solid transparent',
-        borderTop: '1.5px solid rgba(123,104,238,0.3)',
-        borderRight: '1.5px solid rgba(123,104,238,0.15)',
+        borderTop: '1.5px solid rgba(123,104,238,0.55)',
+        borderRight: '1.5px solid rgba(123,104,238,0.28)',
         animation: 'spinBrush 10s linear infinite',
         '@keyframes spinBrush': { '100%': { transform: 'rotate(360deg)' } },
+      }} />
+
+      {/* 중앙 글로우 */}
+      <Box sx={{
+        position: 'absolute', top: '44%', left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: { xs: 360, md: 680 }, height: { xs: 260, md: 500 },
+        borderRadius: '50%',
+        background: 'radial-gradient(ellipse at center, rgba(123,104,238,0.22) 0%, rgba(123,104,238,0.08) 50%, transparent 72%)',
+        filter: 'blur(48px)',
+        zIndex: 0,
+        pointerEvents: 'none',
       }} />
 
       {/* 인터랙티브 도트 - 우하단 */}
@@ -169,26 +184,27 @@ function HeroSection() {
         sx={{
           display: { xs: 'none', sm: 'flex' },
           position: 'absolute', bottom: '14%', right: '6%',
+          zIndex: 2,
           flexDirection: 'column', gap: '10px',
           cursor: 'pointer',
           '&:hover .dot': { transform: 'scale(1.35)', filter: 'brightness(1.2)' },
-          '@keyframes dotBounce0': { '0%,100%': { transform: 'translateY(0)' }, '40%': { transform: 'translateY(-10px)' } },
-          '@keyframes dotBounce1': { '0%,100%': { transform: 'translateY(0)' }, '40%': { transform: 'translateY(-10px)' } },
-          '@keyframes dotBounce2': { '0%,100%': { transform: 'translateY(0)' }, '40%': { transform: 'translateY(-10px)' } },
-          '@keyframes dotBounce3': { '0%,100%': { transform: 'translateY(0)' }, '40%': { transform: 'translateY(-10px)' } },
+          '@keyframes dotBounce0': { '0%,100%': { transform: 'translateY(0)' }, '40%': { transform: 'translateY(-16px)' } },
+          '@keyframes dotBounce1': { '0%,100%': { transform: 'translateY(0)' }, '40%': { transform: 'translateY(-16px)' } },
+          '@keyframes dotBounce2': { '0%,100%': { transform: 'translateY(0)' }, '40%': { transform: 'translateY(-16px)' } },
+          '@keyframes dotBounce3': { '0%,100%': { transform: 'translateY(0)' }, '40%': { transform: 'translateY(-16px)' } },
         }}
       >
         {[
-          { color: '#7B68EE', size: 16, delay: '0s' },
-          { color: '#9D8FF2', size: 13, delay: '0.15s' },
-          { color: '#B8AEFF', size: 14, delay: '0.3s' },
-          { color: '#D4CDFF', size: 11, delay: '0.45s' },
+          { color: '#7B68EE', size: 22, delay: '0s' },
+          { color: '#9D8FF2', size: 17, delay: '0.15s' },
+          { color: '#B8AEFF', size: 19, delay: '0.3s' },
+          { color: '#D4CDFF', size: 14, delay: '0.45s' },
         ].reduce((rows, dot, i) => {
           if (i % 2 === 0) rows.push([]);
           rows[rows.length - 1].push(dot);
           return rows;
         }, []).map((row, ri) => (
-          <Box key={ri} sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <Box key={ri} sx={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
             {row.map((dot, ci) => {
               const idx = ri * 2 + ci;
               return (
@@ -199,7 +215,7 @@ function HeroSection() {
                     width: dot.size, height: dot.size,
                     borderRadius: '50%',
                     bgcolor: dot.color,
-                    boxShadow: `0 0 10px ${dot.color}66`,
+                    boxShadow: `0 0 ${dot.size}px ${dot.color}bb`,
                     animation: `dotBounce${idx} 1.6s ease-in-out ${dot.delay} infinite`,
                     transition: 'transform 0.2s ease, filter 0.2s ease',
                   }}
@@ -224,7 +240,11 @@ function HeroSection() {
           fontSize: { xs: '3rem', sm: '4.5rem', md: '5.5rem', lg: '6.5rem' },
           fontWeight: 900,
           letterSpacing: { xs: '-1px', sm: '-2px', md: '-3px' },
-          lineHeight: 1, color: '#2D2D2D', mb: 2,
+          lineHeight: 1, mb: 2,
+          color: 'transparent',
+          backgroundClip: 'text',
+          WebkitBackgroundClip: 'text',
+          backgroundImage: 'linear-gradient(135deg, #4A3CC5 0%, #7B68EE 45%, #9D8FF2 100%)',
           ...fadeUp(0.25),
         }}>
           장지은
@@ -368,7 +388,7 @@ function AboutSection({ photo }) {
   const iAmSection = sections.find((s) => s.showInHome && s.id === 'i-am');
 
   return (
-    <Box sx={{ width: '100%', pt: { xs: 8, md: 12 }, pb: { xs: 4, md: 6 }, bgcolor: 'var(--color-bg-primary)' }}>
+    <Box sx={{ width: '100%', pt: { xs: 8, md: 12 }, pb: { xs: 4, md: 6 } }}>
       <Container maxWidth="md">
         <Stack
           direction={{ xs: 'column', md: 'row' }}
@@ -530,7 +550,7 @@ const SkillSection = memo(function SkillSection({ skills }) {
   }, []);
 
   return (
-    <Box sx={{ width: '100%', pt: { xs: 4, md: 6 }, pb: { xs: 8, md: 12 }, bgcolor: 'var(--color-bg-primary)' }}>
+    <Box sx={{ width: '100%', pt: { xs: 4, md: 6 }, pb: { xs: 8, md: 12 } }}>
       <Container maxWidth="md">
         <Box sx={{ textAlign: 'center', mb: 1 }}>
           <Box sx={{ width: 40, height: 4, bgcolor: '#7B68EE', mx: 'auto', mb: 1.5, borderRadius: 1 }} />
@@ -732,7 +752,7 @@ function ProjectsSection() {
   }, []);
 
   return (
-    <Box id="projects-section" sx={{ ...sectionBase, background: 'linear-gradient(160deg, #EDE9FF 0%, #E4DFFF 50%, #EDE9FF 100%)' }}>
+    <Box id="projects-section" sx={{ ...sectionBase, background: 'radial-gradient(circle, rgba(123,104,238,0.1) 1.5px, transparent 1.5px), linear-gradient(160deg, #EDE9FF 0%, #E4DFFF 50%, #EDE9FF 100%)', backgroundSize: '30px 30px, auto' }}>
       <Box sx={{ px: { xs: 3, md: 6 } }}>
         <Box sx={{ textAlign: 'center', mb: 1 }}>
           <Box sx={{ width: 40, height: 4, bgcolor: '#7B68EE', mx: 'auto', mb: 1.5, borderRadius: 1 }} />
@@ -791,7 +811,7 @@ function ProjectsSection() {
 function ContactSection() {
 
   return (
-    <Box id="contact-section" sx={{ ...sectionBase, bgcolor: 'var(--color-bg-soft)' }}>
+    <Box id="contact-section" sx={{ ...sectionBase }}>
       <Container maxWidth="md">
         {/* 섹션 타이틀 */}
         <Box sx={{ textAlign: 'center', mb: 6 }}>
@@ -816,7 +836,7 @@ function HomePage({ photo, skills }) {
     <Box>
       <HeroSection />
       <Divider sx={{ borderColor: 'var(--color-border)' }} />
-      <Box sx={{ bgcolor: 'var(--color-bg-primary)' }}>
+      <Box>
         <AboutSection photo={photo} />
         <SkillSection skills={skills} />
       </Box>
