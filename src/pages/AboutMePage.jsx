@@ -595,10 +595,43 @@ function CareerDialog({ open, onClose, onSave, initialValues, skills = [] }) {
   );
 }
 
+/* ── 근무 기간 계산 ───────────────────────────────────────── */
+function calcDuration(period) {
+  try {
+    const parts = String(period ?? '').split(/[~\-–]/).map((s) => s.trim()).filter(Boolean);
+    if (parts.length < 2) return '';
+    const parseYM = (str) => {
+      if (str.includes('현재')) {
+        const now = new Date();
+        return { y: now.getFullYear(), m: now.getMonth() + 1 };
+      }
+      const match = str.match(/(\d{4})\.(\d{1,2})/);
+      if (!match) return null;
+      return { y: Number(match[1]), m: Number(match[2]) };
+    };
+    const start = parseYM(parts[0]);
+    const end   = parseYM(parts[parts.length - 1]);
+    if (!start || !end) return '';
+    const total = (end.y - start.y) * 12 + (end.m - start.m);
+    if (total <= 0) return '';
+    const years  = Math.floor(total / 12);
+    const months = total % 12;
+    if (years === 0) return `${months}개월`;
+    if (months === 0) return `${years}년`;
+    return `${years}년 ${months}개월`;
+  } catch {
+    return '';
+  }
+}
+
 /* ── 경력사항 컨텐츠 ─────────────────────────────────────── */
 const CAREER_STORAGE_KEY = 'portfolio_careers';
 
 function CareerContent({ careers: initialCareers = [], skills = [] }) {
+  const skillColorMap = useMemo(
+    () => Object.fromEntries(skills.map((s) => [s.name, categoryColors[s.category] ?? null])),
+    [skills]
+  );
   const [careers, setCareers] = useState(() => {
     try {
       const stored = localStorage.getItem(CAREER_STORAGE_KEY);
@@ -699,15 +732,23 @@ function CareerContent({ careers: initialCareers = [], skills = [] }) {
             </Box>
             <Typography sx={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', mb: 1, fontWeight: 500 }}>
               {item.period}
+              {calcDuration(item.period) && (
+                <Box component="span" sx={{ ml: 1, color: 'var(--color-primary)', fontWeight: 700 }}>
+                  ({calcDuration(item.period)})
+                </Box>
+              )}
             </Typography>
             <Typography sx={{ fontSize: '0.88rem', color: 'var(--color-text-primary)', lineHeight: 1.7, mb: 1.2 }}>
               {item.description}
             </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.7 }}>
-              {item.tags.map((tag) => (
-                <Chip key={tag} label={tag} size="small"
-                  sx={{ bgcolor: 'rgba(123,104,238,0.08)', color: 'var(--color-primary)', fontSize: '0.68rem', height: 20, fontWeight: 600 }} />
-              ))}
+              {item.tags.map((tag) => {
+                const c = skillColorMap[tag] ?? '#7B68EE';
+                return (
+                  <Chip key={tag} label={tag} size="small"
+                    sx={{ bgcolor: `${c}18`, color: c, fontSize: '0.68rem', height: 20, fontWeight: 600 }} />
+                );
+              })}
             </Box>
           </Box>
         </Box>
