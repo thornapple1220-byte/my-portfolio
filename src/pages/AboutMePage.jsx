@@ -4,8 +4,7 @@ import {
   Box, Typography, Card, Stack,
   Avatar, Chip, IconButton,
   Grid, Dialog, DialogTitle, DialogContent, DialogActions,
-  TextField, MenuItem, Slider, Button, Tooltip,
-  Switch, FormControlLabel,
+  TextField, MenuItem, Slider, Button, Tooltip, Switch, FormControlLabel,
 } from '@mui/material';
 import CameraAltIcon        from '@mui/icons-material/CameraAlt';
 import SchoolIcon           from '@mui/icons-material/School';
@@ -22,7 +21,6 @@ import DescriptionIcon      from '@mui/icons-material/Description';
 import CodeIcon             from '@mui/icons-material/Code';
 import SmartToyIcon         from '@mui/icons-material/SmartToy';
 import AttachMoneyIcon      from '@mui/icons-material/AttachMoney';
-import AddIcon              from '@mui/icons-material/Add';
 import EditIcon             from '@mui/icons-material/Edit';
 import DeleteIcon           from '@mui/icons-material/Delete';
 import { aboutMeData, categoryColors, CATEGORIES } from '../data/aboutMeData';
@@ -441,22 +439,6 @@ function SkillsContent({ skills, onSkillsChange }) {
       </Grid>
       </Box>
 
-      <Button
-        variant="outlined"
-        startIcon={<AddIcon />}
-        onClick={handleOpenAdd}
-        aria-label="새 스킬 추가"
-        sx={{
-          borderColor: 'var(--color-border)',
-          color: 'var(--color-text-secondary)',
-          borderRadius: 2,
-          fontWeight: 600,
-          textTransform: 'none',
-          '&:hover': { borderColor: 'var(--color-primary)', color: 'var(--color-primary)', bgcolor: 'var(--color-accent)' },
-        }}
-      >
-        스킬 추가
-      </Button>
 
       <SkillDialog
         open={dialogOpen}
@@ -492,108 +474,6 @@ const PersonalContent = memo(function PersonalContent({ content }) {
   );
 });
 
-/* ── 탭 콘텐츠 라우터 ─────────────────────────────────────── */
-/* ── 경력 다이얼로그 ─────────────────────────────────────── */
-function CareerDialog({ open, onClose, onSave, initialValues, skills = [] }) {
-  const isEdit = Boolean(initialValues);
-  const skillNames = skills.map((s) => s.name);
-
-  const [form, setForm] = useState({ company: '', role: '', period: '', description: '' });
-  const [selectedSkills, setSelectedSkills] = useState([]);
-  const [customTags, setCustomTags] = useState('');
-
-  useEffect(() => {
-    if (!open) return;
-    if (initialValues) {
-      const { company, role, period, description, tags = [] } = initialValues;
-      setForm({ company, role, period, description });
-      setSelectedSkills(tags.filter((t) => skillNames.includes(t)));
-      setCustomTags(tags.filter((t) => !skillNames.includes(t)).join(', '));
-    } else {
-      setForm({ company: '', role: '', period: '', description: '' });
-      setSelectedSkills([]);
-      setCustomTags('');
-    }
-  }, [open, initialValues]);
-
-  const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
-
-  const toggleSkill = (name) =>
-    setSelectedSkills((prev) =>
-      prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]
-    );
-
-  const handleSave = () => {
-    if (!form.company.trim()) return;
-    const extra = customTags.split(',').map((t) => t.trim()).filter(Boolean);
-    const tags = [...selectedSkills, ...extra.filter((t) => !selectedSkills.includes(t))];
-    onSave(isEdit ? { ...initialValues, ...form, tags } : { ...form, id: Date.now(), tags });
-    onClose();
-  };
-
-  return (
-    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth aria-labelledby="career-dialog-title">
-      <DialogTitle id="career-dialog-title" sx={{ fontWeight: 700, color: 'var(--color-text-primary)' }}>
-        {isEdit ? '경력 수정' : '경력 추가'}
-      </DialogTitle>
-      <DialogContent>
-        <Stack spacing={2.5} sx={{ pt: 1 }}>
-          <TextField label="회사명" value={form.company} onChange={set('company')} fullWidth size="small" autoFocus />
-          <TextField label="직책 / 역할" value={form.role} onChange={set('role')} fullWidth size="small" />
-          <TextField label="기간 (예: 2022.03 - 현재)" value={form.period} onChange={set('period')} fullWidth size="small" />
-          <TextField label="업무 설명" value={form.description} onChange={set('description')} fullWidth size="small" multiline rows={3} />
-
-          {/* 스킬 선택 */}
-          <Box>
-            <Typography sx={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--color-text-secondary)', mb: 1 }}>
-              스킬트리에서 선택
-            </Typography>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.7 }}>
-              {skillNames.map((name) => {
-                const active = selectedSkills.includes(name);
-                return (
-                  <Chip
-                    key={name}
-                    label={name}
-                    size="small"
-                    onClick={() => toggleSkill(name)}
-                    sx={{
-                      cursor: 'pointer',
-                      fontWeight: 600,
-                      fontSize: '0.7rem',
-                      bgcolor: active ? 'var(--color-primary)' : 'rgba(123,104,238,0.08)',
-                      color: active ? '#fff' : 'var(--color-primary)',
-                      '&:hover': { bgcolor: active ? 'var(--color-primary-dark)' : 'rgba(123,104,238,0.18)' },
-                    }}
-                  />
-                );
-              })}
-            </Box>
-          </Box>
-
-          {/* 직접 추가 */}
-          <TextField
-            label="직접 추가 (쉼표로 구분)"
-            value={customTags}
-            onChange={(e) => setCustomTags(e.target.value)}
-            fullWidth size="small"
-            placeholder="예: After Effects, Notion"
-          />
-        </Stack>
-      </DialogContent>
-      <DialogActions sx={{ px: 3, pb: 2.5 }}>
-        <Button onClick={onClose} sx={{ color: 'var(--color-text-secondary)' }}>취소</Button>
-        <Button
-          onClick={handleSave}
-          variant="contained"
-          sx={{ bgcolor: 'var(--color-button-primary)', '&:hover': { bgcolor: 'var(--color-button-hover)' }, fontWeight: 700 }}
-        >
-          {isEdit ? '저장' : '추가'}
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-}
 
 /* ── 근무 기간 계산 ───────────────────────────────────────── */
 function calcDuration(period) {
@@ -612,7 +492,7 @@ function calcDuration(period) {
     const start = parseYM(parts[0]);
     const end   = parseYM(parts[parts.length - 1]);
     if (!start || !end) return '';
-    const total = (end.y - start.y) * 12 + (end.m - start.m);
+    const total = (end.y - start.y) * 12 + (end.m - start.m) + 1;
     if (total <= 0) return '';
     const years  = Math.floor(total / 12);
     const months = total % 12;
@@ -640,10 +520,6 @@ function CareerContent({ careers: initialCareers = [], skills = [] }) {
       return initialCareers;
     }
   });
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [editTarget, setEditTarget] = useState(null);
-  const careerReady = useRef(false);
-
   // 마운트 시 Supabase에서 경력 로드
   useEffect(() => {
     supabase.from('settings').select('value')
@@ -656,31 +532,8 @@ function CareerContent({ careers: initialCareers = [], skills = [] }) {
             localStorage.setItem(CAREER_STORAGE_KEY, data.value);
           } catch {}
         }
-        careerReady.current = true;
       });
   }, []);
-
-  // 경력 변경 시 Supabase + localStorage 동기화
-  useEffect(() => {
-    if (!careerReady.current) return;
-    const json = JSON.stringify(careers);
-    localStorage.setItem(CAREER_STORAGE_KEY, json);
-    supabase.from('settings').upsert(
-      { key: CAREER_STORAGE_KEY, value: json, updated_at: new Date().toISOString() },
-      { onConflict: 'key' }
-    ).then(({ error }) => {
-      if (error) console.error('[경력] DB 저장 실패:', error.message);
-    });
-  }, [careers]);
-
-  const handleAdd  = () => { setEditTarget(null); setDialogOpen(true); };
-  const handleEdit = (item) => { setEditTarget(item); setDialogOpen(true); };
-  const handleDelete = (id) => setCareers((prev) => prev.filter((c) => c.id !== id));
-  const handleSave = (saved) => {
-    setCareers((prev) =>
-      editTarget ? prev.map((c) => c.id === saved.id ? saved : c) : [...prev, saved]
-    );
-  };
 
   const getScore = (period) => {
     try {
@@ -710,19 +563,7 @@ function CareerContent({ careers: initialCareers = [], skills = [] }) {
           </Box>
 
           {/* 내용 */}
-          <Box sx={{ pb: idx < sorted.length - 1 ? 3 : 0, flex: 1, position: 'relative', '&:hover .career-actions': { opacity: 1 } }}>
-            {/* 편집/삭제 버튼 */}
-            <Box className="career-actions" sx={{ position: 'absolute', top: 0, right: 0, display: 'flex', gap: 0.2, opacity: 0, transition: 'opacity 0.15s' }}>
-              <IconButton size="small" onClick={() => handleEdit(item)}
-                sx={{ width: 26, height: 26, color: 'var(--color-text-secondary)', '&:hover': { color: 'var(--color-primary)', bgcolor: 'var(--color-accent)' } }}>
-                <EditIcon sx={{ fontSize: '0.85rem' }} />
-              </IconButton>
-              <IconButton size="small" onClick={() => handleDelete(item.id)}
-                sx={{ width: 26, height: 26, color: 'var(--color-text-secondary)', '&:hover': { color: '#d32f2f', bgcolor: 'rgba(211,47,47,0.08)' } }}>
-                <DeleteIcon sx={{ fontSize: '0.85rem' }} />
-              </IconButton>
-            </Box>
-
+          <Box sx={{ pb: idx < sorted.length - 1 ? 3 : 0, flex: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 1, mb: 0.5 }}>
               <Typography sx={{ fontWeight: 800, fontSize: '1rem', color: 'var(--color-text-primary)' }}>
                 {item.company}
@@ -754,16 +595,7 @@ function CareerContent({ careers: initialCareers = [], skills = [] }) {
         </Box>
       ))}
 
-      <Button
-        onClick={handleAdd}
-        startIcon={<AddIcon />}
-        size="small"
-        sx={{ mt: careers.length > 0 ? 3 : 0, color: 'var(--color-primary)', fontWeight: 700, textTransform: 'none', '&:hover': { bgcolor: 'var(--color-accent)' } }}
-      >
-        경력 추가
-      </Button>
 
-      <CareerDialog open={dialogOpen} onClose={() => setDialogOpen(false)} onSave={handleSave} initialValues={editTarget} skills={skills} />
     </Box>
   );
 }
