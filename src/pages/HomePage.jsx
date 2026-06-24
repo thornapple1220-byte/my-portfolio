@@ -300,7 +300,8 @@ function HeroSection() {
           ...fadeUp(0.8),
         }}>
           <Button
-            component={Link} to="/projects" variant="contained"
+            variant="contained"
+            onClick={handleDotsClick}
             sx={{
               bgcolor: '#7B68EE', color: '#fff',
               width: { xs: '100%', sm: 'auto' },
@@ -788,6 +789,7 @@ function ProjectsSection() {
             component={Link}
             to="/projects"
             variant="outlined"
+            onClick={() => window.scrollTo(0, 0)}
             sx={{
               color: 'var(--color-primary)',
               borderColor: 'rgba(123,104,238,0.4)',
