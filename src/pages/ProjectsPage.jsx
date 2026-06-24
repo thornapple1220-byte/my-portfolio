@@ -218,7 +218,7 @@ function ProjectCard({ project }) {
               mt: 0.1,
             }}
           >
-            기여도 100%
+            {project.category === '바이브코딩' ? '기여도 70% · AI 협업' : '기여도 100%'}
           </Box>
         </Stack>
         <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ mt: 0.5 }}>
