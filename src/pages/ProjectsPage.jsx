@@ -209,7 +209,7 @@ function ProjectCard({ project }) {
       </Box>
 
       {/* 카드 내용 */}
-      <CardContent sx={{ p: 2, pb: '16px !important', display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+      <CardContent sx={{ px: 2, pt: 3, pb: '24px !important', display: 'flex', flexDirection: 'column', gap: 0.5 }}>
         <Stack direction="row" spacing={0.8} alignItems="flex-start">
           <Typography
             variant="subtitle2"
