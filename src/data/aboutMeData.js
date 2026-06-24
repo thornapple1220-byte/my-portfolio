@@ -74,6 +74,11 @@ export const aboutMeData = {
       ],
     },
     {
+      id: 'certificates',
+      title: '자격증',
+      showInHome: false,
+    },
+    {
       id: 'personal',
       title: '개인적인 이야기',
       content:

@@ -2,11 +2,11 @@ import { memo, useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
   Box, Typography, Card, Stack,
-  Avatar, Chip, IconButton,
-  Grid, Dialog, DialogTitle, DialogContent, DialogActions,
-  TextField, MenuItem, Slider, Button, Tooltip, Switch, FormControlLabel,
+  Avatar, Chip,
+  Grid, Tooltip,
 } from '@mui/material';
 import CameraAltIcon        from '@mui/icons-material/CameraAlt';
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SchoolIcon           from '@mui/icons-material/School';
 import WorkIcon             from '@mui/icons-material/Work';
 import PaletteIcon          from '@mui/icons-material/Palette';
@@ -21,8 +21,6 @@ import DescriptionIcon      from '@mui/icons-material/Description';
 import CodeIcon             from '@mui/icons-material/Code';
 import SmartToyIcon         from '@mui/icons-material/SmartToy';
 import AttachMoneyIcon      from '@mui/icons-material/AttachMoney';
-import EditIcon             from '@mui/icons-material/Edit';
-import DeleteIcon           from '@mui/icons-material/Delete';
 import { aboutMeData, categoryColors, CATEGORIES } from '../data/aboutMeData';
 import supabase from '../utils/supabase';
 
@@ -161,7 +159,7 @@ const IAmContent = memo(function IAmContent({ content }) {
 });
 
 /* ── 스킬 카드 ────────────────────────────────────────────── */
-const SkillCard = memo(function SkillCard({ skill, animated, delay, onEdit, onDelete }) {
+const SkillCard = memo(function SkillCard({ skill, animated, delay }) {
   const color = categoryColors[skill.category] ?? '#999';
 
   return (
@@ -174,37 +172,12 @@ const SkillCard = memo(function SkillCard({ skill, animated, delay, onEdit, onDe
           p: { xs: 1.5, sm: 2.5 }, borderRadius: 3, height: '100%',
           border: '1px solid var(--color-border)',
           bgcolor: 'var(--color-bg-primary)',
-          position: 'relative',
           transition: 'box-shadow 0.2s, transform 0.2s',
           cursor: 'default',
           '&:hover': { boxShadow: '0 4px 20px rgba(123,104,238,0.12)', transform: 'translateY(-2px)' },
-          '&:hover .skill-actions': { opacity: 1 },
           '&:focus-visible': { outline: '2px solid var(--color-primary)', outlineOffset: 2 },
         }}
       >
-        {/* 수정 / 삭제 버튼 (hover 시 표시) */}
-        <Box
-          className="skill-actions"
-          sx={{ position: 'absolute', top: 6, right: 6, display: 'flex', gap: 0.2, opacity: 0, transition: 'opacity 0.15s' }}
-        >
-          <IconButton
-            size="small"
-            aria-label={`${skill.name} 수정`}
-            onClick={(e) => { e.stopPropagation(); onEdit(skill); }}
-            sx={{ width: 26, height: 26, color: 'var(--color-text-secondary)', '&:hover': { color: 'var(--color-primary)', bgcolor: 'var(--color-accent)' } }}
-          >
-            <EditIcon sx={{ fontSize: '0.85rem' }} />
-          </IconButton>
-          <IconButton
-            size="small"
-            aria-label={`${skill.name} 삭제`}
-            onClick={(e) => { e.stopPropagation(); onDelete(skill.id); }}
-            sx={{ width: 26, height: 26, color: 'var(--color-text-secondary)', '&:hover': { color: '#d32f2f', bgcolor: 'rgba(211,47,47,0.08)' } }}
-          >
-            <DeleteIcon sx={{ fontSize: '0.85rem' }} />
-          </IconButton>
-        </Box>
-
         <Stack direction="row" alignItems="center" spacing={{ xs: 1, sm: 1.5 }} sx={{ mb: { xs: 1.5, sm: 2 } }}>
           <Box
             sx={{
@@ -256,97 +229,10 @@ const SkillCard = memo(function SkillCard({ skill, animated, delay, onEdit, onDe
   );
 });
 
-/* ── 스킬 다이얼로그 (추가 / 수정 공용) ──────────────────── */
-function SkillDialog({ open, onClose, onSave, initialValues }) {
-  const isEdit = Boolean(initialValues);
-  const [form, setForm] = useState({ name: '', level: 50, category: 'Design', description: '', showInHome: false });
-
-  useEffect(() => {
-    if (open) {
-      setForm(initialValues
-        ? {
-            name: initialValues.name,
-            level: initialValues.level,
-            category: initialValues.category,
-            description: initialValues.description ?? '',
-            showInHome: initialValues.showInHome,
-          }
-        : { name: '', level: 50, category: 'Design', description: '', showInHome: false }
-      );
-    }
-  }, [open, initialValues]);
-
-  const handleSave = () => {
-    if (!form.name.trim()) return;
-    onSave(isEdit ? { ...initialValues, ...form } : { ...form, id: Date.now() });
-    onClose();
-  };
-
-  const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target?.value ?? e }));
-
-  return (
-    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth aria-labelledby="skill-dialog-title">
-      <DialogTitle id="skill-dialog-title" sx={{ fontWeight: 700, color: 'var(--color-text-primary)' }}>
-        {isEdit ? '스킬 수정' : '스킬 추가'}
-      </DialogTitle>
-      <DialogContent>
-        <Stack spacing={2.5} sx={{ pt: 1 }}>
-          <TextField label="기술명" value={form.name} onChange={set('name')} fullWidth size="small" autoFocus />
-          <TextField select label="카테고리" value={form.category} onChange={set('category')} fullWidth size="small">
-            {CATEGORIES.filter((c) => c !== '전체').map((cat) => (
-              <MenuItem key={cat} value={cat}>{cat}</MenuItem>
-            ))}
-          </TextField>
-          <Box>
-            <Stack direction="row" justifyContent="space-between">
-              <Typography sx={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text-primary)' }}>숙련도</Typography>
-              <Typography sx={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-primary)' }}>{form.level}%</Typography>
-            </Stack>
-            <Slider
-              value={form.level}
-              onChange={(_, v) => setForm((f) => ({ ...f, level: v }))}
-              min={0} max={100}
-              aria-label="숙련도 슬라이더"
-              sx={{ color: 'var(--color-primary)', mt: 0.5 }}
-            />
-          </Box>
-          <TextField label="설명 (툴팁)" value={form.description} onChange={set('description')} fullWidth size="small" multiline rows={2} />
-          <FormControlLabel
-            control={
-              <Switch
-                checked={form.showInHome}
-                onChange={(e) => setForm((f) => ({ ...f, showInHome: e.target.checked }))}
-                aria-label="홈 탭에 표시"
-                sx={{
-                  '& .MuiSwitch-switchBase.Mui-checked': { color: 'var(--color-primary)' },
-                  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': { bgcolor: 'var(--color-primary)' },
-                }}
-              />
-            }
-            label={<Typography sx={{ fontSize: '0.85rem', color: 'var(--color-text-primary)' }}>홈 탭에 표시</Typography>}
-          />
-        </Stack>
-      </DialogContent>
-      <DialogActions sx={{ px: 3, pb: 2.5 }}>
-        <Button onClick={onClose} sx={{ color: 'var(--color-text-secondary)' }}>취소</Button>
-        <Button
-          onClick={handleSave}
-          variant="contained"
-          sx={{ bgcolor: 'var(--color-button-primary)', '&:hover': { bgcolor: 'var(--color-button-hover)' }, fontWeight: 700 }}
-        >
-          {isEdit ? '저장' : '추가'}
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-}
-
 /* ── 스킬 섹션 ────────────────────────────────────────────── */
-function SkillsContent({ skills, onSkillsChange }) {
+function SkillsContent({ skills }) {
   const [filter, setFilter] = useState('전체');
   const [animated, setAnimated] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [editTarget, setEditTarget] = useState(null);
 
   useEffect(() => {
     const t = setTimeout(() => setAnimated(true), 120);
@@ -364,29 +250,6 @@ function SkillsContent({ skills, onSkillsChange }) {
     (cat) => (cat !== '전체' ? categoryColors[cat] : 'var(--color-primary)'),
     []
   );
-
-  const handleOpenAdd = useCallback(() => {
-    setEditTarget(null);
-    setDialogOpen(true);
-  }, []);
-
-  const handleOpenEdit = useCallback((skill) => {
-    setEditTarget(skill);
-    setDialogOpen(true);
-  }, []);
-
-  const handleDelete = useCallback((skillId) => {
-    onSkillsChange((prev) => prev.filter((s) => s.id !== skillId));
-  }, [onSkillsChange]);
-
-  const handleSave = useCallback((savedSkill) => {
-    if (editTarget) {
-      onSkillsChange((prev) => prev.map((s) => s.id === savedSkill.id ? savedSkill : s));
-    } else {
-      onSkillsChange((prev) => [...prev, savedSkill]);
-    }
-    setFilter('전체');
-  }, [editTarget, onSkillsChange]);
 
   return (
     <Box sx={{ py: 4 }}>
@@ -424,8 +287,6 @@ function SkillsContent({ skills, onSkillsChange }) {
               skill={skill}
               animated={animated}
               delay={idx * 80}
-              onEdit={handleOpenEdit}
-              onDelete={handleDelete}
             />
           </Grid>
         ))}
@@ -438,14 +299,6 @@ function SkillsContent({ skills, onSkillsChange }) {
         )}
       </Grid>
       </Box>
-
-
-      <SkillDialog
-        open={dialogOpen}
-        onClose={() => setDialogOpen(false)}
-        onSave={handleSave}
-        initialValues={editTarget}
-      />
     </Box>
   );
 }
@@ -474,6 +327,85 @@ const PersonalContent = memo(function PersonalContent({ content }) {
   );
 });
 
+
+/* ── 자격증 컨텐츠 ───────────────────────────────────────── */
+const CERT_STORAGE_KEY = 'portfolio_certificates';
+
+function CertificatesContent() {
+  const [certs, setCerts] = useState(() => {
+    try {
+      const stored = localStorage.getItem(CERT_STORAGE_KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch { return []; }
+  });
+
+  useEffect(() => {
+    supabase.from('settings').select('value')
+      .eq('key', CERT_STORAGE_KEY).maybeSingle()
+      .then(({ data }) => {
+        if (data?.value) {
+          try {
+            const parsed = JSON.parse(data.value);
+            setCerts(parsed);
+            localStorage.setItem(CERT_STORAGE_KEY, data.value);
+          } catch {}
+        }
+      });
+  }, []);
+
+  if (certs.length === 0) {
+    return (
+      <Box sx={{ py: 6, textAlign: 'center', color: 'var(--color-text-muted)' }}>
+        <WorkspacePremiumIcon sx={{ fontSize: '3rem', opacity: 0.3, mb: 1 }} />
+        <Typography sx={{ fontSize: '0.95rem' }}>등록된 자격증이 없습니다.</Typography>
+      </Box>
+    );
+  }
+
+  return (
+    <Box sx={{ py: 2 }}>
+      <Stack spacing={2}>
+        {certs.map((cert) => (
+          <Box
+            key={cert.id}
+            sx={{
+              display: 'flex', alignItems: 'center', gap: 2,
+              p: 2, borderRadius: 2,
+              border: '1px solid var(--color-border)',
+              bgcolor: 'var(--color-bg-soft)',
+            }}
+          >
+            <Box sx={{
+              width: 40, height: 40, borderRadius: 2, flexShrink: 0,
+              bgcolor: 'rgba(123,104,238,0.1)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: 'var(--color-primary)',
+            }}>
+              <WorkspacePremiumIcon fontSize="small" />
+            </Box>
+            <Box sx={{ flex: 1, minWidth: 0 }}>
+              <Typography sx={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text-primary)' }}>
+                {cert.name}
+              </Typography>
+              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                {cert.issuer && (
+                  <Typography sx={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>
+                    {cert.issuer}
+                  </Typography>
+                )}
+                {cert.date && (
+                  <Typography sx={{ fontSize: '0.8rem', color: 'var(--color-primary)', fontWeight: 600 }}>
+                    {cert.date}
+                  </Typography>
+                )}
+              </Stack>
+            </Box>
+          </Box>
+        ))}
+      </Stack>
+    </Box>
+  );
+}
 
 /* ── 근무 기간 계산 ───────────────────────────────────────── */
 function calcDuration(period) {
@@ -600,10 +532,11 @@ function CareerContent({ careers: initialCareers = [], skills = [] }) {
   );
 }
 
-function SectionContent({ section, skills, onSkillsChange }) {
-  if (section.id === 'i-am')   return <IAmContent content={section.content} />;
-  if (section.id === 'skills') return <SkillsContent skills={skills} onSkillsChange={onSkillsChange} />;
-  if (section.id === 'career') return <CareerContent careers={section.careers} skills={skills} />;
+function SectionContent({ section, skills }) {
+  if (section.id === 'i-am')          return <IAmContent content={section.content} />;
+  if (section.id === 'skills')        return <SkillsContent skills={skills} />;
+  if (section.id === 'certificates')  return <CertificatesContent />;
+  if (section.id === 'career')        return <CareerContent careers={section.careers} skills={skills} />;
   return <PersonalContent content={section.content} />;
 }
 
