@@ -749,7 +749,7 @@ function ProjectsSection() {
   }, []);
 
   return (
-    <Box id="projects-section" sx={{ ...sectionBase, background: 'radial-gradient(circle, rgba(123,104,238,0.1) 1.5px, transparent 1.5px), linear-gradient(160deg, #EDE9FF 0%, #E4DFFF 50%, #EDE9FF 100%)', backgroundSize: '30px 30px, auto' }}>
+    <Box id="projects-section" sx={{ ...sectionBase, background: 'radial-gradient(circle, rgba(123,104,238,0.07) 1.5px, transparent 1.5px), linear-gradient(160deg, #F5F3FF 0%, #EDE9FF 50%, #F5F3FF 100%)', backgroundSize: '30px 30px, auto' }}>
       <Box sx={{ px: { xs: 3, md: 6 } }}>
         <Box sx={{ textAlign: 'center', mb: 1 }}>
           <Box sx={{ width: 40, height: 4, bgcolor: '#7B68EE', mx: 'auto', mb: 1.5, borderRadius: 1 }} />

@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import {
   Box, Typography, Grid, Card, CardContent,
-  Button, Chip, Stack, CircularProgress, Alert,
+  Chip, Stack, CircularProgress, Alert,
 } from '@mui/material';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import GitHubIcon from '@mui/icons-material/GitHub';
 import supabase from '../utils/supabase';
 
 const THUM_BASE = 'https://image.thum.io/get/width/600/crop/800';
@@ -129,7 +127,7 @@ function ProjectCard({ project }) {
             className="hover-overlay"
             sx={{
               position: 'absolute', inset: 0,
-              bgcolor: 'rgba(91,79,207,0.88)',
+              bgcolor: 'rgba(91,79,207,0.75)',
               display: 'flex', flexDirection: 'column',
               alignItems: 'center', justifyContent: 'center',
               gap: 1.5,
@@ -138,55 +136,55 @@ function ProjectCard({ project }) {
             }}
           >
             {isDetailPage && thumbnailSrc && (
-              <Button
-                variant="contained"
-                startIcon={<OpenInNewIcon />}
+              <Box
+                component="a"
                 href={thumbnailSrc}
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{
-                  bgcolor: '#fff', color: '#5B4FCF',
-                  fontWeight: 700, fontSize: '0.82rem',
-                  px: 3, borderRadius: 2, width: 152,
-                  '&:hover': { bgcolor: 'var(--color-accent)' },
+                  fontSize: '0.75rem', fontWeight: 700, color: '#fff',
+                  border: '1px solid rgba(255,255,255,0.8)',
+                  borderRadius: 1.5, px: 1.8, py: 0.6, letterSpacing: '0.5px',
+                  textDecoration: 'none',
+                  '&:hover': { bgcolor: 'rgba(255,255,255,0.15)' },
                 }}
               >
-                전체 보기
-              </Button>
+                전체 보기 →
+              </Box>
             )}
             {!isDetailPage && project.demo_url && (
-              <Button
-                variant="contained"
-                startIcon={<OpenInNewIcon />}
+              <Box
+                component="a"
                 href={project.demo_url}
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{
-                  bgcolor: '#fff', color: '#5B4FCF',
-                  fontWeight: 700, fontSize: '0.82rem',
-                  px: 3, borderRadius: 2, width: 152,
-                  '&:hover': { bgcolor: 'var(--color-accent)' },
+                  fontSize: '0.75rem', fontWeight: 700, color: '#fff',
+                  border: '1px solid rgba(255,255,255,0.8)',
+                  borderRadius: 1.5, px: 1.8, py: 0.6, letterSpacing: '0.5px',
+                  textDecoration: 'none',
+                  '&:hover': { bgcolor: 'rgba(255,255,255,0.15)' },
                 }}
               >
-                바로가기
-              </Button>
+                바로가기 →
+              </Box>
             )}
             {project.github_url && (
-              <Button
-                variant="outlined"
-                startIcon={<GitHubIcon />}
+              <Box
+                component="a"
                 href={project.github_url}
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{
-                  borderColor: 'rgba(255,255,255,0.7)', color: '#fff',
-                  fontWeight: 700, fontSize: '0.82rem',
-                  px: 3, borderRadius: 2, width: 152,
-                  '&:hover': { bgcolor: 'rgba(255,255,255,0.15)', borderColor: '#fff' },
+                  fontSize: '0.75rem', fontWeight: 700, color: '#fff',
+                  border: '1px solid rgba(255,255,255,0.8)',
+                  borderRadius: 1.5, px: 1.8, py: 0.6, letterSpacing: '0.5px',
+                  textDecoration: 'none',
+                  '&:hover': { bgcolor: 'rgba(255,255,255,0.15)' },
                 }}
               >
-                GitHub
-              </Button>
+                GitHub →
+              </Box>
             )}
           </Box>
         )}
