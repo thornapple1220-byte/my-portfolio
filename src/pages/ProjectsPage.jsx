@@ -195,12 +195,32 @@ function ProjectCard({ project }) {
         <Typography variant="caption" sx={{ color: 'var(--color-text-muted)' }}>
           {formattedDate}
         </Typography>
-        <Typography
-          variant="subtitle2"
-          sx={{ fontWeight: 700, color: 'var(--color-text-primary)', lineHeight: 1.3 }}
-        >
-          {project.title}
-        </Typography>
+        <Stack direction="row" spacing={0.8} alignItems="flex-start">
+          <Typography
+            variant="subtitle2"
+            sx={{ fontWeight: 700, color: 'var(--color-text-primary)', lineHeight: 1.3, flex: 1 }}
+          >
+            {project.title}
+          </Typography>
+          <Box
+            sx={{
+              flexShrink: 0,
+              fontSize: '0.6rem',
+              fontWeight: 700,
+              color: 'var(--color-primary)',
+              bgcolor: 'var(--color-accent)',
+              border: '1px solid var(--color-primary)',
+              borderRadius: 1,
+              px: 0.7,
+              py: 0.2,
+              lineHeight: 1.4,
+              whiteSpace: 'nowrap',
+              mt: 0.1,
+            }}
+          >
+            기여도 100%
+          </Box>
+        </Stack>
         <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ mt: 0.5 }}>
           {project.tech_stack?.map((tech) => (
             <Chip
