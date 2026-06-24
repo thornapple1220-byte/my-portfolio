@@ -7,6 +7,24 @@ import supabase from '../utils/supabase';
 
 const THUM_BASE = 'https://image.thum.io/get/width/600/crop/800';
 
+const TAG_COLORS = {
+  'React':             '#26C6A6',
+  'CSS3':              '#26C6A6',
+  'HTML/CSS':          '#26C6A6',
+  'Supabase':          '#FF5F7E',
+  'MUI':               '#FF5F7E',
+  'PostgreSQL':        '#FF9F0A',
+  'Unsplash API':      '#FF9F0A',
+  'Photoshop':         '#7B68EE',
+  '상세페이지 디자인': '#7B68EE',
+};
+
+function getTagStyle(tag) {
+  const color = TAG_COLORS[tag];
+  if (!color) return { bgcolor: 'var(--color-accent)', color: 'var(--color-primary)' };
+  return { bgcolor: `${color}20`, color, border: `1px solid ${color}55` };
+}
+
 function getThumbnailUrl(project) {
   if (project.thumbnail_url) return project.thumbnail_url;
   if (project.detail_url) return `${THUM_BASE}/${project.detail_url}`;
@@ -228,8 +246,7 @@ function ProjectCard({ project }) {
               label={tech}
               size="small"
               sx={{
-                bgcolor: 'var(--color-accent)',
-                color: 'var(--color-primary)',
+                ...getTagStyle(tech),
                 fontWeight: 600,
                 fontSize: '0.65rem',
                 height: 20,
