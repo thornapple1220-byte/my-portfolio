@@ -21,6 +21,7 @@ import AutoAwesomeIcon      from '@mui/icons-material/AutoAwesome';
 import DescriptionIcon      from '@mui/icons-material/Description';
 import CodeIcon             from '@mui/icons-material/Code';
 import SmartToyIcon         from '@mui/icons-material/SmartToy';
+import AttachMoneyIcon      from '@mui/icons-material/AttachMoney';
 import AddIcon              from '@mui/icons-material/Add';
 import EditIcon             from '@mui/icons-material/Edit';
 import DeleteIcon           from '@mui/icons-material/Delete';
@@ -37,6 +38,7 @@ const skillIconMap = {
   '문서작성':            <DescriptionIcon />,
   'HTML/CSS':            <CodeIcon />,
   'Claude 바이브코딩':   <SmartToyIcon />,
+  '회계':               <AttachMoneyIcon />,
 };
 const getSkillIcon = (name) => skillIconMap[name] ?? <CodeIcon />;
 
