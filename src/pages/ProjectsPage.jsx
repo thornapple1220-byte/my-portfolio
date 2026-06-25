@@ -210,7 +210,7 @@ function ProjectCard({ project }) {
 
       {/* 카드 내용 */}
       <CardContent sx={{ px: 2, pt: 3, pb: '24px !important', display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-        <Stack direction="row" spacing={0.8} alignItems="flex-start">
+        <Stack direction="row" spacing={0.8} alignItems="flex-start" sx={{ width: '100%', overflow: 'hidden' }}>
           <Typography
             variant="subtitle2"
             sx={{ fontWeight: 700, color: 'var(--color-text-primary)', lineHeight: 1.3, flex: 1, minWidth: 0 }}
@@ -220,13 +220,13 @@ function ProjectCard({ project }) {
           <Box
             sx={{
               flexShrink: 0,
-              fontSize: { xs: '0.6rem', sm: '0.52rem', lg: '0.6rem' },
+              fontSize: { xs: '0.6rem', sm: '0.5rem' },
               fontWeight: 700,
               color: 'var(--color-primary)',
               bgcolor: 'var(--color-accent)',
               border: '1px solid var(--color-primary)',
               borderRadius: 1,
-              px: { xs: 0.7, sm: 0.4, lg: 0.7 },
+              px: { xs: 0.7, sm: 0.35 },
               py: 0.2,
               lineHeight: 1.4,
               whiteSpace: 'nowrap',
