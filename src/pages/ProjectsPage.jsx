@@ -210,30 +210,32 @@ function ProjectCard({ project }) {
 
       {/* 카드 내용 */}
       <CardContent sx={{ px: 2, pt: 3, pb: '24px !important', display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-        <Typography
-          variant="subtitle2"
-          sx={{ fontWeight: 700, color: 'var(--color-text-primary)', lineHeight: 1.3 }}
-        >
-          {project.title}
-        </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Stack direction="row" spacing={0.8} alignItems="flex-start">
+          <Typography
+            variant="subtitle2"
+            sx={{ fontWeight: 700, color: 'var(--color-text-primary)', lineHeight: 1.3, flex: 1, minWidth: 0 }}
+          >
+            {project.title}
+          </Typography>
           <Box
             sx={{
-              fontSize: '0.6rem',
+              flexShrink: 0,
+              fontSize: { xs: '0.6rem', sm: '0.52rem', lg: '0.6rem' },
               fontWeight: 700,
               color: 'var(--color-primary)',
               bgcolor: 'var(--color-accent)',
               border: '1px solid var(--color-primary)',
               borderRadius: 1,
-              px: 0.7,
+              px: { xs: 0.7, sm: 0.4, lg: 0.7 },
               py: 0.2,
               lineHeight: 1.4,
               whiteSpace: 'nowrap',
+              mt: 0.1,
             }}
           >
             {project.category === '바이브코딩' ? '기여도 70% · AI 협업' : '기여도 100%'}
           </Box>
-        </Box>
+        </Stack>
         <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ mt: 0.5 }}>
           {project.tech_stack?.map((tech) => (
             <Chip
