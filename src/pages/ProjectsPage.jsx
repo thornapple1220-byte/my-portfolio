@@ -210,16 +210,15 @@ function ProjectCard({ project }) {
 
       {/* 카드 내용 */}
       <CardContent sx={{ px: 2, pt: 3, pb: '24px !important', display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-        <Stack direction="row" spacing={0.8} alignItems="flex-start">
-          <Typography
-            variant="subtitle2"
-            sx={{ fontWeight: 700, color: 'var(--color-text-primary)', lineHeight: 1.3, flex: 1 }}
-          >
-            {project.title}
-          </Typography>
+        <Typography
+          variant="subtitle2"
+          sx={{ fontWeight: 700, color: 'var(--color-text-primary)', lineHeight: 1.3 }}
+        >
+          {project.title}
+        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Box
             sx={{
-              flexShrink: 0,
               fontSize: '0.6rem',
               fontWeight: 700,
               color: 'var(--color-primary)',
@@ -229,15 +228,12 @@ function ProjectCard({ project }) {
               px: 0.7,
               py: 0.2,
               lineHeight: 1.4,
-              whiteSpace: 'normal',
-              textAlign: 'center',
-              maxWidth: '5rem',
-              mt: 0.1,
+              whiteSpace: 'nowrap',
             }}
           >
             {project.category === '바이브코딩' ? '기여도 70% · AI 협업' : '기여도 100%'}
           </Box>
-        </Stack>
+        </Box>
         <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ mt: 0.5 }}>
           {project.tech_stack?.map((tech) => (
             <Chip
