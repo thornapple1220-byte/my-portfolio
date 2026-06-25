@@ -229,7 +229,9 @@ function ProjectCard({ project }) {
               px: 0.7,
               py: 0.2,
               lineHeight: 1.4,
-              whiteSpace: 'nowrap',
+              whiteSpace: 'normal',
+              textAlign: 'center',
+              maxWidth: '5rem',
               mt: 0.1,
             }}
           >
