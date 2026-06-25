@@ -359,7 +359,7 @@ function ProjectsPage() {
               </Grid>
             ) : (
               filtered.map((project) => (
-                <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={project.id}>
+                <Grid size={{ xs: 12, sm: 6, md: 4, xl: 3 }} key={project.id}>
                   <ProjectCard project={project} />
                 </Grid>
               ))
