@@ -54,18 +54,18 @@ function TypingText({ texts }) {
     const tick = () => {
       if (!deleting && charIdx < current.length) {
         setCharIdx(i => i + 1);
-        timerRef.current = setTimeout(tick, 100);
+        timerRef.current = setTimeout(tick, 160);
       } else if (!deleting && charIdx === current.length) {
-        timerRef.current = setTimeout(() => setDeleting(true), 1800);
+        timerRef.current = setTimeout(() => setDeleting(true), 2200);
       } else if (deleting && charIdx > 0) {
         setCharIdx(i => i - 1);
-        timerRef.current = setTimeout(tick, 55);
+        timerRef.current = setTimeout(tick, 80);
       } else {
         setDeleting(false);
         setTextIdx(i => (i + 1) % texts.length);
       }
     };
-    timerRef.current = setTimeout(tick, deleting ? 55 : 100);
+    timerRef.current = setTimeout(tick, deleting ? 80 : 160);
     return () => clearTimeout(timerRef.current);
   }, [charIdx, deleting, textIdx, texts]);
 
@@ -107,8 +107,8 @@ function HeroSection() {
   return (
     <Box sx={{
       position: 'relative', overflow: 'hidden',
-      minHeight: '100vh', display: 'flex', alignItems: 'center',
-      background: 'radial-gradient(circle, rgba(123,104,238,0.1) 1.5px, transparent 1.5px), linear-gradient(175deg, #C9C0FF 0%, #DDD8FF 22%, #EDE9FF 48%, #F8F6FF 72%, #FFFFFF 100%)',
+      height: { xs: 'calc(100vh - 64px)', md: 'calc(100vh - 80px)' }, display: 'flex', alignItems: 'center',
+      background: 'radial-gradient(circle, rgba(123,104,238,0.1) 1.5px, transparent 1.5px), linear-gradient(175deg, #C9C0FF 0%, #DDD8FF 22%, #EDE9FF 48%, #F8F6FF 72%, #F5F3FF 100%)',
       backgroundSize: '30px 30px, auto',
     }}>
       {/* 페이지 전환 오버레이 */}
@@ -131,12 +131,6 @@ function HeroSection() {
         borderRadius: '60% 40% 70% 30% / 50% 60% 40% 50%',
         background: 'radial-gradient(circle at 40% 40%, rgba(123,104,238,0.5) 0%, rgba(123,104,238,0.22) 50%, transparent 72%)',
         filter: 'blur(2px)',
-        animation: 'morphBlob1 12s ease-in-out infinite',
-        '@keyframes morphBlob1': {
-          '0%,100%': { borderRadius: '60% 40% 70% 30% / 50% 60% 40% 50%', transform: 'translateY(0)' },
-          '33%':     { borderRadius: '40% 60% 30% 70% / 60% 40% 60% 40%', transform: 'translateY(-18px)' },
-          '66%':     { borderRadius: '70% 30% 50% 50% / 30% 70% 30% 70%', transform: 'translateY(10px)' },
-        },
       }} />
 
       {/* 소프트 블롭 - 좌하단 */}
@@ -146,14 +140,10 @@ function HeroSection() {
         borderRadius: '40% 60% 30% 70% / 60% 30% 70% 40%',
         background: 'radial-gradient(circle at 55% 50%, rgba(155,135,245,0.45) 0%, rgba(123,104,238,0.2) 50%, transparent 72%)',
         filter: 'blur(2px)',
-        animation: 'morphBlob2 15s ease-in-out infinite',
-        '@keyframes morphBlob2': {
-          '0%,100%': { borderRadius: '40% 60% 30% 70% / 60% 30% 70% 40%', transform: 'translateY(0)' },
-          '50%':     { borderRadius: '60% 40% 50% 50% / 40% 60% 40% 60%', transform: 'translateY(20px)' },
-        },
       }} />
 
-      {/* 회전 링 - 좌측 */}
+
+      {/* 링 - 좌측 */}
       <Box sx={{
         display: { xs: 'none', md: 'block' },
         position: 'absolute', top: '22%', left: '4%',
@@ -162,8 +152,7 @@ function HeroSection() {
         border: '1.5px solid transparent',
         borderTop: '1.5px solid rgba(123,104,238,0.55)',
         borderRight: '1.5px solid rgba(123,104,238,0.28)',
-        animation: 'spinBrush 10s linear infinite',
-        '@keyframes spinBrush': { '100%': { transform: 'rotate(360deg)' } },
+        transform: 'rotate(-40deg)',
       }} />
 
       {/* 중앙 글로우 */}
@@ -229,8 +218,7 @@ function HeroSection() {
       {/* ── 메인 콘텐츠 ── */}
       <Box sx={{
         position: 'relative', zIndex: 1, textAlign: 'center',
-        pt: { xs: 12, sm: 14, md: 16 },
-        pb: { xs: 10, sm: 12, md: 14 },
+        py: { xs: 12, sm: 14, md: 16 },
         px: { xs: 3, md: 6 },
         width: '100%',
       }}>
@@ -349,32 +337,35 @@ function HeroSection() {
           </Button>
         </Box>
 
-        {/* ── 스크롤 유도 ── */}
-        <Box sx={{
-          mt: { xs: 6, sm: 8 },
-          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5,
-          opacity: visible ? 1 : 0, transition: 'opacity 0.8s ease 1.3s',
-          cursor: 'pointer',
-          '&:hover .arrow-icon': { transform: 'translateY(4px)' },
-        }}
-          onClick={() => window.scrollBy({ top: window.innerHeight * 0.85, behavior: 'smooth' })}
-        >
-          <Typography sx={{
-            fontSize: '0.6rem', color: 'rgba(0,0,0,0.25)',
-            letterSpacing: '3px', textTransform: 'uppercase',
-          }}>
-            Scroll
-          </Typography>
-          <KeyboardArrowDownIcon className="arrow-icon" sx={{
-            color: 'rgba(123,104,238,0.4)', fontSize: '1.8rem',
-            transition: 'transform 0.3s ease',
-            animation: 'bounce 2s ease-in-out infinite',
-            '@keyframes bounce': {
-              '0%,100%': { transform: 'translateY(0)' },
-              '50%': { transform: 'translateY(6px)' },
-            },
-          }} />
-        </Box>
+      </Box>
+
+      {/* ── 스크롤 유도 ── */}
+      <Box sx={{
+        position: 'absolute', bottom: { xs: 24, sm: 32 }, left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: 2,
+        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5,
+        opacity: visible ? 1 : 0, transition: 'opacity 0.8s ease 1.3s',
+        cursor: 'pointer',
+        '&:hover .arrow-icon': { transform: 'translateY(4px)' },
+      }}
+        onClick={() => window.scrollBy({ top: window.innerHeight * 0.85, behavior: 'smooth' })}
+      >
+        <Typography sx={{
+          fontSize: '0.6rem', color: 'rgba(0,0,0,0.25)',
+          letterSpacing: '3px', textTransform: 'uppercase',
+        }}>
+          Scroll
+        </Typography>
+        <KeyboardArrowDownIcon className="arrow-icon" sx={{
+          color: 'rgba(123,104,238,0.4)', fontSize: '1.8rem',
+          transition: 'transform 0.3s ease',
+          animation: 'bounce 2s ease-in-out infinite',
+          '@keyframes bounce': {
+            '0%,100%': { transform: 'translateY(0)' },
+            '50%': { transform: 'translateY(6px)' },
+          },
+        }} />
       </Box>
     </Box>
   );
@@ -488,7 +479,7 @@ function AboutSection({ photo }) {
                 >
                   I AM
                 </Typography>
-                <Box sx={{ width: 44, height: 4, bgcolor: 'var(--color-primary)', mt: 1, mb: 3, borderRadius: 2 }} />
+                <Box sx={{ mb: 3 }} />
 
                 <Stack spacing={2}>
                   {iAmSection.content.map((phrase, idx) => (
@@ -551,7 +542,6 @@ const SkillSection = memo(function SkillSection({ skills }) {
     <Box sx={{ width: '100%', pt: { xs: 4, md: 6 }, pb: { xs: 8, md: 12 } }}>
       <Container maxWidth="md">
         <Box sx={{ textAlign: 'center', mb: 1 }}>
-          <Box sx={{ width: 40, height: 4, bgcolor: '#7B68EE', mx: 'auto', mb: 1.5, borderRadius: 1 }} />
           <Typography variant="h2" sx={{ color: 'var(--color-text-primary)', fontWeight: 800 }}>
             주요 스킬
           </Typography>
@@ -753,7 +743,6 @@ function ProjectsSection() {
     <Box id="projects-section" sx={{ ...sectionBase, background: 'radial-gradient(circle, rgba(123,104,238,0.07) 1.5px, transparent 1.5px), linear-gradient(160deg, #F5F3FF 0%, #EDE9FF 50%, #F5F3FF 100%)', backgroundSize: '30px 30px, auto' }}>
       <Box sx={{ px: { xs: 3, md: 6 } }}>
         <Box sx={{ textAlign: 'center', mb: 1 }}>
-          <Box sx={{ width: 40, height: 4, bgcolor: '#7B68EE', mx: 'auto', mb: 1.5, borderRadius: 1 }} />
           <Typography variant="h2" sx={{ color: 'var(--color-text-primary)', fontWeight: 800 }}>
             프로젝트
           </Typography>
@@ -814,7 +803,6 @@ function ContactSection() {
       <Container maxWidth="md">
         {/* 섹션 타이틀 */}
         <Box sx={{ textAlign: 'center', mb: 6 }}>
-          <Box sx={{ width: 40, height: 4, bgcolor: '#7B68EE', mx: 'auto', mb: 1.5, borderRadius: 1 }} />
           <Typography variant="h2" sx={{ color: 'var(--color-text-primary)' }}>
             연락하기
           </Typography>
@@ -834,7 +822,6 @@ function HomePage({ photo, skills }) {
   return (
     <Box>
       <HeroSection />
-      <Divider sx={{ borderColor: 'var(--color-border)' }} />
       <Box>
         <AboutSection photo={photo} />
         <SkillSection skills={skills} />

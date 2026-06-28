@@ -43,7 +43,7 @@ function Header() {
           transform: { xs: 'translateX(-50%)', md: 'none' },
           fontSize: '1.2rem',
           fontWeight: 700,
-          color: 'var(--color-primary)',
+          color: '#111111',
           textDecoration: 'none',
           letterSpacing: '-0.5px',
           zIndex: 1,
@@ -67,13 +67,11 @@ function Header() {
                 py: 1,
                 fontSize: '0.95rem',
                 fontWeight: isActive ? 700 : 400,
-                color: isActive ? 'var(--color-primary)' : 'var(--color-text-secondary)',
+                color: isActive ? '#111111' : 'var(--color-text-secondary)',
                 textDecoration: 'none',
-                borderBottom: isActive
-                  ? '2px solid var(--color-primary)'
-                  : '2px solid transparent',
+                borderBottom: 'none',
                 transition: 'all 0.2s',
-                '&:hover': { color: 'var(--color-primary)' },
+                '&:hover': { color: '#111111' },
               }}
             >
               {label}

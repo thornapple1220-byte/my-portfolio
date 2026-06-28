@@ -139,7 +139,6 @@ const IAmContent = memo(function IAmContent({ content }) {
         <Typography sx={{ fontSize: { xs: '4rem', md: '6rem' }, fontWeight: 900, color: 'var(--color-accent)', lineHeight: 1, letterSpacing: '-2px', userSelect: 'none' }}>
           I AM
         </Typography>
-        <Box sx={{ width: 56, height: 4, bgcolor: 'var(--color-primary)', mt: 1.5, borderRadius: 2 }} />
       </Box>
       <Stack spacing={3}>
         {content.map((phrase, idx) => (
@@ -603,18 +602,6 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
           },
         }} />
 
-        {/* 회전 링 - 좌상단 */}
-        <Box sx={{
-          display: { xs: 'none', md: 'block' },
-          position: 'absolute', top: '12%', left: '3%',
-          width: 90, height: 90,
-          borderRadius: '50%',
-          border: '1.5px solid transparent',
-          borderTop: '1.5px solid rgba(123,104,238,0.3)',
-          borderRight: '1.5px solid rgba(123,104,238,0.15)',
-          animation: 'aboutSpinBrush 10s linear infinite',
-          '@keyframes aboutSpinBrush': { '100%': { transform: 'rotate(360deg)' } },
-        }} />
 
 
         {/* 컨텐츠 */}
