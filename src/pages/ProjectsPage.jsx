@@ -22,6 +22,7 @@ const TAG_COLORS = {
   '랜딩페이지':        '#9E9E9E',
   '상세페이지':        '#9E9E9E',
   'UI 디자인':         '#9E9E9E',
+  '모바일 디자인':     '#9E9E9E',
 };
 
 function getTagStyle(tag, category) {
