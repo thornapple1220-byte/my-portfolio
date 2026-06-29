@@ -19,7 +19,8 @@ const TAG_COLORS = {
   '상세페이지 디자인': '#9E9E9E',
 };
 
-function getTagStyle(tag) {
+function getTagStyle(tag, category) {
+  if (category === '바이브코딩') return { bgcolor: 'rgba(92,107,192,0.1)', color: '#5C6BC0', border: '1px solid rgba(92,107,192,0.3)' };
   const color = TAG_COLORS[tag];
   if (!color) return { bgcolor: 'var(--color-accent)', color: 'var(--color-primary)' };
   return { bgcolor: `${color}20`, color, border: `1px solid ${color}55` };
@@ -252,7 +253,7 @@ function ProjectCard({ project }) {
               label={tech}
               size="small"
               sx={{
-                ...getTagStyle(tech),
+                ...getTagStyle(tech, project.category),
                 fontWeight: 600,
                 fontSize: '0.65rem',
                 height: 20,
