@@ -16,7 +16,7 @@ const TAG_COLORS = {
   'PostgreSQL':        '#FF9F0A',
   'Unsplash API':      '#FF9F0A',
   'Photoshop':         '#7B68EE',
-  '상세페이지 디자인': '#7B68EE',
+  '상세페이지 디자인': '#9E9E9E',
 };
 
 function getTagStyle(tag) {
@@ -140,6 +140,15 @@ function ProjectCard({ project }) {
       <Box sx={{ position: 'relative' }}>
         <ThumbnailImage src={thumbnailSrc} alt={project.title} />
 
+        {/* 하단 페이드 오버레이 */}
+        <Box sx={{
+          position: 'absolute', bottom: 0, left: 0, right: 0,
+          height: '35%',
+          background: 'linear-gradient(to bottom, transparent, #ffffff)',
+          zIndex: 1,
+          pointerEvents: 'none',
+        }} />
+
         {hasLinks && (
           <Box
             className="hover-overlay"
@@ -156,13 +165,13 @@ function ProjectCard({ project }) {
             {isDetailPage && thumbnailSrc && (
               <Box
                 component="a"
-                href={thumbnailSrc}
+                href={`/my-portfolio/image-viewer.html?src=${encodeURIComponent(thumbnailSrc)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{
-                  fontSize: '0.75rem', fontWeight: 700, color: '#fff',
+                  fontSize: '0.95rem', fontWeight: 700, color: '#fff',
                   border: '1px solid rgba(255,255,255,0.8)',
-                  borderRadius: 1.5, px: 1.8, py: 0.6, letterSpacing: '0.5px',
+                  borderRadius: 1.5, px: 3, py: 1.2, letterSpacing: '0.5px',
                   textDecoration: 'none',
                   '&:hover': { bgcolor: 'rgba(255,255,255,0.15)' },
                 }}
@@ -177,9 +186,9 @@ function ProjectCard({ project }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{
-                  fontSize: '0.75rem', fontWeight: 700, color: '#fff',
+                  fontSize: '0.95rem', fontWeight: 700, color: '#fff',
                   border: '1px solid rgba(255,255,255,0.8)',
-                  borderRadius: 1.5, px: 1.8, py: 0.6, letterSpacing: '0.5px',
+                  borderRadius: 1.5, px: 3, py: 1.2, letterSpacing: '0.5px',
                   textDecoration: 'none',
                   '&:hover': { bgcolor: 'rgba(255,255,255,0.15)' },
                 }}
@@ -194,9 +203,9 @@ function ProjectCard({ project }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 sx={{
-                  fontSize: '0.75rem', fontWeight: 700, color: '#fff',
+                  fontSize: '0.95rem', fontWeight: 700, color: '#fff',
                   border: '1px solid rgba(255,255,255,0.8)',
-                  borderRadius: 1.5, px: 1.8, py: 0.6, letterSpacing: '0.5px',
+                  borderRadius: 1.5, px: 3, py: 1.2, letterSpacing: '0.5px',
                   textDecoration: 'none',
                   '&:hover': { bgcolor: 'rgba(255,255,255,0.15)' },
                 }}
@@ -209,7 +218,7 @@ function ProjectCard({ project }) {
       </Box>
 
       {/* 카드 내용 */}
-      <CardContent sx={{ px: 2, pt: 3, pb: '24px !important', display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+      <CardContent sx={{ px: 2, pt: 4, pb: '32px !important', display: 'flex', flexDirection: 'column', gap: 0.5 }}>
         <Stack direction="row" spacing={0.8} alignItems="flex-start" sx={{ width: '100%', overflow: 'hidden' }}>
           <Typography
             variant="subtitle2"
@@ -220,11 +229,11 @@ function ProjectCard({ project }) {
           <Box
             sx={{
               flexShrink: 0,
-              fontSize: { xs: '0.6rem', sm: '0.5rem' },
+              fontSize: { xs: '0.6rem', sm: '0.72rem' },
               fontWeight: 700,
-              color: 'var(--color-primary)',
-              bgcolor: 'var(--color-accent)',
-              border: '1px solid var(--color-primary)',
+              color: '#9E9E9E',
+              bgcolor: 'rgba(158,158,158,0.12)',
+              border: '1px solid rgba(158,158,158,0.4)',
               borderRadius: 1,
               px: { xs: 0.7, sm: 0.35 },
               py: 0.2,

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>이미지 전체 보기</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #111; display: flex; justify-content: center; }
+    img { width: auto; display: block; }
+  </style>
+</head>
+<body>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const src = params.get('src');
+    if (src) {
+      const img = document.createElement('img');
+      img.src = decodeURIComponent(src);
+      document.body.appendChild(img);
+    }
+  </script>
+</body>
+</html>

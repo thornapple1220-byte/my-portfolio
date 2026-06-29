@@ -95,7 +95,7 @@ function HeroSection() {
 
   const handleDotsClick = () => {
     setTransitioning(true);
-    setTimeout(() => navigate('/projects'), 650);
+    setTimeout(() => navigate('/projects'), 1100);
   };
 
   const fadeUp = (delay = 0) => ({
@@ -116,7 +116,7 @@ function HeroSection() {
         <Box sx={{
           position: 'fixed', inset: 0, zIndex: 9999,
           background: 'linear-gradient(135deg, #7B68EE, #5B4FCF)',
-          animation: 'rippleExpand 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards',
+          animation: 'rippleExpand 1.1s cubic-bezier(0.4, 0, 0.2, 1) forwards',
           '@keyframes rippleExpand': {
             '0%':   { clipPath: 'circle(0% at 88% 82%)' },
             '100%': { clipPath: 'circle(160% at 88% 82%)' },
@@ -430,7 +430,7 @@ function AboutSection({ photo }) {
           <Box sx={{ flex: 1 }}>
             {/* 직함 + 카드 */}
             <Box sx={{ mb: 4 }}>
-              <Typography sx={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-primary)', mb: 2 }}>
+              <Typography sx={{ fontSize: '1rem', fontWeight: 600, color: '#999999', mb: 2 }}>
                 Web Designer
               </Typography>
               <Grid container spacing={1.5}>
@@ -471,7 +471,7 @@ function AboutSection({ photo }) {
                   sx={{
                     fontSize: { xs: '2.8rem', md: '3.8rem' },
                     fontWeight: 900,
-                    color: 'var(--color-accent)',
+                    color: '#5B4FCF',
                     lineHeight: 1,
                     letterSpacing: '-1.5px',
                     userSelect: 'none',
@@ -539,7 +539,7 @@ const SkillSection = memo(function SkillSection({ skills }) {
   }, []);
 
   return (
-    <Box sx={{ width: '100%', pt: { xs: 4, md: 6 }, pb: { xs: 8, md: 12 } }}>
+    <Box sx={{ width: '100%', pt: { xs: 10, md: 10 }, pb: { xs: 8, md: 12 } }}>
       <Container maxWidth="md">
         <Box sx={{ textAlign: 'center', mb: 1 }}>
           <Typography variant="h2" sx={{ color: 'var(--color-text-primary)', fontWeight: 800 }}>
@@ -611,8 +611,9 @@ function HomeProjectCard({ project }) {
   const thumbnailSrc = project.thumbnail_url
     || (project.detail_url ? `${THUM_BASE}/${project.detail_url}` : null);
 
-  const href = project.detail_url || project.github_url
-    || (project.category === '상세페이지' ? project.thumbnail_url : null);
+  const href = project.category === '상세페이지' && thumbnailSrc
+    ? `/my-portfolio/image-viewer.html?src=${encodeURIComponent(thumbnailSrc)}`
+    : project.detail_url || project.github_url || null;
 
   return (
     <Card
@@ -667,6 +668,14 @@ function HomeProjectCard({ project }) {
               </Typography>
             </Box>
           )}
+          {/* 하단 페이드 오버레이 */}
+          <Box sx={{
+            position: 'absolute', bottom: 0, left: 0, right: 0,
+            height: '35%',
+            background: 'linear-gradient(to bottom, transparent, #ffffff)',
+            zIndex: 1,
+            pointerEvents: 'none',
+          }} />
           {/* 호버 오버레이 */}
           {href && (
             <Box sx={{
@@ -677,9 +686,9 @@ function HomeProjectCard({ project }) {
               '.MuiCardActionArea-root:hover &': { opacity: 1 },
             }}>
               <Box sx={{
-                fontSize: '0.75rem', fontWeight: 700, color: '#fff',
+                fontSize: '0.95rem', fontWeight: 700, color: '#fff',
                 border: '1px solid rgba(255,255,255,0.8)',
-                borderRadius: 1.5, px: 1.8, py: 0.6, letterSpacing: '0.5px',
+                borderRadius: 1.5, px: 3, py: 1.2, letterSpacing: '0.5px',
               }}>
                 {project.category === '상세페이지' ? '전체 보기 →' : '바로가기 →'}
               </Box>
@@ -688,7 +697,7 @@ function HomeProjectCard({ project }) {
         </Box>
 
         {/* 텍스트 영역 */}
-        <CardContent sx={{ p: { xs: 1.4, sm: 1.8 }, flexGrow: 1, bgcolor: '#ffffff' }}>
+        <CardContent sx={{ px: { xs: 1.4, sm: 1.8 }, py: { xs: 3, sm: 3.5 }, flexGrow: 1, bgcolor: '#ffffff' }}>
           <Typography sx={{
             fontWeight: 700, color: '#111111',
             mb: 0.8, fontSize: { xs: '0.82rem', sm: '0.95rem' }, lineHeight: 1.4,
@@ -701,7 +710,7 @@ function HomeProjectCard({ project }) {
                 key={tech}
                 label={tech}
                 size="small"
-                sx={{ bgcolor: 'rgba(123,104,238,0.1)', color: '#7B68EE', fontSize: { xs: '0.55rem', sm: '0.6rem' }, height: 18, fontWeight: 600 }}
+                sx={{ bgcolor: tech === '상세페이지 디자인' ? 'rgba(158,158,158,0.15)' : 'rgba(123,104,238,0.1)', color: tech === '상세페이지 디자인' ? '#9E9E9E' : '#7B68EE', fontSize: { xs: '0.55rem', sm: '0.6rem' }, height: 18, fontWeight: 600 }}
               />
             ))}
           </Stack>
