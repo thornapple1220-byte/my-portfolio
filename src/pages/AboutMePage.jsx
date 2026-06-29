@@ -253,7 +253,6 @@ const SkillCard = memo(function SkillCard({ skill, animated, delay }) {
 
 /* ── 스킬 섹션 ────────────────────────────────────────────── */
 function SkillsContent({ skills }) {
-  const [filter, setFilter] = useState('전체');
   const [animated, setAnimated] = useState(false);
 
   useEffect(() => {
@@ -261,66 +260,52 @@ function SkillsContent({ skills }) {
     return () => clearTimeout(t);
   }, []);
 
-  const filtered = useMemo(() =>
-    (filter === '전체' ? skills : skills.filter((s) => s.category === filter))
-      .slice()
-      .sort((a, b) => b.level - a.level),
-    [skills, filter]
+  const categories = CATEGORIES.filter((c) => c !== '전체');
+
+  const grouped = useMemo(() =>
+    categories
+      .map((cat) => ({
+        cat,
+        color: categoryColors[cat],
+        items: skills
+          .filter((s) => s.category === cat)
+          .slice()
+          .sort((a, b) => b.level - a.level),
+      }))
+      .filter(({ items }) => items.length > 0),
+    [skills]
   );
 
-  const filterColor = useCallback(
-    (cat) => (cat !== '전체' ? categoryColors[cat] : 'var(--color-primary)'),
-    []
-  );
+  let globalIdx = 0;
 
   return (
     <Box sx={{ py: 4 }}>
-      {/* 카테고리 필터 */}
-      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mb: 4 }} role="toolbar" aria-label="카테고리 필터">
-        {CATEGORIES.map((cat) => {
-          const active = filter === cat;
-          const color = filterColor(cat);
-          return (
-            <Chip
-              key={cat}
-              label={cat}
-              onClick={() => setFilter(cat)}
-              aria-pressed={active}
-              sx={{
-                fontWeight: 700,
-                fontSize: '0.8rem',
-                bgcolor: active ? color : 'var(--color-bg-soft)',
-                color: active ? '#fff' : 'var(--color-text-secondary)',
-                border: active ? 'none' : '1px solid var(--color-border)',
-                transition: 'all 0.18s',
-                '&:hover': { bgcolor: active ? color : `${color}18` },
-              }}
-            />
-          );
-        })}
-      </Stack>
+      <Stack spacing={6}>
+        {grouped.map(({ cat, color, items }) => (
+          <Box key={cat}>
+            {/* 카테고리 헤더 */}
+            <Stack direction="row" alignItems="center" spacing={1.5} sx={{ mb: 2.5 }}>
+              <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: color, flexShrink: 0 }} />
+              <Typography sx={{ fontSize: '0.8rem', fontWeight: 700, color, letterSpacing: '1.5px', textTransform: 'uppercase' }}>
+                {cat}
+              </Typography>
+              <Box sx={{ flex: 1, height: '1px', bgcolor: `${color}30` }} />
+            </Stack>
 
-      {/* 스킬 그리드 */}
-      <Box sx={{ overflow: 'hidden', mb: 4 }}>
-      <Grid container spacing={{ xs: 1.5, sm: 2 }}>
-        {filtered.map((skill, idx) => (
-          <Grid item xs={6} sm={6} md={4} key={skill.id}>
-            <SkillCard
-              skill={skill}
-              animated={animated}
-              delay={idx * 80}
-            />
-          </Grid>
+            {/* 스킬 그리드 */}
+            <Grid container spacing={{ xs: 1.5, sm: 2 }}>
+              {items.map((skill) => {
+                const delay = globalIdx++ * 80;
+                return (
+                  <Grid item xs={6} sm={6} md={4} key={skill.id}>
+                    <SkillCard skill={skill} animated={animated} delay={delay} />
+                  </Grid>
+                );
+              })}
+            </Grid>
+          </Box>
         ))}
-        {filtered.length === 0 && (
-          <Grid item xs={12}>
-            <Box sx={{ textAlign: 'center', py: 6, color: 'var(--color-text-secondary)' }}>
-              <Typography sx={{ fontSize: '0.95rem' }}>해당 카테고리의 스킬이 없어요.</Typography>
-            </Box>
-          </Grid>
-        )}
-      </Grid>
-      </Box>
+      </Stack>
     </Box>
   );
 }
