@@ -28,16 +28,6 @@ export const aboutMeData = {
   },
   sections: [
     {
-      id: 'i-am',
-      title: 'I AM',
-      content: [
-        '트렌드를 읽어가는 디자이너,',
-        '사회생활 경험 만땅 디자이너,',
-        '귀를 기울일 줄 아는 디자이너.',
-      ],
-      showInHome: true,
-    },
-    {
       id: 'skills',
       title: '스킬',
       showInHome: true,

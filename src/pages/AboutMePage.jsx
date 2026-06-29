@@ -75,7 +75,7 @@ const ProfilePhoto = memo(function ProfilePhoto({ photo, onPhotoChange }) {
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <Box
         sx={{
-          width: { xs: 160, md: 180 },
+          width: { xs: 160, md: 200 },
           borderRadius: 3,
           overflow: 'hidden',
           border: '1px solid var(--color-border)',
@@ -110,10 +110,16 @@ const InfoCard = memo(function InfoCard({ icon, label, value }) {
     <Card
       elevation={0}
       sx={{
-        bgcolor: 'var(--color-bg-soft)',
-        border: '1px solid var(--color-border)',
-        borderRadius: 2.5, px: { xs: 1.5, sm: 2 }, py: { xs: 1.2, sm: 1.5 },
+        background: 'linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(237,233,255,0.6) 100%)',
+        backdropFilter: 'blur(12px)',
+        border: '1px solid rgba(123,104,238,0.18)',
+        borderRadius: 3,
+        px: { xs: 2, sm: 2.5 },
+        py: { xs: 2.5, sm: 5 },
         width: '100%', height: '100%', textAlign: 'left',
+        boxShadow: '0 4px 24px rgba(123,104,238,0.10), inset 0 1px 0 rgba(255,255,255,0.8)',
+        transition: 'box-shadow 0.2s ease',
+        '&:hover': { boxShadow: '0 8px 32px rgba(123,104,238,0.18), inset 0 1px 0 rgba(255,255,255,0.8)' },
       }}
     >
       <Stack direction="row" spacing={0.7} alignItems="center" sx={{ mb: 0.5 }}>
@@ -487,9 +493,9 @@ function CareerContent({ careers: initialCareers = [], skills = [] }) {
         <Box key={item.id} sx={{ display: 'flex', gap: { xs: 2, md: 3 }, mb: idx < careers.length - 1 ? 3 : 0 }}>
           {/* 타임라인 */}
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
-            <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: 'var(--color-primary)', border: '2px solid var(--color-accent)', mt: '4px', flexShrink: 0 }} />
+            <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#BDBDBD', border: '2px solid #E0E0E0', mt: '4px', flexShrink: 0 }} />
             {idx < sorted.length - 1 && (
-              <Box sx={{ width: 2, flex: 1, bgcolor: 'var(--color-border)', mt: 0.5 }} />
+              <Box sx={{ width: 2, flex: 1, bgcolor: '#E0E0E0', mt: 0.5 }} />
             )}
           </Box>
 
@@ -500,12 +506,12 @@ function CareerContent({ careers: initialCareers = [], skills = [] }) {
                 {item.company}
               </Typography>
               <Chip label={item.role} size="small"
-                sx={{ bgcolor: 'var(--color-accent)', color: 'var(--color-primary)', fontWeight: 700, fontSize: '0.7rem', height: 20 }} />
+                sx={{ bgcolor: 'rgba(0,0,0,0.08)', color: '#222222', fontWeight: 700, fontSize: '0.7rem', height: 20 }} />
             </Box>
             <Typography sx={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', mb: 1, fontWeight: 500 }}>
               {item.period}
               {calcDuration(item.period) && (
-                <Box component="span" sx={{ ml: 1, color: 'var(--color-primary)', fontWeight: 700 }}>
+                <Box component="span" sx={{ ml: 1, color: '#222222', fontWeight: 700 }}>
                   ({calcDuration(item.period)})
                 </Box>
               )}
@@ -570,10 +576,9 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
       {/* ─ 프로필 히어로 ─ */}
       <Box sx={{
         position: 'relative', overflow: 'hidden',
-        background: 'radial-gradient(circle, rgba(123,104,238,0.1) 1.5px, transparent 1.5px), linear-gradient(175deg, #C9C0FF 0%, #DDD8FF 22%, #EDE9FF 48%, #F8F6FF 72%, #FFFFFF 100%)',
-        backgroundSize: '30px 30px, auto',
+        background: 'radial-gradient(circle, rgba(123,104,238,0.1) 1.5px, transparent 1.5px), linear-gradient(175deg, #C9C0FF 0%, #DDD8FF 22%, #EDE9FF 48%, #F8F6FF 72%, #F5F3FF 100%)',
+        backgroundSize: '28px 28px, auto',
         py: { xs: 7, md: 10 },
-        borderBottom: '1px solid var(--color-border)',
       }}>
         {/* 소프트 블롭 - 우상단 */}
         <Box sx={{
@@ -624,8 +629,6 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
               }}>
                 Web Designer
               </Typography>
-              {/* 구분선 */}
-              <Box sx={{ width: 56, height: 3, bgcolor: '#7B68EE', borderRadius: 2, mb: 4, mx: { xs: 'auto', md: 0 } }} />
               <Grid container spacing={2} alignItems="stretch">
                 {infoItems.map(({ icon, label, value }) => (
                   <Grid size={{ xs: 12, sm: 4 }} key={label} sx={{ display: 'flex' }}>
