@@ -19,6 +19,8 @@ const TAG_COLORS = {
   '상세페이지 디자인': '#9E9E9E',
   'Figma':             '#A259FF',
   '리뉴얼 디자인':     '#9E9E9E',
+  '랜딩페이지':        '#9E9E9E',
+  '상세페이지':        '#9E9E9E',
 };
 
 function getTagStyle(tag, category) {
