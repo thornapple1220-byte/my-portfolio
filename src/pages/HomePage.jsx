@@ -826,14 +826,14 @@ function ProjectsSection() {
 function ContactSection() {
 
   return (
-    <Box id="contact-section" sx={{ ...sectionBase }}>
+    <Box id="contact-section" sx={{ ...sectionBase, background: 'linear-gradient(160deg, #3D2E9E 0%, #4A3BAF 40%, #5B4FCF 100%)' }}>
       <Container maxWidth="md">
         {/* 섹션 타이틀 */}
         <Box sx={{ textAlign: 'center', mb: 6 }}>
-          <Typography variant="h2" sx={{ color: 'var(--color-text-primary)' }}>
+          <Typography variant="h2" sx={{ color: '#ffffff' }}>
             연락하기
           </Typography>
-          <Typography variant="body1" sx={{ color: 'var(--color-text-secondary)', mt: 1 }}>
+          <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.7)', mt: 1 }}>
             편하게 연락주세요.
           </Typography>
         </Box>
