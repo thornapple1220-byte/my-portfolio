@@ -289,7 +289,6 @@ function SkillsContent({ skills }) {
               <Typography sx={{ fontSize: '0.8rem', fontWeight: 700, color, letterSpacing: '1.5px', textTransform: 'uppercase' }}>
                 {cat}
               </Typography>
-              <Box sx={{ flex: 1, height: '1px', bgcolor: `${color}30` }} />
             </Stack>
 
             {/* 스킬 그리드 */}
