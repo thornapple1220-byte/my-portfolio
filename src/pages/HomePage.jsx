@@ -698,12 +698,30 @@ function HomeProjectCard({ project }) {
 
         {/* 텍스트 영역 */}
         <CardContent sx={{ px: { xs: 1.4, sm: 1.8 }, py: { xs: 3, sm: 3.5 }, flexGrow: 1, bgcolor: '#ffffff' }}>
-          <Typography sx={{
-            fontWeight: 700, color: '#111111',
-            mb: 0.8, fontSize: { xs: '0.82rem', sm: '0.95rem' }, lineHeight: 1.4,
-          }}>
-            {project.title}
-          </Typography>
+          <Stack direction="row" spacing={0.8} alignItems="flex-start" sx={{ width: '100%', overflow: 'hidden', mb: 0.8 }}>
+            <Typography sx={{
+              fontWeight: 700, color: '#111111',
+              fontSize: { xs: '0.82rem', sm: '0.95rem' }, lineHeight: 1.4,
+              flex: 1, minWidth: 0,
+            }}>
+              {project.title}
+            </Typography>
+            <Box sx={{
+              flexShrink: 0,
+              fontSize: { xs: '0.6rem', sm: '0.72rem' },
+              fontWeight: 700,
+              color: '#9E9E9E',
+              bgcolor: 'rgba(158,158,158,0.12)',
+              border: '1px solid rgba(158,158,158,0.4)',
+              borderRadius: 1,
+              px: 0.7, py: 0.2,
+              lineHeight: 1.4,
+              whiteSpace: 'nowrap',
+              mt: 0.1,
+            }}>
+              {project.category === '바이브코딩' ? '기여도 70% · AI 협업' : '기여도 100%'}
+            </Box>
+          </Stack>
           <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
             {project.tech_stack?.slice(0, 2).map((tech) => (
               <Chip
