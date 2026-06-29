@@ -17,6 +17,7 @@ const TAG_COLORS = {
   'Unsplash API':      '#FF9F0A',
   'Photoshop':         '#7B68EE',
   '상세페이지 디자인': '#9E9E9E',
+  'Figma':             '#A259FF',
 };
 
 function getTagStyle(tag, category) {
