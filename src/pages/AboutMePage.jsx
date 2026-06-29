@@ -565,7 +565,8 @@ function AboutMePage({ photo, onPhotoChange, skills, onSkillsChange }) {
     const tab = Number(searchParams.get('tab'));
     return Number.isFinite(tab) ? tab : 0;
   });
-  const { basicInfo, sections } = aboutMeData;
+  const { basicInfo, sections: allSections } = aboutMeData;
+  const sections = allSections.filter((s) => !s.hideInAbout);
 
   const handleTabChange = useCallback((_, v) => setActiveTab(v), []);
 
