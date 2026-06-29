@@ -21,6 +21,12 @@ import DescriptionIcon      from '@mui/icons-material/Description';
 import CodeIcon             from '@mui/icons-material/Code';
 import SmartToyIcon         from '@mui/icons-material/SmartToy';
 import AttachMoneyIcon      from '@mui/icons-material/AttachMoney';
+import DirectionsCarIcon    from '@mui/icons-material/DirectionsCar';
+import TranslateIcon        from '@mui/icons-material/Translate';
+import CalculateIcon        from '@mui/icons-material/Calculate';
+import TableChartIcon       from '@mui/icons-material/TableChart';
+import WebIcon              from '@mui/icons-material/Web';
+import EmojiEventsIcon      from '@mui/icons-material/EmojiEvents';
 import { aboutMeData, categoryColors, CATEGORIES } from '../data/aboutMeData';
 import supabase from '../utils/supabase';
 
@@ -37,6 +43,17 @@ const skillIconMap = {
   '회계':               <AttachMoneyIcon />,
 };
 const getSkillIcon = (name) => skillIconMap[name] ?? <CodeIcon />;
+
+/* ── 자격증 아이콘 + 색상 매핑 ──────────────────────────────── */
+function getCertStyle(name) {
+  if (name.includes('운전'))                                   return { icon: <DirectionsCarIcon fontSize="small" />, color: '#42A5F5' };
+  if (name.includes('일본어') || name.includes('JLPT'))        return { icon: <TranslateIcon fontSize="small" />,    color: '#EF5350' };
+  if (name.includes('회계'))                                   return { icon: <CalculateIcon fontSize="small" />,    color: '#FF9F0A' };
+  if (name.includes('엑셀') || name.includes('한셀') || name.includes('ITQ')) return { icon: <TableChartIcon fontSize="small" />, color: '#26C6A6' };
+  if (name.includes('웹디자인'))                               return { icon: <WebIcon fontSize="small" />,          color: '#7B68EE' };
+  if (name.includes('올림피아드') || name.includes('그래픽'))  return { icon: <EmojiEventsIcon fontSize="small" />,  color: '#FFC107' };
+  return { icon: <WorkspacePremiumIcon fontSize="small" />, color: '#7B68EE' };
+}
 
 /* ── 섹션 레이블 ──────────────────────────────────────────── */
 const SectionLabel = memo(function SectionLabel({ text }) {
@@ -370,23 +387,25 @@ function CertificatesContent() {
   return (
     <Box sx={{ py: 2 }}>
       <Stack spacing={2}>
-        {certs.map((cert) => (
+        {certs.map((cert) => {
+          const { icon, color } = getCertStyle(cert.name);
+          return (
           <Box
             key={cert.id}
             sx={{
               display: 'flex', alignItems: 'center', gap: 2,
               p: 2, borderRadius: 2,
-              border: '1px solid var(--color-border)',
-              bgcolor: 'var(--color-bg-soft)',
+              border: `1px solid ${color}33`,
+              bgcolor: `${color}0A`,
             }}
           >
             <Box sx={{
               width: 40, height: 40, borderRadius: 2, flexShrink: 0,
-              bgcolor: 'rgba(123,104,238,0.1)',
+              bgcolor: `${color}18`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'var(--color-primary)',
+              color,
             }}>
-              <WorkspacePremiumIcon fontSize="small" />
+              {icon}
             </Box>
             <Box sx={{ flex: 1, minWidth: 0 }}>
               <Typography sx={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text-primary)' }}>
@@ -399,14 +418,15 @@ function CertificatesContent() {
                   </Typography>
                 )}
                 {cert.date && (
-                  <Typography sx={{ fontSize: '0.8rem', color: 'var(--color-primary)', fontWeight: 600 }}>
+                  <Typography sx={{ fontSize: '0.8rem', color, fontWeight: 600 }}>
                     {cert.date}
                   </Typography>
                 )}
               </Stack>
             </Box>
           </Box>
-        ))}
+          );
+        })}
       </Stack>
     </Box>
   );
