@@ -18,6 +18,7 @@ const TAG_COLORS = {
   'Photoshop':         '#7B68EE',
   '상세페이지 디자인': '#9E9E9E',
   'Figma':             '#A259FF',
+  '리뉴얼 디자인':     '#9E9E9E',
 };
 
 function getTagStyle(tag, category) {
