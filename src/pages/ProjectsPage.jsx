@@ -183,7 +183,7 @@ function ProjectCard({ project }) {
                   '&:hover': { bgcolor: 'rgba(255,255,255,0.15)' },
                 }}
               >
-                Figma 보기 →
+                전체 보기 →
               </Box>
             )}
             {isDetailPage && !project.demo_url && thumbnailSrc && (
