@@ -169,7 +169,24 @@ function ProjectCard({ project }) {
               transition: 'opacity 0.25s ease',
             }}
           >
-            {isDetailPage && thumbnailSrc && (
+            {isDetailPage && project.demo_url && (
+              <Box
+                component="a"
+                href={project.demo_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  fontSize: '0.95rem', fontWeight: 700, color: '#fff',
+                  border: '1px solid rgba(255,255,255,0.8)',
+                  borderRadius: 1.5, px: 3, py: 1.2, letterSpacing: '0.5px',
+                  textDecoration: 'none',
+                  '&:hover': { bgcolor: 'rgba(255,255,255,0.15)' },
+                }}
+              >
+                Figma 보기 →
+              </Box>
+            )}
+            {isDetailPage && !project.demo_url && thumbnailSrc && (
               <Box
                 component="a"
                 href={`/my-portfolio/image-viewer.html?src=${encodeURIComponent(thumbnailSrc)}`}
