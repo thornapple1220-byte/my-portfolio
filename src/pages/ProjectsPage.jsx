@@ -292,7 +292,7 @@ function ProjectCard({ project }) {
   );
 }
 
-const CATEGORIES = ['전체', '상세페이지', 'UI디자인', '바이브코딩'];
+const CATEGORIES = ['전체', '상세페이지', '배너디자인', 'UI디자인', '바이브코딩'];
 
 function ProjectsPage() {
   const [projects, setProjects] = useState([]);
@@ -320,7 +320,7 @@ function ProjectsPage() {
     fetchProjects();
   }, []);
 
-  const CATEGORY_ORDER = { '상세페이지': 0, 'UI디자인': 1, '바이브코딩': 2 };
+  const CATEGORY_ORDER = { '상세페이지': 0, '배너디자인': 1, 'UI디자인': 2, '바이브코딩': 3 };
 
   const filtered = (activeCategory === '전체'
     ? [...projects].sort((a, b) =>
