@@ -17,7 +17,7 @@ const TAG_COLORS = {
   'Unsplash API':      '#FF9F0A',
   'Photoshop':         '#7B68EE',
   '포토샵':            '#7B68EE',
-  '이벤트페이지':      '#9E9E9E',
+  '이벤트페이지 디자인': '#9E9E9E',
   '상세페이지 디자인': '#9E9E9E',
   'Figma':             '#A259FF',
   '리뉴얼 디자인':     '#9E9E9E',
