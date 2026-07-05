@@ -127,12 +127,6 @@ function BannerCard({ project }) {
     <Box
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={() => {
-        if (thumbnailSrc) window.open(
-          `/my-portfolio/image-viewer.html?src=${encodeURIComponent(thumbnailSrc)}`,
-          '_blank'
-        );
-      }}
       sx={{
         breakInside: 'avoid',
         mb: 2,
@@ -140,48 +134,88 @@ function BannerCard({ project }) {
         overflow: 'hidden',
         border: '1px solid var(--color-border)',
         transition: 'transform 0.25s ease, box-shadow 0.25s ease',
-        position: 'relative',
-        cursor: thumbnailSrc ? 'pointer' : 'default',
         transform: hovered ? 'translateY(-4px)' : 'none',
         boxShadow: hovered ? '0 12px 36px rgba(123,104,238,0.18)' : 'none',
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
-      {thumbnailSrc && !imgError ? (
+      {/* 이미지 + 호버 오버레이 */}
+      <Box
+        onClick={() => {
+          if (thumbnailSrc) window.open(
+            `/my-portfolio/image-viewer.html?src=${encodeURIComponent(thumbnailSrc)}`,
+            '_blank'
+          );
+        }}
+        sx={{ position: 'relative', cursor: thumbnailSrc ? 'pointer' : 'default' }}
+      >
+        {thumbnailSrc && !imgError ? (
+          <Box
+            component="img"
+            src={thumbnailSrc}
+            alt={project.title}
+            onError={() => setImgError(true)}
+            sx={{ width: '100%', height: 'auto', display: 'block' }}
+          />
+        ) : (
+          <Box sx={{
+            width: '100%', height: 160,
+            background: 'linear-gradient(135deg, var(--color-accent) 0%, #E4DFFF 100%)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <Typography variant="body2" sx={{ color: 'var(--color-primary)', fontWeight: 600 }}>
+              {project.title}
+            </Typography>
+          </Box>
+        )}
+
+        {/* 호버 오버레이 */}
         <Box
-          component="img"
-          src={thumbnailSrc}
-          alt={project.title}
-          onError={() => setImgError(true)}
-          sx={{ width: '100%', height: 'auto', display: 'block' }}
-        />
-      ) : (
-        <Box sx={{
-          width: '100%', height: 160,
-          background: 'linear-gradient(135deg, var(--color-accent) 0%, #E4DFFF 100%)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}>
-          <Typography variant="body2" sx={{ color: 'var(--color-primary)', fontWeight: 600 }}>
-            {project.title}
+          sx={{
+            position: 'absolute', inset: 0,
+            bgcolor: 'rgba(91,79,207,0.7)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            opacity: hovered ? 1 : 0,
+            transition: 'opacity 0.25s ease',
+            pointerEvents: 'none',
+          }}
+        >
+          <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem' }}>
+            전체 보기 →
           </Typography>
         </Box>
-      )}
+      </Box>
 
-      {/* 호버 오버레이 */}
-      <Box
-        sx={{
-          position: 'absolute', inset: 0,
-          bgcolor: 'rgba(91,79,207,0.7)',
-          display: 'flex', flexDirection: 'column',
-          alignItems: 'center', justifyContent: 'center', gap: 1,
-          opacity: hovered ? 1 : 0,
-          transition: 'opacity 0.25s ease',
-          pointerEvents: 'none',
-        }}
-      >
-        <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem', textAlign: 'center', px: 2 }}>
-          {project.title}
-        </Typography>
-        <Stack direction="row" spacing={0.5} flexWrap="wrap" justifyContent="center" useFlexGap>
+      {/* 하단 정보 */}
+      <Box sx={{ px: 2, pt: 1.5, pb: 2, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+        <Stack direction="row" spacing={0.8} alignItems="flex-start">
+          <Typography
+            variant="subtitle2"
+            sx={{ fontWeight: 700, color: 'var(--color-text-primary)', lineHeight: 1.3, flex: 1, minWidth: 0 }}
+          >
+            {project.title}
+          </Typography>
+          <Box
+            sx={{
+              flexShrink: 0,
+              fontSize: { xs: '0.6rem', sm: '0.72rem' },
+              fontWeight: 700,
+              color: '#9E9E9E',
+              bgcolor: 'rgba(158,158,158,0.12)',
+              border: '1px solid rgba(158,158,158,0.4)',
+              borderRadius: 1,
+              px: { xs: 0.7, sm: 0.35 },
+              py: 0.2,
+              lineHeight: 1.4,
+              whiteSpace: 'nowrap',
+              mt: 0.1,
+            }}
+          >
+            기여도 100%
+          </Box>
+        </Stack>
+        <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ mt: 0.5 }}>
           {project.tech_stack?.map((tech) => (
             <Chip
               key={tech}
@@ -192,13 +226,11 @@ function BannerCard({ project }) {
                 fontWeight: 600,
                 fontSize: '0.65rem',
                 height: 20,
+                mb: 0.5,
               }}
             />
           ))}
         </Stack>
-        <Typography sx={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.8rem', mt: 0.5 }}>
-          전체 보기 →
-        </Typography>
       </Box>
     </Box>
   );
