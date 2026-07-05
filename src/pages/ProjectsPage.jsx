@@ -441,9 +441,9 @@ function ProjectsPage() {
   const CATEGORY_ORDER = { '상세페이지': 0, '배너디자인': 1, 'UI디자인': 2, '바이브코딩': 3 };
 
   const filtered = (activeCategory === '전체'
-    ? [...projects].sort((a, b) =>
-        (CATEGORY_ORDER[a.category] ?? 99) - (CATEGORY_ORDER[b.category] ?? 99)
-      )
+    ? [...projects]
+        .filter((p) => p.category !== '배너디자인')
+        .sort((a, b) => (CATEGORY_ORDER[a.category] ?? 99) - (CATEGORY_ORDER[b.category] ?? 99))
     : projects.filter((p) => p.category === activeCategory));
 
   return (
