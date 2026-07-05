@@ -117,6 +117,91 @@ function ThumbnailImage({ src, alt, scrollable = false }) {
   );
 }
 
+function BannerCard({ project }) {
+  const [imgError, setImgError] = useState(false);
+  const thumbnailSrc = getThumbnailUrl(project);
+
+  return (
+    <Box
+      sx={{
+        breakInside: 'avoid',
+        mb: 2,
+        borderRadius: 3,
+        overflow: 'hidden',
+        border: '1px solid var(--color-border)',
+        transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+        position: 'relative',
+        cursor: thumbnailSrc ? 'pointer' : 'default',
+        '&:hover': {
+          transform: 'translateY(-4px)',
+          boxShadow: '0 12px 36px rgba(123,104,238,0.18)',
+        },
+        '&:hover .banner-overlay': { opacity: 1 },
+      }}
+      onClick={() => {
+        if (thumbnailSrc) window.open(
+          `/my-portfolio/image-viewer.html?src=${encodeURIComponent(thumbnailSrc)}`,
+          '_blank'
+        );
+      }}
+    >
+      {thumbnailSrc && !imgError ? (
+        <Box
+          component="img"
+          src={thumbnailSrc}
+          alt={project.title}
+          onError={() => setImgError(true)}
+          sx={{ width: '100%', height: 'auto', display: 'block' }}
+        />
+      ) : (
+        <Box sx={{
+          width: '100%', height: 160,
+          background: 'linear-gradient(135deg, var(--color-accent) 0%, #E4DFFF 100%)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <Typography variant="body2" sx={{ color: 'var(--color-primary)', fontWeight: 600 }}>
+            {project.title}
+          </Typography>
+        </Box>
+      )}
+
+      {/* 호버 오버레이 */}
+      <Box
+        className="banner-overlay"
+        sx={{
+          position: 'absolute', inset: 0,
+          bgcolor: 'rgba(91,79,207,0.7)',
+          display: 'flex', flexDirection: 'column',
+          alignItems: 'center', justifyContent: 'center', gap: 1,
+          opacity: 0, transition: 'opacity 0.25s ease',
+        }}
+      >
+        <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem', textAlign: 'center', px: 2 }}>
+          {project.title}
+        </Typography>
+        <Stack direction="row" spacing={0.5} flexWrap="wrap" justifyContent="center" useFlexGap>
+          {project.tech_stack?.map((tech) => (
+            <Chip
+              key={tech}
+              label={tech}
+              size="small"
+              sx={{
+                ...getTagStyle(tech, project.category),
+                fontWeight: 600,
+                fontSize: '0.65rem',
+                height: 20,
+              }}
+            />
+          ))}
+        </Stack>
+        <Typography sx={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.8rem', mt: 0.5 }}>
+          전체 보기 →
+        </Typography>
+      </Box>
+    </Box>
+  );
+}
+
 function ProjectCard({ project }) {
   const thumbnailSrc = getThumbnailUrl(project);
   const isDetailPage = project.category === '상세페이지';
@@ -382,23 +467,31 @@ function ProjectsPage() {
 
         {/* 프로젝트 그리드 */}
         {!loading && !error && (
-          <Grid container spacing={3}>
-            {filtered.length === 0 ? (
-              <Grid size={12}>
-                <Box sx={{ textAlign: 'center', py: 10 }}>
-                  <Typography variant="body1" sx={{ color: 'var(--color-text-muted)' }}>
-                    등록된 프로젝트가 없습니다.
-                  </Typography>
-                </Box>
-              </Grid>
-            ) : (
-              filtered.map((project) => (
+          filtered.length === 0 ? (
+            <Box sx={{ textAlign: 'center', py: 10 }}>
+              <Typography variant="body1" sx={{ color: 'var(--color-text-muted)' }}>
+                등록된 프로젝트가 없습니다.
+              </Typography>
+            </Box>
+          ) : activeCategory === '배너디자인' ? (
+            /* Masonry 레이아웃 */
+            <Box sx={{
+              columns: { xs: 1, sm: 2, md: 3 },
+              columnGap: '24px',
+            }}>
+              {filtered.map((project) => (
+                <BannerCard key={project.id} project={project} />
+              ))}
+            </Box>
+          ) : (
+            <Grid container spacing={3}>
+              {filtered.map((project) => (
                 <Grid size={{ xs: 12, sm: 6, md: 4, xl: 3 }} key={project.id}>
                   <ProjectCard project={project} />
                 </Grid>
-              ))
-            )}
-          </Grid>
+              ))}
+            </Grid>
+          )
         )}
       </Box>
     </Box>
