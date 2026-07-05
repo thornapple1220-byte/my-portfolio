@@ -120,10 +120,19 @@ function ThumbnailImage({ src, alt, scrollable = false }) {
 
 function BannerCard({ project }) {
   const [imgError, setImgError] = useState(false);
+  const [hovered, setHovered] = useState(false);
   const thumbnailSrc = getThumbnailUrl(project);
 
   return (
     <Box
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onClick={() => {
+        if (thumbnailSrc) window.open(
+          `/my-portfolio/image-viewer.html?src=${encodeURIComponent(thumbnailSrc)}`,
+          '_blank'
+        );
+      }}
       sx={{
         breakInside: 'avoid',
         mb: 2,
@@ -133,17 +142,8 @@ function BannerCard({ project }) {
         transition: 'transform 0.25s ease, box-shadow 0.25s ease',
         position: 'relative',
         cursor: thumbnailSrc ? 'pointer' : 'default',
-        '&:hover': {
-          transform: 'translateY(-4px)',
-          boxShadow: '0 12px 36px rgba(123,104,238,0.18)',
-        },
-        '&:hover .banner-overlay': { opacity: 1 },
-      }}
-      onClick={() => {
-        if (thumbnailSrc) window.open(
-          `/my-portfolio/image-viewer.html?src=${encodeURIComponent(thumbnailSrc)}`,
-          '_blank'
-        );
+        transform: hovered ? 'translateY(-4px)' : 'none',
+        boxShadow: hovered ? '0 12px 36px rgba(123,104,238,0.18)' : 'none',
       }}
     >
       {thumbnailSrc && !imgError ? (
@@ -168,13 +168,14 @@ function BannerCard({ project }) {
 
       {/* 호버 오버레이 */}
       <Box
-        className="banner-overlay"
         sx={{
           position: 'absolute', inset: 0,
           bgcolor: 'rgba(91,79,207,0.7)',
           display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center', gap: 1,
-          opacity: 0, transition: 'opacity 0.25s ease',
+          opacity: hovered ? 1 : 0,
+          transition: 'opacity 0.25s ease',
+          pointerEvents: 'none',
         }}
       >
         <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem', textAlign: 'center', px: 2 }}>
@@ -488,7 +489,10 @@ function ProjectsPage() {
             <Grid container spacing={3}>
               {filtered.map((project) => (
                 <Grid size={{ xs: 12, sm: 6, md: 4, xl: 3 }} key={project.id}>
-                  <ProjectCard project={project} />
+                  {project.category === '배너디자인'
+                    ? <BannerCard project={project} />
+                    : <ProjectCard project={project} />
+                  }
                 </Grid>
               ))}
             </Grid>
