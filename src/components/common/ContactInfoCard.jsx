@@ -1,15 +1,8 @@
 import { Box, Card, CardContent, Typography, IconButton, Tooltip } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
-import InstagramIcon from '@mui/icons-material/Instagram';
 import GitHubIcon from '@mui/icons-material/GitHub';
 
 const SNS_LINKS = [
-  {
-    label: 'Instagram',
-    icon: <InstagramIcon />,
-    href: 'https://instagram.com/',
-    color: '#E1306C',
-  },
   {
     label: 'GitHub',
     icon: <GitHubIcon />,

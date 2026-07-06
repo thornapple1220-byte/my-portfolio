@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Box, Container, Typography, Button, Divider, Grid, CircularProgress, Stack, Avatar, Card, CardContent, CardActionArea, Chip, IconButton, Tooltip } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import InstagramIcon from '@mui/icons-material/Instagram';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import EmailIcon from '@mui/icons-material/Email';
 import PersonIcon from '@mui/icons-material/Person';
