@@ -339,12 +339,12 @@ function HeroSection() {
           </Button>
 
           <Button
-            variant="outlined"
+            variant="contained"
             href={RESUME_PDF_URL}
             download
             startIcon={<DownloadIcon />}
             sx={{
-              borderColor: 'rgba(17,17,17,0.2)', color: '#111111',
+              bgcolor: '#FF5F7E', color: '#fff',
               width: { xs: '100%', sm: 'auto' },
               maxWidth: { xs: 320, sm: 'none' },
               px: { xs: 3, sm: 5 },
@@ -353,11 +353,12 @@ function HeroSection() {
               borderRadius: 2, fontWeight: 700,
               textTransform: 'none',
               fontSize: { xs: '0.95rem', sm: '1rem' },
+              boxShadow: '0 4px 20px rgba(255,95,126,0.35)',
               transition: 'all 0.22s ease',
               '&:hover': {
-                bgcolor: 'rgba(17,17,17,0.05)',
-                borderColor: '#111111',
+                bgcolor: '#E5486A',
                 transform: 'translateY(-3px)',
+                boxShadow: '0 10px 32px rgba(255,95,126,0.5)',
               },
             }}
           >
