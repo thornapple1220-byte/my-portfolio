@@ -5,6 +5,7 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import EmailIcon from '@mui/icons-material/Email';
+import DownloadIcon from '@mui/icons-material/Download';
 import PersonIcon from '@mui/icons-material/Person';
 import SchoolIcon from '@mui/icons-material/School';
 import WorkIcon from '@mui/icons-material/Work';
@@ -17,6 +18,8 @@ const sectionBase = {
   width: '100%',
   py: { xs: 8, md: 12 },
 };
+
+const RESUME_PDF_URL = 'https://github.com/thornapple1220-byte/my-portfolio/releases/download/resume-2026/Jang-Jieun-Portfolio-2026.pdf';
 
 function SectionLabel({ text }) {
   return (
@@ -333,6 +336,32 @@ function HeroSection() {
             }}
           >
             연락하기
+          </Button>
+
+          <Button
+            variant="outlined"
+            href={RESUME_PDF_URL}
+            download
+            startIcon={<DownloadIcon />}
+            sx={{
+              borderColor: 'rgba(17,17,17,0.2)', color: '#111111',
+              width: { xs: '100%', sm: 'auto' },
+              maxWidth: { xs: 320, sm: 'none' },
+              px: { xs: 3, sm: 5 },
+              py: { xs: '12px', sm: '13px' },
+              minHeight: 48,
+              borderRadius: 2, fontWeight: 700,
+              textTransform: 'none',
+              fontSize: { xs: '0.95rem', sm: '1rem' },
+              transition: 'all 0.22s ease',
+              '&:hover': {
+                bgcolor: 'rgba(17,17,17,0.05)',
+                borderColor: '#111111',
+                transform: 'translateY(-3px)',
+              },
+            }}
+          >
+            포트폴리오 다운로드
           </Button>
         </Box>
 
